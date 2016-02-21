@@ -1,0 +1,2682 @@
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"Poll_Timer.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global	Poll_Timer_initVar
+  19              		.bss
+  20              		.type	Poll_Timer_initVar, %object
+  21              		.size	Poll_Timer_initVar, 1
+  22              	Poll_Timer_initVar:
+  23 0000 00       		.space	1
+  24              		.section	.text.Poll_Timer_Init,"ax",%progbits
+  25              		.align	2
+  26              		.global	Poll_Timer_Init
+  27              		.thumb
+  28              		.thumb_func
+  29              		.type	Poll_Timer_Init, %function
+  30              	Poll_Timer_Init:
+  31              	.LFB0:
+  32              		.file 1 ".\\Generated_Source\\PSoC5\\Poll_Timer.c"
+   1:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+   2:.\Generated_Source\PSoC5/Poll_Timer.c **** * File Name: Poll_Timer.c
+   3:.\Generated_Source\PSoC5/Poll_Timer.c **** * Version 2.50
+   4:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+   5:.\Generated_Source\PSoC5/Poll_Timer.c **** * Description:
+   6:.\Generated_Source\PSoC5/Poll_Timer.c **** *  The Timer component consists of a 8, 16, 24 or 32-bit timer with
+   7:.\Generated_Source\PSoC5/Poll_Timer.c **** *  a selectable period between 2 and 2^Width - 1.  The timer may free run
+   8:.\Generated_Source\PSoC5/Poll_Timer.c **** *  or be used as a capture timer as well.  The capture can be initiated
+   9:.\Generated_Source\PSoC5/Poll_Timer.c **** *  by a positive or negative edge signal as well as via software.
+  10:.\Generated_Source\PSoC5/Poll_Timer.c **** *  A trigger input can be programmed to enable the timer on rising edge
+  11:.\Generated_Source\PSoC5/Poll_Timer.c **** *  falling edge, either edge or continous run.
+  12:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Interrupts may be generated due to a terminal count condition
+  13:.\Generated_Source\PSoC5/Poll_Timer.c **** *  or a capture event.
+  14:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+  15:.\Generated_Source\PSoC5/Poll_Timer.c **** * Note:
+  16:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+  17:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+  18:.\Generated_Source\PSoC5/Poll_Timer.c **** * Copyright 2008-2012, Cypress Semiconductor Corporation.  All rights reserved.
+  19:.\Generated_Source\PSoC5/Poll_Timer.c **** * You may use this file only in accordance with the license, terms, conditions,
+  20:.\Generated_Source\PSoC5/Poll_Timer.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  21:.\Generated_Source\PSoC5/Poll_Timer.c **** * the software package with which this file was provided.
+  22:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************/
+  23:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+  24:.\Generated_Source\PSoC5/Poll_Timer.c **** #include "Poll_Timer.h"
+  25:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 2
+
+
+  26:.\Generated_Source\PSoC5/Poll_Timer.c **** uint8 Poll_Timer_initVar = 0u;
+  27:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+  28:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+  29:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+  30:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_Init
+  31:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+  32:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+  33:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+  34:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Initialize to the schematic state
+  35:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+  36:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+  37:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+  38:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+  39:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+  40:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+  41:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+  42:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+  43:.\Generated_Source\PSoC5/Poll_Timer.c **** void Poll_Timer_Init(void) 
+  44:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+  33              		.loc 1 44 0
+  34              		.cfi_startproc
+  35              		@ args = 0, pretend = 0, frame = 8
+  36              		@ frame_needed = 1, uses_anonymous_args = 0
+  37 0000 80B5     		push	{r7, lr}
+  38              	.LCFI0:
+  39              		.cfi_def_cfa_offset 8
+  40              		.cfi_offset 7, -8
+  41              		.cfi_offset 14, -4
+  42 0002 82B0     		sub	sp, sp, #8
+  43              	.LCFI1:
+  44              		.cfi_def_cfa_offset 16
+  45 0004 00AF     		add	r7, sp, #0
+  46              	.LCFI2:
+  47              		.cfi_def_cfa_register 7
+  45:.\Generated_Source\PSoC5/Poll_Timer.c ****     #if(!Poll_Timer_UsingFixedFunction)
+  46:.\Generated_Source\PSoC5/Poll_Timer.c ****             /* Interrupt State Backup for Critical Region*/
+  47:.\Generated_Source\PSoC5/Poll_Timer.c ****             uint8 Poll_Timer_interruptState;
+  48:.\Generated_Source\PSoC5/Poll_Timer.c ****     #endif /* Interrupt state back up for Fixed Function only */
+  49:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+  50:.\Generated_Source\PSoC5/Poll_Timer.c ****     #if (Poll_Timer_UsingFixedFunction)
+  51:.\Generated_Source\PSoC5/Poll_Timer.c ****         /* Clear all bits but the enable bit (if it's already set) for Timer operation */
+  52:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_CONTROL &= Poll_Timer_CTRL_ENABLE;
+  53:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+  54:.\Generated_Source\PSoC5/Poll_Timer.c ****         /* Clear the mode bits for continuous run mode */
+  55:.\Generated_Source\PSoC5/Poll_Timer.c ****         #if (CY_PSOC5A)
+  56:.\Generated_Source\PSoC5/Poll_Timer.c ****             Poll_Timer_CONTROL2 &= ((uint8)(~Poll_Timer_CTRL_MODE_MASK));
+  57:.\Generated_Source\PSoC5/Poll_Timer.c ****         #endif /* Clear bits in CONTROL2 only in PSOC5A */
+  58:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+  59:.\Generated_Source\PSoC5/Poll_Timer.c ****         #if (CY_PSOC3 || CY_PSOC5LP)
+  60:.\Generated_Source\PSoC5/Poll_Timer.c ****             Poll_Timer_CONTROL3 &= ((uint8)(~Poll_Timer_CTRL_MODE_MASK));
+  61:.\Generated_Source\PSoC5/Poll_Timer.c ****         #endif /* CONTROL3 register exists only in PSoC3 OR PSoC5LP */
+  62:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+  63:.\Generated_Source\PSoC5/Poll_Timer.c ****         /* Check if One Shot mode is enabled i.e. RunMode !=0*/
+  64:.\Generated_Source\PSoC5/Poll_Timer.c ****         #if (Poll_Timer_RunModeUsed != 0x0u)
+  65:.\Generated_Source\PSoC5/Poll_Timer.c ****             /* Set 3rd bit of Control register to enable one shot mode */
+  66:.\Generated_Source\PSoC5/Poll_Timer.c ****             Poll_Timer_CONTROL |= 0x04u;
+  67:.\Generated_Source\PSoC5/Poll_Timer.c ****         #endif /* One Shot enabled only when RunModeUsed is not Continuous*/
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 3
+
+
+  68:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+  69:.\Generated_Source\PSoC5/Poll_Timer.c ****         #if (Poll_Timer_RunModeUsed == 2)
+  70:.\Generated_Source\PSoC5/Poll_Timer.c ****             #if (CY_PSOC5A)
+  71:.\Generated_Source\PSoC5/Poll_Timer.c ****                 /* Set last 2 bits of control2 register if one shot(halt on
+  72:.\Generated_Source\PSoC5/Poll_Timer.c ****                 interrupt) is enabled*/
+  73:.\Generated_Source\PSoC5/Poll_Timer.c ****                 Poll_Timer_CONTROL2 |= 0x03u;
+  74:.\Generated_Source\PSoC5/Poll_Timer.c ****             #endif /* Set One-Shot Halt on Interrupt bit in CONTROL2 for PSoC5A */
+  75:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+  76:.\Generated_Source\PSoC5/Poll_Timer.c ****             #if (CY_PSOC3 || CY_PSOC5LP)
+  77:.\Generated_Source\PSoC5/Poll_Timer.c ****                 /* Set last 2 bits of control3 register if one shot(halt on
+  78:.\Generated_Source\PSoC5/Poll_Timer.c ****                 interrupt) is enabled*/
+  79:.\Generated_Source\PSoC5/Poll_Timer.c ****                 Poll_Timer_CONTROL3 |= 0x03u;
+  80:.\Generated_Source\PSoC5/Poll_Timer.c ****             #endif /* Set One-Shot Halt on Interrupt bit in CONTROL3 for PSoC3 or PSoC5LP */
+  81:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+  82:.\Generated_Source\PSoC5/Poll_Timer.c ****         #endif /* Remove section if One Shot Halt on Interrupt is not enabled */
+  83:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+  84:.\Generated_Source\PSoC5/Poll_Timer.c ****         #if (Poll_Timer_UsingHWEnable != 0)
+  85:.\Generated_Source\PSoC5/Poll_Timer.c ****             #if (CY_PSOC5A)
+  86:.\Generated_Source\PSoC5/Poll_Timer.c ****                 /* Set the default Run Mode of the Timer to Continuous */
+  87:.\Generated_Source\PSoC5/Poll_Timer.c ****                 Poll_Timer_CONTROL2 |= Poll_Timer_CTRL_MODE_PULSEWIDTH;
+  88:.\Generated_Source\PSoC5/Poll_Timer.c ****             #endif /* Set Continuous Run Mode in CONTROL2 for PSoC5A */
+  89:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+  90:.\Generated_Source\PSoC5/Poll_Timer.c ****             #if (CY_PSOC3 || CY_PSOC5LP)
+  91:.\Generated_Source\PSoC5/Poll_Timer.c ****                 /* Clear and Set ROD and COD bits of CFG2 register */
+  92:.\Generated_Source\PSoC5/Poll_Timer.c ****                 Poll_Timer_CONTROL3 &= ((uint8)(~Poll_Timer_CTRL_RCOD_MASK));
+  93:.\Generated_Source\PSoC5/Poll_Timer.c ****                 Poll_Timer_CONTROL3 |= Poll_Timer_CTRL_RCOD;
+  94:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+  95:.\Generated_Source\PSoC5/Poll_Timer.c ****                 /* Clear and Enable the HW enable bit in CFG2 register */
+  96:.\Generated_Source\PSoC5/Poll_Timer.c ****                 Poll_Timer_CONTROL3 &= ((uint8)(~Poll_Timer_CTRL_ENBL_MASK));
+  97:.\Generated_Source\PSoC5/Poll_Timer.c ****                 Poll_Timer_CONTROL3 |= Poll_Timer_CTRL_ENBL;
+  98:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+  99:.\Generated_Source\PSoC5/Poll_Timer.c ****                 /* Set the default Run Mode of the Timer to Continuous */
+ 100:.\Generated_Source\PSoC5/Poll_Timer.c ****                 Poll_Timer_CONTROL3 |= Poll_Timer_CTRL_MODE_CONTINUOUS;
+ 101:.\Generated_Source\PSoC5/Poll_Timer.c ****             #endif /* Set Continuous Run Mode in CONTROL3 for PSoC3ES3 or PSoC5A */
+ 102:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 103:.\Generated_Source\PSoC5/Poll_Timer.c ****         #endif /* Configure Run Mode with hardware enable */
+ 104:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 105:.\Generated_Source\PSoC5/Poll_Timer.c ****         /* Clear and Set SYNCTC and SYNCCMP bits of RT1 register */
+ 106:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_RT1 &= ((uint8)(~Poll_Timer_RT1_MASK));
+ 107:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_RT1 |= Poll_Timer_SYNC;
+ 108:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 109:.\Generated_Source\PSoC5/Poll_Timer.c ****         /*Enable DSI Sync all all inputs of the Timer*/
+ 110:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_RT1 &= ((uint8)(~Poll_Timer_SYNCDSI_MASK));
+ 111:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_RT1 |= Poll_Timer_SYNCDSI_EN;
+ 112:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 113:.\Generated_Source\PSoC5/Poll_Timer.c ****         /* Set the IRQ to use the status register interrupts */
+ 114:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_CONTROL2 |= Poll_Timer_CTRL2_IRQ_SEL;
+ 115:.\Generated_Source\PSoC5/Poll_Timer.c ****     #endif /* Configuring registers of fixed function implementation */
+ 116:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 117:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Set Initial values from Configuration */
+ 118:.\Generated_Source\PSoC5/Poll_Timer.c ****     Poll_Timer_WritePeriod(Poll_Timer_INIT_PERIOD);
+  48              		.loc 1 118 0
+  49 0006 43F2FF10 		movw	r0, #12799
+  50 000a FFF7FEFF 		bl	Poll_Timer_WritePeriod
+ 119:.\Generated_Source\PSoC5/Poll_Timer.c ****     Poll_Timer_WriteCounter(Poll_Timer_INIT_PERIOD);
+  51              		.loc 1 119 0
+  52 000e 43F2FF10 		movw	r0, #12799
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 4
+
+
+  53 0012 FFF7FEFF 		bl	Poll_Timer_WriteCounter
+ 120:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 121:.\Generated_Source\PSoC5/Poll_Timer.c ****     #if (Poll_Timer_UsingHWCaptureCounter)/* Capture counter is enabled */
+ 122:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_CAPTURE_COUNT_CTRL |= Poll_Timer_CNTR_ENABLE;
+ 123:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_SetCaptureCount(Poll_Timer_INIT_CAPTURE_COUNT);
+ 124:.\Generated_Source\PSoC5/Poll_Timer.c ****     #endif /* Configure capture counter value */
+ 125:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 126:.\Generated_Source\PSoC5/Poll_Timer.c ****     #if (!Poll_Timer_UsingFixedFunction)
+ 127:.\Generated_Source\PSoC5/Poll_Timer.c ****         #if (Poll_Timer_SoftwareCaptureMode)
+ 128:.\Generated_Source\PSoC5/Poll_Timer.c ****             Poll_Timer_SetCaptureMode(Poll_Timer_INIT_CAPTURE_MODE);
+ 129:.\Generated_Source\PSoC5/Poll_Timer.c ****         #endif /* Set Capture Mode for UDB implementation if capture mode is software controlled */
+ 130:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 131:.\Generated_Source\PSoC5/Poll_Timer.c ****         #if (Poll_Timer_SoftwareTriggerMode)
+ 132:.\Generated_Source\PSoC5/Poll_Timer.c ****             if (0u == (Poll_Timer_CONTROL & Poll_Timer__B_TIMER__TM_SOFTWARE))
+ 133:.\Generated_Source\PSoC5/Poll_Timer.c ****             {
+ 134:.\Generated_Source\PSoC5/Poll_Timer.c ****                 Poll_Timer_SetTriggerMode(Poll_Timer_INIT_TRIGGER_MODE);
+ 135:.\Generated_Source\PSoC5/Poll_Timer.c ****             }
+ 136:.\Generated_Source\PSoC5/Poll_Timer.c ****         #endif /* Set trigger mode for UDB Implementation if trigger mode is software controlled */
+ 137:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 138:.\Generated_Source\PSoC5/Poll_Timer.c ****         /* CyEnterCriticalRegion and CyExitCriticalRegion are used to mark following region critica
+ 139:.\Generated_Source\PSoC5/Poll_Timer.c ****         /* Enter Critical Region*/
+ 140:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_interruptState = CyEnterCriticalSection();
+  54              		.loc 1 140 0
+  55 0016 FFF7FEFF 		bl	CyEnterCriticalSection
+  56 001a 0346     		mov	r3, r0
+  57 001c FB71     		strb	r3, [r7, #7]
+ 141:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 142:.\Generated_Source\PSoC5/Poll_Timer.c ****         /* Use the interrupt output of the status register for IRQ output */
+ 143:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_STATUS_AUX_CTRL |= Poll_Timer_STATUS_ACTL_INT_EN_MASK;
+  58              		.loc 1 143 0
+  59 001e 46F29753 		movw	r3, #26007
+  60 0022 C4F20003 		movt	r3, 16384
+  61 0026 46F29752 		movw	r2, #26007
+  62 002a C4F20002 		movt	r2, 16384
+  63 002e 1278     		ldrb	r2, [r2, #0]
+  64 0030 D2B2     		uxtb	r2, r2
+  65 0032 42F01002 		orr	r2, r2, #16
+  66 0036 D2B2     		uxtb	r2, r2
+  67 0038 1A70     		strb	r2, [r3, #0]
+ 144:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 145:.\Generated_Source\PSoC5/Poll_Timer.c ****         /* Exit Critical Region*/
+ 146:.\Generated_Source\PSoC5/Poll_Timer.c ****         CyExitCriticalSection(Poll_Timer_interruptState);
+  68              		.loc 1 146 0
+  69 003a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+  70 003c 1846     		mov	r0, r3
+  71 003e FFF7FEFF 		bl	CyExitCriticalSection
+ 147:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 148:.\Generated_Source\PSoC5/Poll_Timer.c ****         #if (Poll_Timer_EnableTriggerMode)
+ 149:.\Generated_Source\PSoC5/Poll_Timer.c ****             Poll_Timer_EnableTrigger();
+ 150:.\Generated_Source\PSoC5/Poll_Timer.c ****         #endif /* Set Trigger enable bit for UDB implementation in the control register*/
+ 151:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 152:.\Generated_Source\PSoC5/Poll_Timer.c ****         #if (Poll_Timer_InterruptOnCaptureCount)
+ 153:.\Generated_Source\PSoC5/Poll_Timer.c ****              #if (!Poll_Timer_ControlRegRemoved)
+ 154:.\Generated_Source\PSoC5/Poll_Timer.c ****                 Poll_Timer_SetInterruptCount(Poll_Timer_INIT_INT_CAPTURE_COUNT);
+ 155:.\Generated_Source\PSoC5/Poll_Timer.c ****             #endif /* Set interrupt count in control register if control register is not removed */
+ 156:.\Generated_Source\PSoC5/Poll_Timer.c ****         #endif /*Set interrupt count in UDB implementation if interrupt count feature is checked.*/
+ 157:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 5
+
+
+ 158:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_ClearFIFO();
+  72              		.loc 1 158 0
+  73 0042 FFF7FEFF 		bl	Poll_Timer_ClearFIFO
+ 159:.\Generated_Source\PSoC5/Poll_Timer.c ****     #endif /* Configure additional features of UDB implementation */
+ 160:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 161:.\Generated_Source\PSoC5/Poll_Timer.c ****     Poll_Timer_SetInterruptMode(Poll_Timer_INIT_INTERRUPT_MODE);
+  74              		.loc 1 161 0
+  75 0046 4FF00100 		mov	r0, #1
+  76 004a FFF7FEFF 		bl	Poll_Timer_SetInterruptMode
+ 162:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+  77              		.loc 1 162 0
+  78 004e 07F10807 		add	r7, r7, #8
+  79 0052 BD46     		mov	sp, r7
+  80 0054 80BD     		pop	{r7, pc}
+  81              		.cfi_endproc
+  82              	.LFE0:
+  83              		.size	Poll_Timer_Init, .-Poll_Timer_Init
+  84 0056 00BF     		.section	.text.Poll_Timer_Enable,"ax",%progbits
+  85              		.align	2
+  86              		.global	Poll_Timer_Enable
+  87              		.thumb
+  88              		.thumb_func
+  89              		.type	Poll_Timer_Enable, %function
+  90              	Poll_Timer_Enable:
+  91              	.LFB1:
+ 163:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 164:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 165:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 166:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_Enable
+ 167:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 168:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 169:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 170:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Enable the Timer
+ 171:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 172:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 173:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 174:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 175:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 176:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 177:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 178:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 179:.\Generated_Source\PSoC5/Poll_Timer.c **** void Poll_Timer_Enable(void) 
+ 180:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+  92              		.loc 1 180 0
+  93              		.cfi_startproc
+  94              		@ args = 0, pretend = 0, frame = 0
+  95              		@ frame_needed = 1, uses_anonymous_args = 0
+  96              		@ link register save eliminated.
+  97 0000 80B4     		push	{r7}
+  98              	.LCFI3:
+  99              		.cfi_def_cfa_offset 4
+ 100              		.cfi_offset 7, -4
+ 101 0002 00AF     		add	r7, sp, #0
+ 102              	.LCFI4:
+ 103              		.cfi_def_cfa_register 7
+ 181:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Globally Enable the Fixed Function Block chosen */
+ 182:.\Generated_Source\PSoC5/Poll_Timer.c ****     #if (Poll_Timer_UsingFixedFunction)
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 6
+
+
+ 183:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_GLOBAL_ENABLE |= Poll_Timer_BLOCK_EN_MASK;
+ 184:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_GLOBAL_STBY_ENABLE |= Poll_Timer_BLOCK_STBY_EN_MASK;
+ 185:.\Generated_Source\PSoC5/Poll_Timer.c ****     #endif /* Set Enable bit for enabling Fixed function timer*/
+ 186:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 187:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Remove assignment if control register is removed */
+ 188:.\Generated_Source\PSoC5/Poll_Timer.c ****     #if (!Poll_Timer_ControlRegRemoved || Poll_Timer_UsingFixedFunction)
+ 189:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_CONTROL |= Poll_Timer_CTRL_ENABLE;
+ 104              		.loc 1 189 0
+ 105 0004 46F27553 		movw	r3, #25973
+ 106 0008 C4F20003 		movt	r3, 16384
+ 107 000c 46F27552 		movw	r2, #25973
+ 108 0010 C4F20002 		movt	r2, 16384
+ 109 0014 1278     		ldrb	r2, [r2, #0]
+ 110 0016 D2B2     		uxtb	r2, r2
+ 111 0018 62F07F02 		orn	r2, r2, #127
+ 112 001c D2B2     		uxtb	r2, r2
+ 113 001e 1A70     		strb	r2, [r3, #0]
+ 190:.\Generated_Source\PSoC5/Poll_Timer.c ****     #endif /* Remove assignment if control register is removed */
+ 191:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 114              		.loc 1 191 0
+ 115 0020 BD46     		mov	sp, r7
+ 116 0022 80BC     		pop	{r7}
+ 117 0024 7047     		bx	lr
+ 118              		.cfi_endproc
+ 119              	.LFE1:
+ 120              		.size	Poll_Timer_Enable, .-Poll_Timer_Enable
+ 121 0026 00BF     		.section	.text.Poll_Timer_Start,"ax",%progbits
+ 122              		.align	2
+ 123              		.global	Poll_Timer_Start
+ 124              		.thumb
+ 125              		.thumb_func
+ 126              		.type	Poll_Timer_Start, %function
+ 127              	Poll_Timer_Start:
+ 128              	.LFB2:
+ 192:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 193:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 194:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 195:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_Start
+ 196:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 197:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 198:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 199:.\Generated_Source\PSoC5/Poll_Timer.c **** *  The start function initializes the timer with the default values, the
+ 200:.\Generated_Source\PSoC5/Poll_Timer.c **** *  enables the timerto begin counting.  It does not enable interrupts,
+ 201:.\Generated_Source\PSoC5/Poll_Timer.c **** *  the EnableInt command should be called if interrupt generation is required.
+ 202:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 203:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 204:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 205:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 206:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 207:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 208:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 209:.\Generated_Source\PSoC5/Poll_Timer.c **** * Global variables:
+ 210:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Poll_Timer_initVar: Is modified when this function is called for the
+ 211:.\Generated_Source\PSoC5/Poll_Timer.c **** *   first time. Is used to ensure that initialization happens only once.
+ 212:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 213:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 214:.\Generated_Source\PSoC5/Poll_Timer.c **** void Poll_Timer_Start(void) 
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 7
+
+
+ 215:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 129              		.loc 1 215 0
+ 130              		.cfi_startproc
+ 131              		@ args = 0, pretend = 0, frame = 0
+ 132              		@ frame_needed = 1, uses_anonymous_args = 0
+ 133 0000 80B5     		push	{r7, lr}
+ 134              	.LCFI5:
+ 135              		.cfi_def_cfa_offset 8
+ 136              		.cfi_offset 7, -8
+ 137              		.cfi_offset 14, -4
+ 138 0002 00AF     		add	r7, sp, #0
+ 139              	.LCFI6:
+ 140              		.cfi_def_cfa_register 7
+ 216:.\Generated_Source\PSoC5/Poll_Timer.c ****     if(Poll_Timer_initVar == 0u)
+ 141              		.loc 1 216 0
+ 142 0004 40F20003 		movw	r3, #:lower16:Poll_Timer_initVar
+ 143 0008 C0F20003 		movt	r3, #:upper16:Poll_Timer_initVar
+ 144 000c 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 145 000e 002B     		cmp	r3, #0
+ 146 0010 08D1     		bne	.L4
+ 217:.\Generated_Source\PSoC5/Poll_Timer.c ****     {
+ 218:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_Init();
+ 147              		.loc 1 218 0
+ 148 0012 FFF7FEFF 		bl	Poll_Timer_Init
+ 219:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 220:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_initVar = 1u;   /* Clear this bit for Initialization */
+ 149              		.loc 1 220 0
+ 150 0016 40F20003 		movw	r3, #:lower16:Poll_Timer_initVar
+ 151 001a C0F20003 		movt	r3, #:upper16:Poll_Timer_initVar
+ 152 001e 4FF00102 		mov	r2, #1
+ 153 0022 1A70     		strb	r2, [r3, #0]
+ 154              	.L4:
+ 221:.\Generated_Source\PSoC5/Poll_Timer.c ****     }
+ 222:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 223:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Enable the Timer */
+ 224:.\Generated_Source\PSoC5/Poll_Timer.c ****     Poll_Timer_Enable();
+ 155              		.loc 1 224 0
+ 156 0024 FFF7FEFF 		bl	Poll_Timer_Enable
+ 225:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 157              		.loc 1 225 0
+ 158 0028 80BD     		pop	{r7, pc}
+ 159              		.cfi_endproc
+ 160              	.LFE2:
+ 161              		.size	Poll_Timer_Start, .-Poll_Timer_Start
+ 162 002a 00BF     		.section	.text.Poll_Timer_Stop,"ax",%progbits
+ 163              		.align	2
+ 164              		.global	Poll_Timer_Stop
+ 165              		.thumb
+ 166              		.thumb_func
+ 167              		.type	Poll_Timer_Stop, %function
+ 168              	Poll_Timer_Stop:
+ 169              	.LFB3:
+ 226:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 227:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 228:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 229:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_Stop
+ 230:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 8
+
+
+ 231:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 232:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 233:.\Generated_Source\PSoC5/Poll_Timer.c **** *  The stop function halts the timer, but does not change any modes or disable
+ 234:.\Generated_Source\PSoC5/Poll_Timer.c **** *  interrupts.
+ 235:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 236:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 237:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 238:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 239:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 240:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 241:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 242:.\Generated_Source\PSoC5/Poll_Timer.c **** * Side Effects: If the Enable mode is set to Hardware only then this function
+ 243:.\Generated_Source\PSoC5/Poll_Timer.c **** *               has no effect on the operation of the timer.
+ 244:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 245:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 246:.\Generated_Source\PSoC5/Poll_Timer.c **** void Poll_Timer_Stop(void) 
+ 247:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 170              		.loc 1 247 0
+ 171              		.cfi_startproc
+ 172              		@ args = 0, pretend = 0, frame = 0
+ 173              		@ frame_needed = 1, uses_anonymous_args = 0
+ 174              		@ link register save eliminated.
+ 175 0000 80B4     		push	{r7}
+ 176              	.LCFI7:
+ 177              		.cfi_def_cfa_offset 4
+ 178              		.cfi_offset 7, -4
+ 179 0002 00AF     		add	r7, sp, #0
+ 180              	.LCFI8:
+ 181              		.cfi_def_cfa_register 7
+ 248:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Disable Timer */
+ 249:.\Generated_Source\PSoC5/Poll_Timer.c ****     #if(!Poll_Timer_ControlRegRemoved || Poll_Timer_UsingFixedFunction)
+ 250:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_CONTROL &= ((uint8)(~Poll_Timer_CTRL_ENABLE));
+ 182              		.loc 1 250 0
+ 183 0004 46F27553 		movw	r3, #25973
+ 184 0008 C4F20003 		movt	r3, 16384
+ 185 000c 46F27552 		movw	r2, #25973
+ 186 0010 C4F20002 		movt	r2, 16384
+ 187 0014 1278     		ldrb	r2, [r2, #0]
+ 188 0016 D2B2     		uxtb	r2, r2
+ 189 0018 02F07F02 		and	r2, r2, #127
+ 190 001c D2B2     		uxtb	r2, r2
+ 191 001e 1A70     		strb	r2, [r3, #0]
+ 251:.\Generated_Source\PSoC5/Poll_Timer.c ****     #endif /* Remove assignment if control register is removed */
+ 252:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 253:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Globally disable the Fixed Function Block chosen */
+ 254:.\Generated_Source\PSoC5/Poll_Timer.c ****     #if (Poll_Timer_UsingFixedFunction)
+ 255:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_GLOBAL_ENABLE &= ((uint8)(~Poll_Timer_BLOCK_EN_MASK));
+ 256:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_GLOBAL_STBY_ENABLE &= ((uint8)(~Poll_Timer_BLOCK_STBY_EN_MASK));
+ 257:.\Generated_Source\PSoC5/Poll_Timer.c ****     #endif /* Disable global enable for the Timer Fixed function block to stop the Timer*/
+ 258:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 192              		.loc 1 258 0
+ 193 0020 BD46     		mov	sp, r7
+ 194 0022 80BC     		pop	{r7}
+ 195 0024 7047     		bx	lr
+ 196              		.cfi_endproc
+ 197              	.LFE3:
+ 198              		.size	Poll_Timer_Stop, .-Poll_Timer_Stop
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 9
+
+
+ 199 0026 00BF     		.section	.text.Poll_Timer_SetInterruptMode,"ax",%progbits
+ 200              		.align	2
+ 201              		.global	Poll_Timer_SetInterruptMode
+ 202              		.thumb
+ 203              		.thumb_func
+ 204              		.type	Poll_Timer_SetInterruptMode, %function
+ 205              	Poll_Timer_SetInterruptMode:
+ 206              	.LFB4:
+ 259:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 260:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 261:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 262:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_SetInterruptMode
+ 263:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 264:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 265:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 266:.\Generated_Source\PSoC5/Poll_Timer.c **** *  This function selects which of the interrupt inputs may cause an interrupt.
+ 267:.\Generated_Source\PSoC5/Poll_Timer.c **** *  The twosources are caputure and terminal.  One, both or neither may
+ 268:.\Generated_Source\PSoC5/Poll_Timer.c **** *  be selected.
+ 269:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 270:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 271:.\Generated_Source\PSoC5/Poll_Timer.c **** *  interruptMode:   This parameter is used to enable interrups on either/or
+ 272:.\Generated_Source\PSoC5/Poll_Timer.c **** *                   terminal count or capture.
+ 273:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 274:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 275:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 276:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 277:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 278:.\Generated_Source\PSoC5/Poll_Timer.c **** void Poll_Timer_SetInterruptMode(uint8 interruptMode) 
+ 279:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 207              		.loc 1 279 0
+ 208              		.cfi_startproc
+ 209              		@ args = 0, pretend = 0, frame = 8
+ 210              		@ frame_needed = 1, uses_anonymous_args = 0
+ 211              		@ link register save eliminated.
+ 212 0000 80B4     		push	{r7}
+ 213              	.LCFI9:
+ 214              		.cfi_def_cfa_offset 4
+ 215              		.cfi_offset 7, -4
+ 216 0002 83B0     		sub	sp, sp, #12
+ 217              	.LCFI10:
+ 218              		.cfi_def_cfa_offset 16
+ 219 0004 00AF     		add	r7, sp, #0
+ 220              	.LCFI11:
+ 221              		.cfi_def_cfa_register 7
+ 222 0006 0346     		mov	r3, r0
+ 223 0008 FB71     		strb	r3, [r7, #7]
+ 280:.\Generated_Source\PSoC5/Poll_Timer.c ****     Poll_Timer_STATUS_MASK = interruptMode;
+ 224              		.loc 1 280 0
+ 225 000a 46F28753 		movw	r3, #25991
+ 226 000e C4F20003 		movt	r3, 16384
+ 227 0012 FA79     		ldrb	r2, [r7, #7]
+ 228 0014 1A70     		strb	r2, [r3, #0]
+ 281:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 229              		.loc 1 281 0
+ 230 0016 07F10C07 		add	r7, r7, #12
+ 231 001a BD46     		mov	sp, r7
+ 232 001c 80BC     		pop	{r7}
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 10
+
+
+ 233 001e 7047     		bx	lr
+ 234              		.cfi_endproc
+ 235              	.LFE4:
+ 236              		.size	Poll_Timer_SetInterruptMode, .-Poll_Timer_SetInterruptMode
+ 237              		.section	.text.Poll_Timer_SoftwareCapture,"ax",%progbits
+ 238              		.align	2
+ 239              		.global	Poll_Timer_SoftwareCapture
+ 240              		.thumb
+ 241              		.thumb_func
+ 242              		.type	Poll_Timer_SoftwareCapture, %function
+ 243              	Poll_Timer_SoftwareCapture:
+ 244              	.LFB5:
+ 282:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 283:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 284:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 285:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_SoftwareCapture
+ 286:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 287:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 288:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 289:.\Generated_Source\PSoC5/Poll_Timer.c **** *  This function forces a capture independent of the capture signal.
+ 290:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 291:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 292:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 293:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 294:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 295:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 296:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 297:.\Generated_Source\PSoC5/Poll_Timer.c **** * Side Effects:
+ 298:.\Generated_Source\PSoC5/Poll_Timer.c **** *  An existing hardware capture could be overwritten.
+ 299:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 300:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 301:.\Generated_Source\PSoC5/Poll_Timer.c **** void Poll_Timer_SoftwareCapture(void) 
+ 302:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 245              		.loc 1 302 0
+ 246              		.cfi_startproc
+ 247              		@ args = 0, pretend = 0, frame = 0
+ 248              		@ frame_needed = 1, uses_anonymous_args = 0
+ 249              		@ link register save eliminated.
+ 250 0000 80B4     		push	{r7}
+ 251              	.LCFI12:
+ 252              		.cfi_def_cfa_offset 4
+ 253              		.cfi_offset 7, -4
+ 254 0002 00AF     		add	r7, sp, #0
+ 255              	.LCFI13:
+ 256              		.cfi_def_cfa_register 7
+ 303:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Generate a software capture by reading the counter register */
+ 304:.\Generated_Source\PSoC5/Poll_Timer.c ****     (void)Poll_Timer_COUNTER_LSB;
+ 257              		.loc 1 304 0
+ 258 0004 46F20453 		movw	r3, #25860
+ 259 0008 C4F20003 		movt	r3, 16384
+ 260 000c 1B68     		ldr	r3, [r3, #0]
+ 305:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Capture Data is now in the FIFO */
+ 306:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 261              		.loc 1 306 0
+ 262 000e BD46     		mov	sp, r7
+ 263 0010 80BC     		pop	{r7}
+ 264 0012 7047     		bx	lr
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 11
+
+
+ 265              		.cfi_endproc
+ 266              	.LFE5:
+ 267              		.size	Poll_Timer_SoftwareCapture, .-Poll_Timer_SoftwareCapture
+ 268              		.section	.text.Poll_Timer_ReadStatusRegister,"ax",%progbits
+ 269              		.align	2
+ 270              		.global	Poll_Timer_ReadStatusRegister
+ 271              		.thumb
+ 272              		.thumb_func
+ 273              		.type	Poll_Timer_ReadStatusRegister, %function
+ 274              	Poll_Timer_ReadStatusRegister:
+ 275              	.LFB6:
+ 307:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 308:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 309:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 310:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_ReadStatusRegister
+ 311:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 312:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 313:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 314:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Reads the status register and returns it's state. This function should use
+ 315:.\Generated_Source\PSoC5/Poll_Timer.c **** *  defined types for the bit-field information as the bits in this register may
+ 316:.\Generated_Source\PSoC5/Poll_Timer.c **** *  be permuteable.
+ 317:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 318:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 319:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 320:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 321:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 322:.\Generated_Source\PSoC5/Poll_Timer.c **** *  The contents of the status register
+ 323:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 324:.\Generated_Source\PSoC5/Poll_Timer.c **** * Side Effects:
+ 325:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Status register bits may be clear on read.
+ 326:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 327:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 328:.\Generated_Source\PSoC5/Poll_Timer.c **** uint8   Poll_Timer_ReadStatusRegister(void) 
+ 329:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 276              		.loc 1 329 0
+ 277              		.cfi_startproc
+ 278              		@ args = 0, pretend = 0, frame = 0
+ 279              		@ frame_needed = 1, uses_anonymous_args = 0
+ 280              		@ link register save eliminated.
+ 281 0000 80B4     		push	{r7}
+ 282              	.LCFI14:
+ 283              		.cfi_def_cfa_offset 4
+ 284              		.cfi_offset 7, -4
+ 285 0002 00AF     		add	r7, sp, #0
+ 286              	.LCFI15:
+ 287              		.cfi_def_cfa_register 7
+ 330:.\Generated_Source\PSoC5/Poll_Timer.c ****     return (Poll_Timer_STATUS);
+ 288              		.loc 1 330 0
+ 289 0004 46F26753 		movw	r3, #25959
+ 290 0008 C4F20003 		movt	r3, 16384
+ 291 000c 1B78     		ldrb	r3, [r3, #0]
+ 292 000e DBB2     		uxtb	r3, r3
+ 331:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 293              		.loc 1 331 0
+ 294 0010 1846     		mov	r0, r3
+ 295 0012 BD46     		mov	sp, r7
+ 296 0014 80BC     		pop	{r7}
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 12
+
+
+ 297 0016 7047     		bx	lr
+ 298              		.cfi_endproc
+ 299              	.LFE6:
+ 300              		.size	Poll_Timer_ReadStatusRegister, .-Poll_Timer_ReadStatusRegister
+ 301              		.section	.text.Poll_Timer_ReadControlRegister,"ax",%progbits
+ 302              		.align	2
+ 303              		.global	Poll_Timer_ReadControlRegister
+ 304              		.thumb
+ 305              		.thumb_func
+ 306              		.type	Poll_Timer_ReadControlRegister, %function
+ 307              	Poll_Timer_ReadControlRegister:
+ 308              	.LFB7:
+ 332:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 333:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 334:.\Generated_Source\PSoC5/Poll_Timer.c **** #if (!Poll_Timer_ControlRegRemoved) /* Remove API if control register is removed */
+ 335:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 336:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 337:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 338:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_ReadControlRegister
+ 339:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 340:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 341:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 342:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Reads the control register and returns it's value.
+ 343:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 344:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 345:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 346:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 347:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 348:.\Generated_Source\PSoC5/Poll_Timer.c **** *  The contents of the control register
+ 349:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 350:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 351:.\Generated_Source\PSoC5/Poll_Timer.c **** uint8 Poll_Timer_ReadControlRegister(void) 
+ 352:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 309              		.loc 1 352 0
+ 310              		.cfi_startproc
+ 311              		@ args = 0, pretend = 0, frame = 0
+ 312              		@ frame_needed = 1, uses_anonymous_args = 0
+ 313              		@ link register save eliminated.
+ 314 0000 80B4     		push	{r7}
+ 315              	.LCFI16:
+ 316              		.cfi_def_cfa_offset 4
+ 317              		.cfi_offset 7, -4
+ 318 0002 00AF     		add	r7, sp, #0
+ 319              	.LCFI17:
+ 320              		.cfi_def_cfa_register 7
+ 353:.\Generated_Source\PSoC5/Poll_Timer.c ****     return ((uint8)Poll_Timer_CONTROL);
+ 321              		.loc 1 353 0
+ 322 0004 46F27553 		movw	r3, #25973
+ 323 0008 C4F20003 		movt	r3, 16384
+ 324 000c 1B78     		ldrb	r3, [r3, #0]
+ 325 000e DBB2     		uxtb	r3, r3
+ 354:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 326              		.loc 1 354 0
+ 327 0010 1846     		mov	r0, r3
+ 328 0012 BD46     		mov	sp, r7
+ 329 0014 80BC     		pop	{r7}
+ 330 0016 7047     		bx	lr
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 13
+
+
+ 331              		.cfi_endproc
+ 332              	.LFE7:
+ 333              		.size	Poll_Timer_ReadControlRegister, .-Poll_Timer_ReadControlRegister
+ 334              		.section	.text.Poll_Timer_WriteControlRegister,"ax",%progbits
+ 335              		.align	2
+ 336              		.global	Poll_Timer_WriteControlRegister
+ 337              		.thumb
+ 338              		.thumb_func
+ 339              		.type	Poll_Timer_WriteControlRegister, %function
+ 340              	Poll_Timer_WriteControlRegister:
+ 341              	.LFB8:
+ 355:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 356:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 357:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 358:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_WriteControlRegister
+ 359:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 360:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 361:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 362:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Sets the bit-field of the control register.
+ 363:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 364:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 365:.\Generated_Source\PSoC5/Poll_Timer.c **** *  control: The contents of the control register
+ 366:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 367:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 368:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 369:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 370:.\Generated_Source\PSoC5/Poll_Timer.c **** void Poll_Timer_WriteControlRegister(uint8 control) 
+ 371:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 342              		.loc 1 371 0
+ 343              		.cfi_startproc
+ 344              		@ args = 0, pretend = 0, frame = 8
+ 345              		@ frame_needed = 1, uses_anonymous_args = 0
+ 346              		@ link register save eliminated.
+ 347 0000 80B4     		push	{r7}
+ 348              	.LCFI18:
+ 349              		.cfi_def_cfa_offset 4
+ 350              		.cfi_offset 7, -4
+ 351 0002 83B0     		sub	sp, sp, #12
+ 352              	.LCFI19:
+ 353              		.cfi_def_cfa_offset 16
+ 354 0004 00AF     		add	r7, sp, #0
+ 355              	.LCFI20:
+ 356              		.cfi_def_cfa_register 7
+ 357 0006 0346     		mov	r3, r0
+ 358 0008 FB71     		strb	r3, [r7, #7]
+ 372:.\Generated_Source\PSoC5/Poll_Timer.c ****     Poll_Timer_CONTROL = control;
+ 359              		.loc 1 372 0
+ 360 000a 46F27553 		movw	r3, #25973
+ 361 000e C4F20003 		movt	r3, 16384
+ 362 0012 FA79     		ldrb	r2, [r7, #7]
+ 363 0014 1A70     		strb	r2, [r3, #0]
+ 373:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 364              		.loc 1 373 0
+ 365 0016 07F10C07 		add	r7, r7, #12
+ 366 001a BD46     		mov	sp, r7
+ 367 001c 80BC     		pop	{r7}
+ 368 001e 7047     		bx	lr
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 14
+
+
+ 369              		.cfi_endproc
+ 370              	.LFE8:
+ 371              		.size	Poll_Timer_WriteControlRegister, .-Poll_Timer_WriteControlRegister
+ 372              		.section	.text.Poll_Timer_ReadPeriod,"ax",%progbits
+ 373              		.align	2
+ 374              		.global	Poll_Timer_ReadPeriod
+ 375              		.thumb
+ 376              		.thumb_func
+ 377              		.type	Poll_Timer_ReadPeriod, %function
+ 378              	Poll_Timer_ReadPeriod:
+ 379              	.LFB9:
+ 374:.\Generated_Source\PSoC5/Poll_Timer.c **** #endif /* Remove API if control register is removed */
+ 375:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 376:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 377:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 378:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_ReadPeriod
+ 379:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 380:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 381:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 382:.\Generated_Source\PSoC5/Poll_Timer.c **** *  This function returns the current value of the Period.
+ 383:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 384:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 385:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 386:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 387:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 388:.\Generated_Source\PSoC5/Poll_Timer.c **** *  The present value of the counter.
+ 389:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 390:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 391:.\Generated_Source\PSoC5/Poll_Timer.c **** uint32 Poll_Timer_ReadPeriod(void) 
+ 392:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 380              		.loc 1 392 0
+ 381              		.cfi_startproc
+ 382              		@ args = 0, pretend = 0, frame = 0
+ 383              		@ frame_needed = 1, uses_anonymous_args = 0
+ 384              		@ link register save eliminated.
+ 385 0000 80B4     		push	{r7}
+ 386              	.LCFI21:
+ 387              		.cfi_def_cfa_offset 4
+ 388              		.cfi_offset 7, -4
+ 389 0002 00AF     		add	r7, sp, #0
+ 390              	.LCFI22:
+ 391              		.cfi_def_cfa_register 7
+ 393:.\Generated_Source\PSoC5/Poll_Timer.c ****    #if(Poll_Timer_UsingFixedFunction)
+ 394:.\Generated_Source\PSoC5/Poll_Timer.c ****        return ((uint32)CY_GET_REG16(Poll_Timer_PERIOD_LSB_PTR));
+ 395:.\Generated_Source\PSoC5/Poll_Timer.c ****    #else
+ 396:.\Generated_Source\PSoC5/Poll_Timer.c ****        return (CY_GET_REG24(Poll_Timer_PERIOD_LSB_PTR));
+ 392              		.loc 1 396 0
+ 393 0004 46F22453 		movw	r3, #25892
+ 394 0008 C4F20003 		movt	r3, 16384
+ 395 000c 1B68     		ldr	r3, [r3, #0]
+ 396 000e 23F07F43 		bic	r3, r3, #-16777216
+ 397:.\Generated_Source\PSoC5/Poll_Timer.c ****    #endif /* (Poll_Timer_UsingFixedFunction) */
+ 398:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 397              		.loc 1 398 0
+ 398 0012 1846     		mov	r0, r3
+ 399 0014 BD46     		mov	sp, r7
+ 400 0016 80BC     		pop	{r7}
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 15
+
+
+ 401 0018 7047     		bx	lr
+ 402              		.cfi_endproc
+ 403              	.LFE9:
+ 404              		.size	Poll_Timer_ReadPeriod, .-Poll_Timer_ReadPeriod
+ 405 001a 00BF     		.section	.text.Poll_Timer_WritePeriod,"ax",%progbits
+ 406              		.align	2
+ 407              		.global	Poll_Timer_WritePeriod
+ 408              		.thumb
+ 409              		.thumb_func
+ 410              		.type	Poll_Timer_WritePeriod, %function
+ 411              	Poll_Timer_WritePeriod:
+ 412              	.LFB10:
+ 399:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 400:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 401:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 402:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_WritePeriod
+ 403:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 404:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 405:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 406:.\Generated_Source\PSoC5/Poll_Timer.c **** *  This function is used to change the period of the counter.  The new period
+ 407:.\Generated_Source\PSoC5/Poll_Timer.c **** *  will be loaded the next time terminal count is detected.
+ 408:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 409:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 410:.\Generated_Source\PSoC5/Poll_Timer.c **** *  period: This value may be between 1 and (2^Resolution)-1.  A value of 0 will
+ 411:.\Generated_Source\PSoC5/Poll_Timer.c **** *          result in the counter remaining at zero.
+ 412:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 413:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 414:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 415:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 416:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 417:.\Generated_Source\PSoC5/Poll_Timer.c **** void Poll_Timer_WritePeriod(uint32 period) 
+ 418:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 413              		.loc 1 418 0
+ 414              		.cfi_startproc
+ 415              		@ args = 0, pretend = 0, frame = 8
+ 416              		@ frame_needed = 1, uses_anonymous_args = 0
+ 417 0000 80B5     		push	{r7, lr}
+ 418              	.LCFI23:
+ 419              		.cfi_def_cfa_offset 8
+ 420              		.cfi_offset 7, -8
+ 421              		.cfi_offset 14, -4
+ 422 0002 82B0     		sub	sp, sp, #8
+ 423              	.LCFI24:
+ 424              		.cfi_def_cfa_offset 16
+ 425 0004 00AF     		add	r7, sp, #0
+ 426              	.LCFI25:
+ 427              		.cfi_def_cfa_register 7
+ 428 0006 7860     		str	r0, [r7, #4]
+ 419:.\Generated_Source\PSoC5/Poll_Timer.c ****     #if(Poll_Timer_UsingFixedFunction)
+ 420:.\Generated_Source\PSoC5/Poll_Timer.c ****         uint16 period_temp = (uint16)period;
+ 421:.\Generated_Source\PSoC5/Poll_Timer.c ****         CY_SET_REG16(Poll_Timer_PERIOD_LSB_PTR, period_temp);
+ 422:.\Generated_Source\PSoC5/Poll_Timer.c ****     #else
+ 423:.\Generated_Source\PSoC5/Poll_Timer.c ****         CY_SET_REG24(Poll_Timer_PERIOD_LSB_PTR, period);
+ 429              		.loc 1 423 0
+ 430 0008 46F22450 		movw	r0, #25892
+ 431 000c C4F20000 		movt	r0, 16384
+ 432 0010 7968     		ldr	r1, [r7, #4]
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 16
+
+
+ 433 0012 FFF7FEFF 		bl	CySetReg24
+ 424:.\Generated_Source\PSoC5/Poll_Timer.c ****     #endif /*Write Period value with appropriate resolution suffix depending on UDB or fixed functi
+ 425:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 434              		.loc 1 425 0
+ 435 0016 07F10807 		add	r7, r7, #8
+ 436 001a BD46     		mov	sp, r7
+ 437 001c 80BD     		pop	{r7, pc}
+ 438              		.cfi_endproc
+ 439              	.LFE10:
+ 440              		.size	Poll_Timer_WritePeriod, .-Poll_Timer_WritePeriod
+ 441 001e 00BF     		.section	.text.Poll_Timer_ReadCapture,"ax",%progbits
+ 442              		.align	2
+ 443              		.global	Poll_Timer_ReadCapture
+ 444              		.thumb
+ 445              		.thumb_func
+ 446              		.type	Poll_Timer_ReadCapture, %function
+ 447              	Poll_Timer_ReadCapture:
+ 448              	.LFB11:
+ 426:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 427:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 428:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 429:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_ReadCapture
+ 430:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 431:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 432:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 433:.\Generated_Source\PSoC5/Poll_Timer.c **** *  This function returns the last value captured.
+ 434:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 435:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 436:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 437:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 438:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 439:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Present Capture value.
+ 440:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 441:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 442:.\Generated_Source\PSoC5/Poll_Timer.c **** uint32 Poll_Timer_ReadCapture(void) 
+ 443:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 449              		.loc 1 443 0
+ 450              		.cfi_startproc
+ 451              		@ args = 0, pretend = 0, frame = 0
+ 452              		@ frame_needed = 1, uses_anonymous_args = 0
+ 453              		@ link register save eliminated.
+ 454 0000 80B4     		push	{r7}
+ 455              	.LCFI26:
+ 456              		.cfi_def_cfa_offset 4
+ 457              		.cfi_offset 7, -4
+ 458 0002 00AF     		add	r7, sp, #0
+ 459              	.LCFI27:
+ 460              		.cfi_def_cfa_register 7
+ 444:.\Generated_Source\PSoC5/Poll_Timer.c ****    #if(Poll_Timer_UsingFixedFunction)
+ 445:.\Generated_Source\PSoC5/Poll_Timer.c ****        return ((uint32)CY_GET_REG16(Poll_Timer_CAPTURE_LSB_PTR));
+ 446:.\Generated_Source\PSoC5/Poll_Timer.c ****    #else
+ 447:.\Generated_Source\PSoC5/Poll_Timer.c ****        return (CY_GET_REG24(Poll_Timer_CAPTURE_LSB_PTR));
+ 461              		.loc 1 447 0
+ 462 0004 46F24453 		movw	r3, #25924
+ 463 0008 C4F20003 		movt	r3, 16384
+ 464 000c 1B68     		ldr	r3, [r3, #0]
+ 465 000e 23F07F43 		bic	r3, r3, #-16777216
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 17
+
+
+ 448:.\Generated_Source\PSoC5/Poll_Timer.c ****    #endif /* (Poll_Timer_UsingFixedFunction) */
+ 449:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 466              		.loc 1 449 0
+ 467 0012 1846     		mov	r0, r3
+ 468 0014 BD46     		mov	sp, r7
+ 469 0016 80BC     		pop	{r7}
+ 470 0018 7047     		bx	lr
+ 471              		.cfi_endproc
+ 472              	.LFE11:
+ 473              		.size	Poll_Timer_ReadCapture, .-Poll_Timer_ReadCapture
+ 474 001a 00BF     		.section	.text.Poll_Timer_WriteCounter,"ax",%progbits
+ 475              		.align	2
+ 476              		.global	Poll_Timer_WriteCounter
+ 477              		.thumb
+ 478              		.thumb_func
+ 479              		.type	Poll_Timer_WriteCounter, %function
+ 480              	Poll_Timer_WriteCounter:
+ 481              	.LFB12:
+ 450:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 451:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 452:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 453:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_WriteCounter
+ 454:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 455:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 456:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 457:.\Generated_Source\PSoC5/Poll_Timer.c **** *  This funtion is used to set the counter to a specific value
+ 458:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 459:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 460:.\Generated_Source\PSoC5/Poll_Timer.c **** *  counter:  New counter value.
+ 461:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 462:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 463:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 464:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 465:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 466:.\Generated_Source\PSoC5/Poll_Timer.c **** void Poll_Timer_WriteCounter(uint32 counter) \
+ 467:.\Generated_Source\PSoC5/Poll_Timer.c ****                                    
+ 468:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 482              		.loc 1 468 0
+ 483              		.cfi_startproc
+ 484              		@ args = 0, pretend = 0, frame = 8
+ 485              		@ frame_needed = 1, uses_anonymous_args = 0
+ 486 0000 80B5     		push	{r7, lr}
+ 487              	.LCFI28:
+ 488              		.cfi_def_cfa_offset 8
+ 489              		.cfi_offset 7, -8
+ 490              		.cfi_offset 14, -4
+ 491 0002 82B0     		sub	sp, sp, #8
+ 492              	.LCFI29:
+ 493              		.cfi_def_cfa_offset 16
+ 494 0004 00AF     		add	r7, sp, #0
+ 495              	.LCFI30:
+ 496              		.cfi_def_cfa_register 7
+ 497 0006 7860     		str	r0, [r7, #4]
+ 469:.\Generated_Source\PSoC5/Poll_Timer.c ****    #if(Poll_Timer_UsingFixedFunction)
+ 470:.\Generated_Source\PSoC5/Poll_Timer.c ****         /* This functionality is removed until a FixedFunction HW update to
+ 471:.\Generated_Source\PSoC5/Poll_Timer.c ****          * allow this register to be written
+ 472:.\Generated_Source\PSoC5/Poll_Timer.c ****          */
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 18
+
+
+ 473:.\Generated_Source\PSoC5/Poll_Timer.c ****         CY_SET_REG16(Poll_Timer_COUNTER_LSB_PTR, (uint16)counter);
+ 474:.\Generated_Source\PSoC5/Poll_Timer.c ****         
+ 475:.\Generated_Source\PSoC5/Poll_Timer.c ****     #else
+ 476:.\Generated_Source\PSoC5/Poll_Timer.c ****         CY_SET_REG24(Poll_Timer_COUNTER_LSB_PTR, counter);
+ 498              		.loc 1 476 0
+ 499 0008 46F20450 		movw	r0, #25860
+ 500 000c C4F20000 		movt	r0, 16384
+ 501 0010 7968     		ldr	r1, [r7, #4]
+ 502 0012 FFF7FEFF 		bl	CySetReg24
+ 477:.\Generated_Source\PSoC5/Poll_Timer.c ****     #endif /* Set Write Counter only for the UDB implementation (Write Counter not available in fix
+ 478:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 503              		.loc 1 478 0
+ 504 0016 07F10807 		add	r7, r7, #8
+ 505 001a BD46     		mov	sp, r7
+ 506 001c 80BD     		pop	{r7, pc}
+ 507              		.cfi_endproc
+ 508              	.LFE12:
+ 509              		.size	Poll_Timer_WriteCounter, .-Poll_Timer_WriteCounter
+ 510 001e 00BF     		.section	.text.Poll_Timer_ReadCounter,"ax",%progbits
+ 511              		.align	2
+ 512              		.global	Poll_Timer_ReadCounter
+ 513              		.thumb
+ 514              		.thumb_func
+ 515              		.type	Poll_Timer_ReadCounter, %function
+ 516              	Poll_Timer_ReadCounter:
+ 517              	.LFB13:
+ 479:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 480:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 481:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 482:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_ReadCounter
+ 483:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 484:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 485:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 486:.\Generated_Source\PSoC5/Poll_Timer.c **** *  This function returns the current counter value.
+ 487:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 488:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 489:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 490:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 491:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 492:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Present compare value.
+ 493:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 494:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 495:.\Generated_Source\PSoC5/Poll_Timer.c **** uint32 Poll_Timer_ReadCounter(void) 
+ 496:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 518              		.loc 1 496 0
+ 519              		.cfi_startproc
+ 520              		@ args = 0, pretend = 0, frame = 0
+ 521              		@ frame_needed = 1, uses_anonymous_args = 0
+ 522              		@ link register save eliminated.
+ 523 0000 80B4     		push	{r7}
+ 524              	.LCFI31:
+ 525              		.cfi_def_cfa_offset 4
+ 526              		.cfi_offset 7, -4
+ 527 0002 00AF     		add	r7, sp, #0
+ 528              	.LCFI32:
+ 529              		.cfi_def_cfa_register 7
+ 497:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 19
+
+
+ 498:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Force capture by reading Accumulator */
+ 499:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Must first do a software capture to be able to read the counter */
+ 500:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* It is up to the user code to make sure there isn't already captured data in the FIFO */
+ 501:.\Generated_Source\PSoC5/Poll_Timer.c ****     (void)Poll_Timer_COUNTER_LSB;
+ 530              		.loc 1 501 0
+ 531 0004 46F20453 		movw	r3, #25860
+ 532 0008 C4F20003 		movt	r3, 16384
+ 533 000c 1B68     		ldr	r3, [r3, #0]
+ 502:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 503:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Read the data from the FIFO (or capture register for Fixed Function)*/
+ 504:.\Generated_Source\PSoC5/Poll_Timer.c ****     #if(Poll_Timer_UsingFixedFunction)
+ 505:.\Generated_Source\PSoC5/Poll_Timer.c ****         return ((uint32)CY_GET_REG16(Poll_Timer_CAPTURE_LSB_PTR));
+ 506:.\Generated_Source\PSoC5/Poll_Timer.c ****     #else
+ 507:.\Generated_Source\PSoC5/Poll_Timer.c ****         return (CY_GET_REG24(Poll_Timer_CAPTURE_LSB_PTR));
+ 534              		.loc 1 507 0
+ 535 000e 46F24453 		movw	r3, #25924
+ 536 0012 C4F20003 		movt	r3, 16384
+ 537 0016 1B68     		ldr	r3, [r3, #0]
+ 538 0018 23F07F43 		bic	r3, r3, #-16777216
+ 508:.\Generated_Source\PSoC5/Poll_Timer.c ****     #endif /* (Poll_Timer_UsingFixedFunction) */
+ 509:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 539              		.loc 1 509 0
+ 540 001c 1846     		mov	r0, r3
+ 541 001e BD46     		mov	sp, r7
+ 542 0020 80BC     		pop	{r7}
+ 543 0022 7047     		bx	lr
+ 544              		.cfi_endproc
+ 545              	.LFE13:
+ 546              		.size	Poll_Timer_ReadCounter, .-Poll_Timer_ReadCounter
+ 547              		.section	.text.Poll_Timer_ClearFIFO,"ax",%progbits
+ 548              		.align	2
+ 549              		.global	Poll_Timer_ClearFIFO
+ 550              		.thumb
+ 551              		.thumb_func
+ 552              		.type	Poll_Timer_ClearFIFO, %function
+ 553              	Poll_Timer_ClearFIFO:
+ 554              	.LFB14:
+ 510:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 511:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 512:.\Generated_Source\PSoC5/Poll_Timer.c **** #if(!Poll_Timer_UsingFixedFunction) /* UDB Specific Functions */
+ 513:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 514:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 515:.\Generated_Source\PSoC5/Poll_Timer.c ****  * The functions below this point are only available using the UDB
+ 516:.\Generated_Source\PSoC5/Poll_Timer.c ****  * implementation.  If a feature is selected, then the API is enabled.
+ 517:.\Generated_Source\PSoC5/Poll_Timer.c ****  ******************************************************************************/
+ 518:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 519:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 520:.\Generated_Source\PSoC5/Poll_Timer.c **** #if (Poll_Timer_SoftwareCaptureMode)
+ 521:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 522:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 523:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 524:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_SetCaptureMode
+ 525:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 526:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 527:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 528:.\Generated_Source\PSoC5/Poll_Timer.c **** *  This function sets the capture mode to either rising or falling edge.
+ 529:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 20
+
+
+ 530:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 531:.\Generated_Source\PSoC5/Poll_Timer.c **** *  captureMode: This parameter sets the capture mode of the UDB capture feature
+ 532:.\Generated_Source\PSoC5/Poll_Timer.c **** *  The parameter values are defined using the
+ 533:.\Generated_Source\PSoC5/Poll_Timer.c **** *  #define Poll_Timer__B_TIMER__CM_NONE 0
+ 534:.\Generated_Source\PSoC5/Poll_Timer.c **** #define Poll_Timer__B_TIMER__CM_RISINGEDGE 1
+ 535:.\Generated_Source\PSoC5/Poll_Timer.c **** #define Poll_Timer__B_TIMER__CM_FALLINGEDGE 2
+ 536:.\Generated_Source\PSoC5/Poll_Timer.c **** #define Poll_Timer__B_TIMER__CM_EITHEREDGE 3
+ 537:.\Generated_Source\PSoC5/Poll_Timer.c **** #define Poll_Timer__B_TIMER__CM_SOFTWARE 4
+ 538:.\Generated_Source\PSoC5/Poll_Timer.c ****  identifiers
+ 539:.\Generated_Source\PSoC5/Poll_Timer.c **** *  The following are the possible values of the parameter
+ 540:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Poll_Timer__B_TIMER__CM_NONE        - Set Capture mode to None
+ 541:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Poll_Timer__B_TIMER__CM_RISINGEDGE  - Rising edge of Capture input
+ 542:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Poll_Timer__B_TIMER__CM_FALLINGEDGE - Falling edge of Capture input
+ 543:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Poll_Timer__B_TIMER__CM_EITHEREDGE  - Either edge of Capture input
+ 544:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 545:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 546:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 547:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 548:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 549:.\Generated_Source\PSoC5/Poll_Timer.c **** void Poll_Timer_SetCaptureMode(uint8 captureMode) 
+ 550:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 551:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* This must only set to two bits of the control register associated */
+ 552:.\Generated_Source\PSoC5/Poll_Timer.c ****     captureMode = ((uint8)((uint8)captureMode << Poll_Timer_CTRL_CAP_MODE_SHIFT));
+ 553:.\Generated_Source\PSoC5/Poll_Timer.c ****     captureMode &= (Poll_Timer_CTRL_CAP_MODE_MASK);
+ 554:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 555:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Clear the Current Setting */
+ 556:.\Generated_Source\PSoC5/Poll_Timer.c ****     Poll_Timer_CONTROL &= ((uint8)(~Poll_Timer_CTRL_CAP_MODE_MASK));
+ 557:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 558:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Write The New Setting */
+ 559:.\Generated_Source\PSoC5/Poll_Timer.c ****     Poll_Timer_CONTROL |= captureMode;
+ 560:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 561:.\Generated_Source\PSoC5/Poll_Timer.c **** #endif /* Remove API if Capture Mode is not Software Controlled */
+ 562:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 563:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 564:.\Generated_Source\PSoC5/Poll_Timer.c **** #if (Poll_Timer_SoftwareTriggerMode)
+ 565:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 566:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 567:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 568:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_SetTriggerMode
+ 569:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 570:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 571:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 572:.\Generated_Source\PSoC5/Poll_Timer.c **** *  This function sets the trigger input mode
+ 573:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 574:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 575:.\Generated_Source\PSoC5/Poll_Timer.c **** *  triggerMode: Pass one of the pre-defined Trigger Modes (except Software)
+ 576:.\Generated_Source\PSoC5/Poll_Timer.c ****     #define Poll_Timer__B_TIMER__TM_NONE 0x00u
+ 577:.\Generated_Source\PSoC5/Poll_Timer.c ****     #define Poll_Timer__B_TIMER__TM_RISINGEDGE 0x04u
+ 578:.\Generated_Source\PSoC5/Poll_Timer.c ****     #define Poll_Timer__B_TIMER__TM_FALLINGEDGE 0x08u
+ 579:.\Generated_Source\PSoC5/Poll_Timer.c ****     #define Poll_Timer__B_TIMER__TM_EITHEREDGE 0x0Cu
+ 580:.\Generated_Source\PSoC5/Poll_Timer.c ****     #define Poll_Timer__B_TIMER__TM_SOFTWARE 0x10u
+ 581:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 582:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 583:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 584:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 585:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 586:.\Generated_Source\PSoC5/Poll_Timer.c **** void Poll_Timer_SetTriggerMode(uint8 triggerMode) 
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 21
+
+
+ 587:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 588:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* This must only set to two bits of the control register associated */
+ 589:.\Generated_Source\PSoC5/Poll_Timer.c ****     triggerMode &= Poll_Timer_CTRL_TRIG_MODE_MASK;
+ 590:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 591:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Clear the Current Setting */
+ 592:.\Generated_Source\PSoC5/Poll_Timer.c ****     Poll_Timer_CONTROL &= ((uint8)(~Poll_Timer_CTRL_TRIG_MODE_MASK));
+ 593:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 594:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Write The New Setting */
+ 595:.\Generated_Source\PSoC5/Poll_Timer.c ****     Poll_Timer_CONTROL |= (triggerMode | Poll_Timer__B_TIMER__TM_SOFTWARE);
+ 596:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 597:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 598:.\Generated_Source\PSoC5/Poll_Timer.c **** #endif /* Remove API if Trigger Mode is not Software Controlled */
+ 599:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 600:.\Generated_Source\PSoC5/Poll_Timer.c **** #if (Poll_Timer_EnableTriggerMode)
+ 601:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 602:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 603:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 604:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_EnableTrigger
+ 605:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 606:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 607:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 608:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Sets the control bit enabling Hardware Trigger mode
+ 609:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 610:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 611:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 612:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 613:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 614:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 615:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 616:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 617:.\Generated_Source\PSoC5/Poll_Timer.c **** void Poll_Timer_EnableTrigger(void) 
+ 618:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 619:.\Generated_Source\PSoC5/Poll_Timer.c ****     #if (!Poll_Timer_ControlRegRemoved)   /* Remove assignment if control register is removed */
+ 620:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_CONTROL |= Poll_Timer_CTRL_TRIG_EN;
+ 621:.\Generated_Source\PSoC5/Poll_Timer.c ****     #endif /* Remove code section if control register is not used */
+ 622:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 623:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 624:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 625:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 626:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_DisableTrigger
+ 627:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 628:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 629:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 630:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Clears the control bit enabling Hardware Trigger mode
+ 631:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 632:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 633:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 634:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 635:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 636:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 637:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 638:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 639:.\Generated_Source\PSoC5/Poll_Timer.c **** void Poll_Timer_DisableTrigger(void) 
+ 640:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 641:.\Generated_Source\PSoC5/Poll_Timer.c ****     #if (!Poll_Timer_ControlRegRemoved)   /* Remove assignment if control register is removed */
+ 642:.\Generated_Source\PSoC5/Poll_Timer.c ****         Poll_Timer_CONTROL &= ((uint8)(~Poll_Timer_CTRL_TRIG_EN));
+ 643:.\Generated_Source\PSoC5/Poll_Timer.c ****     #endif /* Remove code section if control register is not used */
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 22
+
+
+ 644:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 645:.\Generated_Source\PSoC5/Poll_Timer.c **** #endif /* Remove API is Trigger Mode is set to None */
+ 646:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 647:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 648:.\Generated_Source\PSoC5/Poll_Timer.c **** #if(Poll_Timer_InterruptOnCaptureCount)
+ 649:.\Generated_Source\PSoC5/Poll_Timer.c **** #if (!Poll_Timer_ControlRegRemoved)   /* Remove API if control register is removed */
+ 650:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 651:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 652:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 653:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_SetInterruptCount
+ 654:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 655:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 656:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 657:.\Generated_Source\PSoC5/Poll_Timer.c **** *  This function sets the capture count before an interrupt is triggered.
+ 658:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 659:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 660:.\Generated_Source\PSoC5/Poll_Timer.c **** *  interruptCount:  A value between 0 and 3 is valid.  If the value is 0, then
+ 661:.\Generated_Source\PSoC5/Poll_Timer.c **** *                   an interrupt will occur each time a capture occurs.
+ 662:.\Generated_Source\PSoC5/Poll_Timer.c **** *                   A value of 1 to 3 will cause the interrupt
+ 663:.\Generated_Source\PSoC5/Poll_Timer.c **** *                   to delay by the same number of captures.
+ 664:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 665:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 666:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 667:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 668:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 669:.\Generated_Source\PSoC5/Poll_Timer.c **** void Poll_Timer_SetInterruptCount(uint8 interruptCount) 
+ 670:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 671:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* This must only set to two bits of the control register associated */
+ 672:.\Generated_Source\PSoC5/Poll_Timer.c ****     interruptCount &= Poll_Timer_CTRL_INTCNT_MASK;
+ 673:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 674:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Clear the Current Setting */
+ 675:.\Generated_Source\PSoC5/Poll_Timer.c ****     Poll_Timer_CONTROL &= ((uint8)(~Poll_Timer_CTRL_INTCNT_MASK));
+ 676:.\Generated_Source\PSoC5/Poll_Timer.c ****     /* Write The New Setting */
+ 677:.\Generated_Source\PSoC5/Poll_Timer.c ****     Poll_Timer_CONTROL |= interruptCount;
+ 678:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 679:.\Generated_Source\PSoC5/Poll_Timer.c **** #endif /* Remove API if control register is removed */
+ 680:.\Generated_Source\PSoC5/Poll_Timer.c **** #endif /* Poll_Timer_InterruptOnCaptureCount */
+ 681:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 682:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 683:.\Generated_Source\PSoC5/Poll_Timer.c **** #if (Poll_Timer_UsingHWCaptureCounter)
+ 684:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 685:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 686:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 687:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_SetCaptureCount
+ 688:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 689:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 690:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 691:.\Generated_Source\PSoC5/Poll_Timer.c **** *  This function sets the capture count
+ 692:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 693:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 694:.\Generated_Source\PSoC5/Poll_Timer.c **** *  captureCount: A value between 2 and 127 inclusive is valid.  A value of 1
+ 695:.\Generated_Source\PSoC5/Poll_Timer.c **** *                to 127 will cause the interrupt to delay by the same number of
+ 696:.\Generated_Source\PSoC5/Poll_Timer.c **** *                captures.
+ 697:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 698:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 699:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 700:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 23
+
+
+ 701:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 702:.\Generated_Source\PSoC5/Poll_Timer.c **** void Poll_Timer_SetCaptureCount(uint8 captureCount) 
+ 703:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 704:.\Generated_Source\PSoC5/Poll_Timer.c ****     Poll_Timer_CAP_COUNT = captureCount;
+ 705:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 706:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 707:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 708:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 709:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_ReadCaptureCount
+ 710:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 711:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 712:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 713:.\Generated_Source\PSoC5/Poll_Timer.c **** *  This function reads the capture count setting
+ 714:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 715:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 716:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 717:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 718:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 719:.\Generated_Source\PSoC5/Poll_Timer.c **** *  Returns the Capture Count Setting
+ 720:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 721:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 722:.\Generated_Source\PSoC5/Poll_Timer.c **** uint8 Poll_Timer_ReadCaptureCount(void) 
+ 723:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 724:.\Generated_Source\PSoC5/Poll_Timer.c ****     return ((uint8)Poll_Timer_CAP_COUNT);
+ 725:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 726:.\Generated_Source\PSoC5/Poll_Timer.c **** #endif /* Poll_Timer_UsingHWCaptureCounter */
+ 727:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 728:.\Generated_Source\PSoC5/Poll_Timer.c **** 
+ 729:.\Generated_Source\PSoC5/Poll_Timer.c **** /*******************************************************************************
+ 730:.\Generated_Source\PSoC5/Poll_Timer.c **** * Function Name: Poll_Timer_ClearFIFO
+ 731:.\Generated_Source\PSoC5/Poll_Timer.c **** ********************************************************************************
+ 732:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 733:.\Generated_Source\PSoC5/Poll_Timer.c **** * Summary:
+ 734:.\Generated_Source\PSoC5/Poll_Timer.c **** *  This function clears all capture data from the capture FIFO
+ 735:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 736:.\Generated_Source\PSoC5/Poll_Timer.c **** * Parameters:
+ 737:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 738:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 739:.\Generated_Source\PSoC5/Poll_Timer.c **** * Return:
+ 740:.\Generated_Source\PSoC5/Poll_Timer.c **** *  void
+ 741:.\Generated_Source\PSoC5/Poll_Timer.c **** *
+ 742:.\Generated_Source\PSoC5/Poll_Timer.c **** *******************************************************************************/
+ 743:.\Generated_Source\PSoC5/Poll_Timer.c **** void Poll_Timer_ClearFIFO(void) 
+ 744:.\Generated_Source\PSoC5/Poll_Timer.c **** {
+ 555              		.loc 1 744 0
+ 556              		.cfi_startproc
+ 557              		@ args = 0, pretend = 0, frame = 0
+ 558              		@ frame_needed = 1, uses_anonymous_args = 0
+ 559 0000 80B5     		push	{r7, lr}
+ 560              	.LCFI33:
+ 561              		.cfi_def_cfa_offset 8
+ 562              		.cfi_offset 7, -8
+ 563              		.cfi_offset 14, -4
+ 564 0002 00AF     		add	r7, sp, #0
+ 565              	.LCFI34:
+ 566              		.cfi_def_cfa_register 7
+ 745:.\Generated_Source\PSoC5/Poll_Timer.c ****     while(0u != (Poll_Timer_ReadStatusRegister() & Poll_Timer_STATUS_FIFONEMP))
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 24
+
+
+ 567              		.loc 1 745 0
+ 568 0004 01E0     		b	.L22
+ 569              	.L23:
+ 746:.\Generated_Source\PSoC5/Poll_Timer.c ****     {
+ 747:.\Generated_Source\PSoC5/Poll_Timer.c ****         (void)Poll_Timer_ReadCapture();
+ 570              		.loc 1 747 0
+ 571 0006 FFF7FEFF 		bl	Poll_Timer_ReadCapture
+ 572              	.L22:
+ 745:.\Generated_Source\PSoC5/Poll_Timer.c ****     while(0u != (Poll_Timer_ReadStatusRegister() & Poll_Timer_STATUS_FIFONEMP))
+ 573              		.loc 1 745 0 discriminator 1
+ 574 000a FFF7FEFF 		bl	Poll_Timer_ReadStatusRegister
+ 575 000e 0346     		mov	r3, r0
+ 576 0010 03F00803 		and	r3, r3, #8
+ 577 0014 002B     		cmp	r3, #0
+ 578 0016 F6D1     		bne	.L23
+ 748:.\Generated_Source\PSoC5/Poll_Timer.c ****     }
+ 749:.\Generated_Source\PSoC5/Poll_Timer.c **** }
+ 579              		.loc 1 749 0
+ 580 0018 80BD     		pop	{r7, pc}
+ 581              		.cfi_endproc
+ 582              	.LFE14:
+ 583              		.size	Poll_Timer_ClearFIFO, .-Poll_Timer_ClearFIFO
+ 584 001a 00BF     		.text
+ 585              	.Letext0:
+ 586              		.file 2 ".\\Generated_Source\\PSoC5\\cytypes.h"
+ 587              		.section	.debug_info,"",%progbits
+ 588              	.Ldebug_info0:
+ 589 0000 9C020000 		.4byte	0x29c
+ 590 0004 0200     		.2byte	0x2
+ 591 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 592 000a 04       		.byte	0x4
+ 593 000b 01       		.uleb128 0x1
+ 594 000c B4020000 		.4byte	.LASF36
+ 595 0010 01       		.byte	0x1
+ 596 0011 C0010000 		.4byte	.LASF37
+ 597 0015 3B000000 		.4byte	.LASF38
+ 598 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 599 001d 00000000 		.4byte	0
+ 600 0021 00000000 		.4byte	0
+ 601 0025 00000000 		.4byte	.Ldebug_line0
+ 602 0029 02       		.uleb128 0x2
+ 603 002a 01       		.byte	0x1
+ 604 002b 06       		.byte	0x6
+ 605 002c 1B030000 		.4byte	.LASF0
+ 606 0030 02       		.uleb128 0x2
+ 607 0031 01       		.byte	0x1
+ 608 0032 08       		.byte	0x8
+ 609 0033 3D010000 		.4byte	.LASF1
+ 610 0037 02       		.uleb128 0x2
+ 611 0038 02       		.byte	0x2
+ 612 0039 05       		.byte	0x5
+ 613 003a AA020000 		.4byte	.LASF2
+ 614 003e 02       		.uleb128 0x2
+ 615 003f 02       		.byte	0x2
+ 616 0040 07       		.byte	0x7
+ 617 0041 D8000000 		.4byte	.LASF3
+ 618 0045 02       		.uleb128 0x2
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 25
+
+
+ 619 0046 04       		.byte	0x4
+ 620 0047 05       		.byte	0x5
+ 621 0048 FD020000 		.4byte	.LASF4
+ 622 004c 02       		.uleb128 0x2
+ 623 004d 04       		.byte	0x4
+ 624 004e 07       		.byte	0x7
+ 625 004f 66010000 		.4byte	.LASF5
+ 626 0053 02       		.uleb128 0x2
+ 627 0054 08       		.byte	0x8
+ 628 0055 05       		.byte	0x5
+ 629 0056 5D020000 		.4byte	.LASF6
+ 630 005a 02       		.uleb128 0x2
+ 631 005b 08       		.byte	0x8
+ 632 005c 07       		.byte	0x7
+ 633 005d E6010000 		.4byte	.LASF7
+ 634 0061 03       		.uleb128 0x3
+ 635 0062 04       		.byte	0x4
+ 636 0063 05       		.byte	0x5
+ 637 0064 696E7400 		.ascii	"int\000"
+ 638 0068 02       		.uleb128 0x2
+ 639 0069 04       		.byte	0x4
+ 640 006a 07       		.byte	0x7
+ 641 006b B3010000 		.4byte	.LASF8
+ 642 006f 04       		.uleb128 0x4
+ 643 0070 78010000 		.4byte	.LASF9
+ 644 0074 02       		.byte	0x2
+ 645 0075 5B       		.byte	0x5b
+ 646 0076 30000000 		.4byte	0x30
+ 647 007a 04       		.uleb128 0x4
+ 648 007b AC010000 		.4byte	.LASF10
+ 649 007f 02       		.byte	0x2
+ 650 0080 5D       		.byte	0x5d
+ 651 0081 4C000000 		.4byte	0x4c
+ 652 0085 02       		.uleb128 0x2
+ 653 0086 04       		.byte	0x4
+ 654 0087 04       		.byte	0x4
+ 655 0088 2F010000 		.4byte	.LASF11
+ 656 008c 02       		.uleb128 0x2
+ 657 008d 08       		.byte	0x8
+ 658 008e 04       		.byte	0x4
+ 659 008f 86010000 		.4byte	.LASF12
+ 660 0093 02       		.uleb128 0x2
+ 661 0094 01       		.byte	0x1
+ 662 0095 08       		.byte	0x8
+ 663 0096 06030000 		.4byte	.LASF13
+ 664 009a 04       		.uleb128 0x4
+ 665 009b 4B010000 		.4byte	.LASF14
+ 666 009f 02       		.byte	0x2
+ 667 00a0 F0       		.byte	0xf0
+ 668 00a1 A5000000 		.4byte	0xa5
+ 669 00a5 05       		.uleb128 0x5
+ 670 00a6 6F000000 		.4byte	0x6f
+ 671 00aa 04       		.uleb128 0x4
+ 672 00ab 17000000 		.4byte	.LASF15
+ 673 00af 02       		.byte	0x2
+ 674 00b0 F2       		.byte	0xf2
+ 675 00b1 B5000000 		.4byte	0xb5
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 26
+
+
+ 676 00b5 05       		.uleb128 0x5
+ 677 00b6 7A000000 		.4byte	0x7a
+ 678 00ba 02       		.uleb128 0x2
+ 679 00bb 04       		.byte	0x4
+ 680 00bc 07       		.byte	0x7
+ 681 00bd 54020000 		.4byte	.LASF16
+ 682 00c1 06       		.uleb128 0x6
+ 683 00c2 01       		.byte	0x1
+ 684 00c3 07010000 		.4byte	.LASF20
+ 685 00c7 01       		.byte	0x1
+ 686 00c8 2B       		.byte	0x2b
+ 687 00c9 01       		.byte	0x1
+ 688 00ca 00000000 		.4byte	.LFB0
+ 689 00ce 56000000 		.4byte	.LFE0
+ 690 00d2 00000000 		.4byte	.LLST0
+ 691 00d6 01       		.byte	0x1
+ 692 00d7 EA000000 		.4byte	0xea
+ 693 00db 07       		.uleb128 0x7
+ 694 00dc 27030000 		.4byte	.LASF39
+ 695 00e0 01       		.byte	0x1
+ 696 00e1 2F       		.byte	0x2f
+ 697 00e2 6F000000 		.4byte	0x6f
+ 698 00e6 02       		.byte	0x2
+ 699 00e7 91       		.byte	0x91
+ 700 00e8 77       		.sleb128 -9
+ 701 00e9 00       		.byte	0
+ 702 00ea 08       		.uleb128 0x8
+ 703 00eb 01       		.byte	0x1
+ 704 00ec 2F020000 		.4byte	.LASF17
+ 705 00f0 01       		.byte	0x1
+ 706 00f1 B3       		.byte	0xb3
+ 707 00f2 01       		.byte	0x1
+ 708 00f3 00000000 		.4byte	.LFB1
+ 709 00f7 26000000 		.4byte	.LFE1
+ 710 00fb 38000000 		.4byte	.LLST1
+ 711 00ff 01       		.byte	0x1
+ 712 0100 09       		.uleb128 0x9
+ 713 0101 01       		.byte	0x1
+ 714 0102 79020000 		.4byte	.LASF18
+ 715 0106 01       		.byte	0x1
+ 716 0107 D6       		.byte	0xd6
+ 717 0108 01       		.byte	0x1
+ 718 0109 00000000 		.4byte	.LFB2
+ 719 010d 2A000000 		.4byte	.LFE2
+ 720 0111 64000000 		.4byte	.LLST2
+ 721 0115 01       		.byte	0x1
+ 722 0116 08       		.uleb128 0x8
+ 723 0117 01       		.byte	0x1
+ 724 0118 0B030000 		.4byte	.LASF19
+ 725 011c 01       		.byte	0x1
+ 726 011d F6       		.byte	0xf6
+ 727 011e 01       		.byte	0x1
+ 728 011f 00000000 		.4byte	.LFB3
+ 729 0123 26000000 		.4byte	.LFE3
+ 730 0127 90000000 		.4byte	.LLST3
+ 731 012b 01       		.byte	0x1
+ 732 012c 0A       		.uleb128 0xa
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 27
+
+
+ 733 012d 01       		.byte	0x1
+ 734 012e EB000000 		.4byte	.LASF21
+ 735 0132 01       		.byte	0x1
+ 736 0133 1601     		.2byte	0x116
+ 737 0135 01       		.byte	0x1
+ 738 0136 00000000 		.4byte	.LFB4
+ 739 013a 20000000 		.4byte	.LFE4
+ 740 013e BC000000 		.4byte	.LLST4
+ 741 0142 01       		.byte	0x1
+ 742 0143 57010000 		.4byte	0x157
+ 743 0147 0B       		.uleb128 0xb
+ 744 0148 6B020000 		.4byte	.LASF26
+ 745 014c 01       		.byte	0x1
+ 746 014d 1601     		.2byte	0x116
+ 747 014f 6F000000 		.4byte	0x6f
+ 748 0153 02       		.byte	0x2
+ 749 0154 91       		.byte	0x91
+ 750 0155 77       		.sleb128 -9
+ 751 0156 00       		.byte	0
+ 752 0157 0C       		.uleb128 0xc
+ 753 0158 01       		.byte	0x1
+ 754 0159 14020000 		.4byte	.LASF22
+ 755 015d 01       		.byte	0x1
+ 756 015e 2D01     		.2byte	0x12d
+ 757 0160 01       		.byte	0x1
+ 758 0161 00000000 		.4byte	.LFB5
+ 759 0165 14000000 		.4byte	.LFE5
+ 760 0169 F4000000 		.4byte	.LLST5
+ 761 016d 01       		.byte	0x1
+ 762 016e 0D       		.uleb128 0xd
+ 763 016f 01       		.byte	0x1
+ 764 0170 1D000000 		.4byte	.LASF23
+ 765 0174 01       		.byte	0x1
+ 766 0175 4801     		.2byte	0x148
+ 767 0177 01       		.byte	0x1
+ 768 0178 6F000000 		.4byte	0x6f
+ 769 017c 00000000 		.4byte	.LFB6
+ 770 0180 18000000 		.4byte	.LFE6
+ 771 0184 20010000 		.4byte	.LLST6
+ 772 0188 01       		.byte	0x1
+ 773 0189 0D       		.uleb128 0xd
+ 774 018a 01       		.byte	0x1
+ 775 018b 8D010000 		.4byte	.LASF24
+ 776 018f 01       		.byte	0x1
+ 777 0190 5F01     		.2byte	0x15f
+ 778 0192 01       		.byte	0x1
+ 779 0193 6F000000 		.4byte	0x6f
+ 780 0197 00000000 		.4byte	.LFB7
+ 781 019b 18000000 		.4byte	.LFE7
+ 782 019f 4C010000 		.4byte	.LLST7
+ 783 01a3 01       		.byte	0x1
+ 784 01a4 0A       		.uleb128 0xa
+ 785 01a5 01       		.byte	0x1
+ 786 01a6 8A020000 		.4byte	.LASF25
+ 787 01aa 01       		.byte	0x1
+ 788 01ab 7201     		.2byte	0x172
+ 789 01ad 01       		.byte	0x1
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 28
+
+
+ 790 01ae 00000000 		.4byte	.LFB8
+ 791 01b2 20000000 		.4byte	.LFE8
+ 792 01b6 78010000 		.4byte	.LLST8
+ 793 01ba 01       		.byte	0x1
+ 794 01bb CF010000 		.4byte	0x1cf
+ 795 01bf 0B       		.uleb128 0xb
+ 796 01c0 7E010000 		.4byte	.LASF27
+ 797 01c4 01       		.byte	0x1
+ 798 01c5 7201     		.2byte	0x172
+ 799 01c7 6F000000 		.4byte	0x6f
+ 800 01cb 02       		.byte	0x2
+ 801 01cc 91       		.byte	0x91
+ 802 01cd 77       		.sleb128 -9
+ 803 01ce 00       		.byte	0
+ 804 01cf 0D       		.uleb128 0xd
+ 805 01d0 01       		.byte	0x1
+ 806 01d1 50010000 		.4byte	.LASF28
+ 807 01d5 01       		.byte	0x1
+ 808 01d6 8701     		.2byte	0x187
+ 809 01d8 01       		.byte	0x1
+ 810 01d9 7A000000 		.4byte	0x7a
+ 811 01dd 00000000 		.4byte	.LFB9
+ 812 01e1 1A000000 		.4byte	.LFE9
+ 813 01e5 B0010000 		.4byte	.LLST9
+ 814 01e9 01       		.byte	0x1
+ 815 01ea 0E       		.uleb128 0xe
+ 816 01eb 01       		.byte	0x1
+ 817 01ec BA000000 		.4byte	.LASF29
+ 818 01f0 01       		.byte	0x1
+ 819 01f1 A101     		.2byte	0x1a1
+ 820 01f3 01       		.byte	0x1
+ 821 01f4 00000000 		.4byte	.LFB10
+ 822 01f8 1E000000 		.4byte	.LFE10
+ 823 01fc DC010000 		.4byte	.LLST10
+ 824 0200 01       		.byte	0x1
+ 825 0201 15020000 		.4byte	0x215
+ 826 0205 0B       		.uleb128 0xb
+ 827 0206 D1000000 		.4byte	.LASF30
+ 828 020a 01       		.byte	0x1
+ 829 020b A101     		.2byte	0x1a1
+ 830 020d 7A000000 		.4byte	0x7a
+ 831 0211 02       		.byte	0x2
+ 832 0212 91       		.byte	0x91
+ 833 0213 74       		.sleb128 -12
+ 834 0214 00       		.byte	0
+ 835 0215 0D       		.uleb128 0xd
+ 836 0216 01       		.byte	0x1
+ 837 0217 FD010000 		.4byte	.LASF31
+ 838 021b 01       		.byte	0x1
+ 839 021c BA01     		.2byte	0x1ba
+ 840 021e 01       		.byte	0x1
+ 841 021f 7A000000 		.4byte	0x7a
+ 842 0223 00000000 		.4byte	.LFB11
+ 843 0227 1A000000 		.4byte	.LFE11
+ 844 022b 14020000 		.4byte	.LLST11
+ 845 022f 01       		.byte	0x1
+ 846 0230 0E       		.uleb128 0xe
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 29
+
+
+ 847 0231 01       		.byte	0x1
+ 848 0232 17010000 		.4byte	.LASF32
+ 849 0236 01       		.byte	0x1
+ 850 0237 D201     		.2byte	0x1d2
+ 851 0239 01       		.byte	0x1
+ 852 023a 00000000 		.4byte	.LFB12
+ 853 023e 1E000000 		.4byte	.LFE12
+ 854 0242 40020000 		.4byte	.LLST12
+ 855 0246 01       		.byte	0x1
+ 856 0247 5B020000 		.4byte	0x25b
+ 857 024b 0B       		.uleb128 0xb
+ 858 024c 35010000 		.4byte	.LASF33
+ 859 0250 01       		.byte	0x1
+ 860 0251 D201     		.2byte	0x1d2
+ 861 0253 7A000000 		.4byte	0x7a
+ 862 0257 02       		.byte	0x2
+ 863 0258 91       		.byte	0x91
+ 864 0259 74       		.sleb128 -12
+ 865 025a 00       		.byte	0
+ 866 025b 0D       		.uleb128 0xd
+ 867 025c 01       		.byte	0x1
+ 868 025d 00000000 		.4byte	.LASF34
+ 869 0261 01       		.byte	0x1
+ 870 0262 EF01     		.2byte	0x1ef
+ 871 0264 01       		.byte	0x1
+ 872 0265 7A000000 		.4byte	0x7a
+ 873 0269 00000000 		.4byte	.LFB13
+ 874 026d 24000000 		.4byte	.LFE13
+ 875 0271 78020000 		.4byte	.LLST13
+ 876 0275 01       		.byte	0x1
+ 877 0276 0F       		.uleb128 0xf
+ 878 0277 01       		.byte	0x1
+ 879 0278 41030000 		.4byte	.LASF35
+ 880 027c 01       		.byte	0x1
+ 881 027d E702     		.2byte	0x2e7
+ 882 027f 01       		.byte	0x1
+ 883 0280 00000000 		.4byte	.LFB14
+ 884 0284 1A000000 		.4byte	.LFE14
+ 885 0288 A4020000 		.4byte	.LLST14
+ 886 028c 01       		.byte	0x1
+ 887 028d 10       		.uleb128 0x10
+ 888 028e 41020000 		.4byte	.LASF40
+ 889 0292 01       		.byte	0x1
+ 890 0293 1A       		.byte	0x1a
+ 891 0294 6F000000 		.4byte	0x6f
+ 892 0298 01       		.byte	0x1
+ 893 0299 05       		.byte	0x5
+ 894 029a 03       		.byte	0x3
+ 895 029b 00000000 		.4byte	Poll_Timer_initVar
+ 896 029f 00       		.byte	0
+ 897              		.section	.debug_abbrev,"",%progbits
+ 898              	.Ldebug_abbrev0:
+ 899 0000 01       		.uleb128 0x1
+ 900 0001 11       		.uleb128 0x11
+ 901 0002 01       		.byte	0x1
+ 902 0003 25       		.uleb128 0x25
+ 903 0004 0E       		.uleb128 0xe
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 30
+
+
+ 904 0005 13       		.uleb128 0x13
+ 905 0006 0B       		.uleb128 0xb
+ 906 0007 03       		.uleb128 0x3
+ 907 0008 0E       		.uleb128 0xe
+ 908 0009 1B       		.uleb128 0x1b
+ 909 000a 0E       		.uleb128 0xe
+ 910 000b 55       		.uleb128 0x55
+ 911 000c 06       		.uleb128 0x6
+ 912 000d 11       		.uleb128 0x11
+ 913 000e 01       		.uleb128 0x1
+ 914 000f 52       		.uleb128 0x52
+ 915 0010 01       		.uleb128 0x1
+ 916 0011 10       		.uleb128 0x10
+ 917 0012 06       		.uleb128 0x6
+ 918 0013 00       		.byte	0
+ 919 0014 00       		.byte	0
+ 920 0015 02       		.uleb128 0x2
+ 921 0016 24       		.uleb128 0x24
+ 922 0017 00       		.byte	0
+ 923 0018 0B       		.uleb128 0xb
+ 924 0019 0B       		.uleb128 0xb
+ 925 001a 3E       		.uleb128 0x3e
+ 926 001b 0B       		.uleb128 0xb
+ 927 001c 03       		.uleb128 0x3
+ 928 001d 0E       		.uleb128 0xe
+ 929 001e 00       		.byte	0
+ 930 001f 00       		.byte	0
+ 931 0020 03       		.uleb128 0x3
+ 932 0021 24       		.uleb128 0x24
+ 933 0022 00       		.byte	0
+ 934 0023 0B       		.uleb128 0xb
+ 935 0024 0B       		.uleb128 0xb
+ 936 0025 3E       		.uleb128 0x3e
+ 937 0026 0B       		.uleb128 0xb
+ 938 0027 03       		.uleb128 0x3
+ 939 0028 08       		.uleb128 0x8
+ 940 0029 00       		.byte	0
+ 941 002a 00       		.byte	0
+ 942 002b 04       		.uleb128 0x4
+ 943 002c 16       		.uleb128 0x16
+ 944 002d 00       		.byte	0
+ 945 002e 03       		.uleb128 0x3
+ 946 002f 0E       		.uleb128 0xe
+ 947 0030 3A       		.uleb128 0x3a
+ 948 0031 0B       		.uleb128 0xb
+ 949 0032 3B       		.uleb128 0x3b
+ 950 0033 0B       		.uleb128 0xb
+ 951 0034 49       		.uleb128 0x49
+ 952 0035 13       		.uleb128 0x13
+ 953 0036 00       		.byte	0
+ 954 0037 00       		.byte	0
+ 955 0038 05       		.uleb128 0x5
+ 956 0039 35       		.uleb128 0x35
+ 957 003a 00       		.byte	0
+ 958 003b 49       		.uleb128 0x49
+ 959 003c 13       		.uleb128 0x13
+ 960 003d 00       		.byte	0
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 31
+
+
+ 961 003e 00       		.byte	0
+ 962 003f 06       		.uleb128 0x6
+ 963 0040 2E       		.uleb128 0x2e
+ 964 0041 01       		.byte	0x1
+ 965 0042 3F       		.uleb128 0x3f
+ 966 0043 0C       		.uleb128 0xc
+ 967 0044 03       		.uleb128 0x3
+ 968 0045 0E       		.uleb128 0xe
+ 969 0046 3A       		.uleb128 0x3a
+ 970 0047 0B       		.uleb128 0xb
+ 971 0048 3B       		.uleb128 0x3b
+ 972 0049 0B       		.uleb128 0xb
+ 973 004a 27       		.uleb128 0x27
+ 974 004b 0C       		.uleb128 0xc
+ 975 004c 11       		.uleb128 0x11
+ 976 004d 01       		.uleb128 0x1
+ 977 004e 12       		.uleb128 0x12
+ 978 004f 01       		.uleb128 0x1
+ 979 0050 40       		.uleb128 0x40
+ 980 0051 06       		.uleb128 0x6
+ 981 0052 9642     		.uleb128 0x2116
+ 982 0054 0C       		.uleb128 0xc
+ 983 0055 01       		.uleb128 0x1
+ 984 0056 13       		.uleb128 0x13
+ 985 0057 00       		.byte	0
+ 986 0058 00       		.byte	0
+ 987 0059 07       		.uleb128 0x7
+ 988 005a 34       		.uleb128 0x34
+ 989 005b 00       		.byte	0
+ 990 005c 03       		.uleb128 0x3
+ 991 005d 0E       		.uleb128 0xe
+ 992 005e 3A       		.uleb128 0x3a
+ 993 005f 0B       		.uleb128 0xb
+ 994 0060 3B       		.uleb128 0x3b
+ 995 0061 0B       		.uleb128 0xb
+ 996 0062 49       		.uleb128 0x49
+ 997 0063 13       		.uleb128 0x13
+ 998 0064 02       		.uleb128 0x2
+ 999 0065 0A       		.uleb128 0xa
+ 1000 0066 00       		.byte	0
+ 1001 0067 00       		.byte	0
+ 1002 0068 08       		.uleb128 0x8
+ 1003 0069 2E       		.uleb128 0x2e
+ 1004 006a 00       		.byte	0
+ 1005 006b 3F       		.uleb128 0x3f
+ 1006 006c 0C       		.uleb128 0xc
+ 1007 006d 03       		.uleb128 0x3
+ 1008 006e 0E       		.uleb128 0xe
+ 1009 006f 3A       		.uleb128 0x3a
+ 1010 0070 0B       		.uleb128 0xb
+ 1011 0071 3B       		.uleb128 0x3b
+ 1012 0072 0B       		.uleb128 0xb
+ 1013 0073 27       		.uleb128 0x27
+ 1014 0074 0C       		.uleb128 0xc
+ 1015 0075 11       		.uleb128 0x11
+ 1016 0076 01       		.uleb128 0x1
+ 1017 0077 12       		.uleb128 0x12
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 32
+
+
+ 1018 0078 01       		.uleb128 0x1
+ 1019 0079 40       		.uleb128 0x40
+ 1020 007a 06       		.uleb128 0x6
+ 1021 007b 9742     		.uleb128 0x2117
+ 1022 007d 0C       		.uleb128 0xc
+ 1023 007e 00       		.byte	0
+ 1024 007f 00       		.byte	0
+ 1025 0080 09       		.uleb128 0x9
+ 1026 0081 2E       		.uleb128 0x2e
+ 1027 0082 00       		.byte	0
+ 1028 0083 3F       		.uleb128 0x3f
+ 1029 0084 0C       		.uleb128 0xc
+ 1030 0085 03       		.uleb128 0x3
+ 1031 0086 0E       		.uleb128 0xe
+ 1032 0087 3A       		.uleb128 0x3a
+ 1033 0088 0B       		.uleb128 0xb
+ 1034 0089 3B       		.uleb128 0x3b
+ 1035 008a 0B       		.uleb128 0xb
+ 1036 008b 27       		.uleb128 0x27
+ 1037 008c 0C       		.uleb128 0xc
+ 1038 008d 11       		.uleb128 0x11
+ 1039 008e 01       		.uleb128 0x1
+ 1040 008f 12       		.uleb128 0x12
+ 1041 0090 01       		.uleb128 0x1
+ 1042 0091 40       		.uleb128 0x40
+ 1043 0092 06       		.uleb128 0x6
+ 1044 0093 9642     		.uleb128 0x2116
+ 1045 0095 0C       		.uleb128 0xc
+ 1046 0096 00       		.byte	0
+ 1047 0097 00       		.byte	0
+ 1048 0098 0A       		.uleb128 0xa
+ 1049 0099 2E       		.uleb128 0x2e
+ 1050 009a 01       		.byte	0x1
+ 1051 009b 3F       		.uleb128 0x3f
+ 1052 009c 0C       		.uleb128 0xc
+ 1053 009d 03       		.uleb128 0x3
+ 1054 009e 0E       		.uleb128 0xe
+ 1055 009f 3A       		.uleb128 0x3a
+ 1056 00a0 0B       		.uleb128 0xb
+ 1057 00a1 3B       		.uleb128 0x3b
+ 1058 00a2 05       		.uleb128 0x5
+ 1059 00a3 27       		.uleb128 0x27
+ 1060 00a4 0C       		.uleb128 0xc
+ 1061 00a5 11       		.uleb128 0x11
+ 1062 00a6 01       		.uleb128 0x1
+ 1063 00a7 12       		.uleb128 0x12
+ 1064 00a8 01       		.uleb128 0x1
+ 1065 00a9 40       		.uleb128 0x40
+ 1066 00aa 06       		.uleb128 0x6
+ 1067 00ab 9742     		.uleb128 0x2117
+ 1068 00ad 0C       		.uleb128 0xc
+ 1069 00ae 01       		.uleb128 0x1
+ 1070 00af 13       		.uleb128 0x13
+ 1071 00b0 00       		.byte	0
+ 1072 00b1 00       		.byte	0
+ 1073 00b2 0B       		.uleb128 0xb
+ 1074 00b3 05       		.uleb128 0x5
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 33
+
+
+ 1075 00b4 00       		.byte	0
+ 1076 00b5 03       		.uleb128 0x3
+ 1077 00b6 0E       		.uleb128 0xe
+ 1078 00b7 3A       		.uleb128 0x3a
+ 1079 00b8 0B       		.uleb128 0xb
+ 1080 00b9 3B       		.uleb128 0x3b
+ 1081 00ba 05       		.uleb128 0x5
+ 1082 00bb 49       		.uleb128 0x49
+ 1083 00bc 13       		.uleb128 0x13
+ 1084 00bd 02       		.uleb128 0x2
+ 1085 00be 0A       		.uleb128 0xa
+ 1086 00bf 00       		.byte	0
+ 1087 00c0 00       		.byte	0
+ 1088 00c1 0C       		.uleb128 0xc
+ 1089 00c2 2E       		.uleb128 0x2e
+ 1090 00c3 00       		.byte	0
+ 1091 00c4 3F       		.uleb128 0x3f
+ 1092 00c5 0C       		.uleb128 0xc
+ 1093 00c6 03       		.uleb128 0x3
+ 1094 00c7 0E       		.uleb128 0xe
+ 1095 00c8 3A       		.uleb128 0x3a
+ 1096 00c9 0B       		.uleb128 0xb
+ 1097 00ca 3B       		.uleb128 0x3b
+ 1098 00cb 05       		.uleb128 0x5
+ 1099 00cc 27       		.uleb128 0x27
+ 1100 00cd 0C       		.uleb128 0xc
+ 1101 00ce 11       		.uleb128 0x11
+ 1102 00cf 01       		.uleb128 0x1
+ 1103 00d0 12       		.uleb128 0x12
+ 1104 00d1 01       		.uleb128 0x1
+ 1105 00d2 40       		.uleb128 0x40
+ 1106 00d3 06       		.uleb128 0x6
+ 1107 00d4 9742     		.uleb128 0x2117
+ 1108 00d6 0C       		.uleb128 0xc
+ 1109 00d7 00       		.byte	0
+ 1110 00d8 00       		.byte	0
+ 1111 00d9 0D       		.uleb128 0xd
+ 1112 00da 2E       		.uleb128 0x2e
+ 1113 00db 00       		.byte	0
+ 1114 00dc 3F       		.uleb128 0x3f
+ 1115 00dd 0C       		.uleb128 0xc
+ 1116 00de 03       		.uleb128 0x3
+ 1117 00df 0E       		.uleb128 0xe
+ 1118 00e0 3A       		.uleb128 0x3a
+ 1119 00e1 0B       		.uleb128 0xb
+ 1120 00e2 3B       		.uleb128 0x3b
+ 1121 00e3 05       		.uleb128 0x5
+ 1122 00e4 27       		.uleb128 0x27
+ 1123 00e5 0C       		.uleb128 0xc
+ 1124 00e6 49       		.uleb128 0x49
+ 1125 00e7 13       		.uleb128 0x13
+ 1126 00e8 11       		.uleb128 0x11
+ 1127 00e9 01       		.uleb128 0x1
+ 1128 00ea 12       		.uleb128 0x12
+ 1129 00eb 01       		.uleb128 0x1
+ 1130 00ec 40       		.uleb128 0x40
+ 1131 00ed 06       		.uleb128 0x6
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 34
+
+
+ 1132 00ee 9742     		.uleb128 0x2117
+ 1133 00f0 0C       		.uleb128 0xc
+ 1134 00f1 00       		.byte	0
+ 1135 00f2 00       		.byte	0
+ 1136 00f3 0E       		.uleb128 0xe
+ 1137 00f4 2E       		.uleb128 0x2e
+ 1138 00f5 01       		.byte	0x1
+ 1139 00f6 3F       		.uleb128 0x3f
+ 1140 00f7 0C       		.uleb128 0xc
+ 1141 00f8 03       		.uleb128 0x3
+ 1142 00f9 0E       		.uleb128 0xe
+ 1143 00fa 3A       		.uleb128 0x3a
+ 1144 00fb 0B       		.uleb128 0xb
+ 1145 00fc 3B       		.uleb128 0x3b
+ 1146 00fd 05       		.uleb128 0x5
+ 1147 00fe 27       		.uleb128 0x27
+ 1148 00ff 0C       		.uleb128 0xc
+ 1149 0100 11       		.uleb128 0x11
+ 1150 0101 01       		.uleb128 0x1
+ 1151 0102 12       		.uleb128 0x12
+ 1152 0103 01       		.uleb128 0x1
+ 1153 0104 40       		.uleb128 0x40
+ 1154 0105 06       		.uleb128 0x6
+ 1155 0106 9642     		.uleb128 0x2116
+ 1156 0108 0C       		.uleb128 0xc
+ 1157 0109 01       		.uleb128 0x1
+ 1158 010a 13       		.uleb128 0x13
+ 1159 010b 00       		.byte	0
+ 1160 010c 00       		.byte	0
+ 1161 010d 0F       		.uleb128 0xf
+ 1162 010e 2E       		.uleb128 0x2e
+ 1163 010f 00       		.byte	0
+ 1164 0110 3F       		.uleb128 0x3f
+ 1165 0111 0C       		.uleb128 0xc
+ 1166 0112 03       		.uleb128 0x3
+ 1167 0113 0E       		.uleb128 0xe
+ 1168 0114 3A       		.uleb128 0x3a
+ 1169 0115 0B       		.uleb128 0xb
+ 1170 0116 3B       		.uleb128 0x3b
+ 1171 0117 05       		.uleb128 0x5
+ 1172 0118 27       		.uleb128 0x27
+ 1173 0119 0C       		.uleb128 0xc
+ 1174 011a 11       		.uleb128 0x11
+ 1175 011b 01       		.uleb128 0x1
+ 1176 011c 12       		.uleb128 0x12
+ 1177 011d 01       		.uleb128 0x1
+ 1178 011e 40       		.uleb128 0x40
+ 1179 011f 06       		.uleb128 0x6
+ 1180 0120 9642     		.uleb128 0x2116
+ 1181 0122 0C       		.uleb128 0xc
+ 1182 0123 00       		.byte	0
+ 1183 0124 00       		.byte	0
+ 1184 0125 10       		.uleb128 0x10
+ 1185 0126 34       		.uleb128 0x34
+ 1186 0127 00       		.byte	0
+ 1187 0128 03       		.uleb128 0x3
+ 1188 0129 0E       		.uleb128 0xe
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 35
+
+
+ 1189 012a 3A       		.uleb128 0x3a
+ 1190 012b 0B       		.uleb128 0xb
+ 1191 012c 3B       		.uleb128 0x3b
+ 1192 012d 0B       		.uleb128 0xb
+ 1193 012e 49       		.uleb128 0x49
+ 1194 012f 13       		.uleb128 0x13
+ 1195 0130 3F       		.uleb128 0x3f
+ 1196 0131 0C       		.uleb128 0xc
+ 1197 0132 02       		.uleb128 0x2
+ 1198 0133 0A       		.uleb128 0xa
+ 1199 0134 00       		.byte	0
+ 1200 0135 00       		.byte	0
+ 1201 0136 00       		.byte	0
+ 1202              		.section	.debug_loc,"",%progbits
+ 1203              	.Ldebug_loc0:
+ 1204              	.LLST0:
+ 1205 0000 00000000 		.4byte	.LFB0
+ 1206 0004 02000000 		.4byte	.LCFI0
+ 1207 0008 0200     		.2byte	0x2
+ 1208 000a 7D       		.byte	0x7d
+ 1209 000b 00       		.sleb128 0
+ 1210 000c 02000000 		.4byte	.LCFI0
+ 1211 0010 04000000 		.4byte	.LCFI1
+ 1212 0014 0200     		.2byte	0x2
+ 1213 0016 7D       		.byte	0x7d
+ 1214 0017 08       		.sleb128 8
+ 1215 0018 04000000 		.4byte	.LCFI1
+ 1216 001c 06000000 		.4byte	.LCFI2
+ 1217 0020 0200     		.2byte	0x2
+ 1218 0022 7D       		.byte	0x7d
+ 1219 0023 10       		.sleb128 16
+ 1220 0024 06000000 		.4byte	.LCFI2
+ 1221 0028 56000000 		.4byte	.LFE0
+ 1222 002c 0200     		.2byte	0x2
+ 1223 002e 77       		.byte	0x77
+ 1224 002f 10       		.sleb128 16
+ 1225 0030 00000000 		.4byte	0
+ 1226 0034 00000000 		.4byte	0
+ 1227              	.LLST1:
+ 1228 0038 00000000 		.4byte	.LFB1
+ 1229 003c 02000000 		.4byte	.LCFI3
+ 1230 0040 0200     		.2byte	0x2
+ 1231 0042 7D       		.byte	0x7d
+ 1232 0043 00       		.sleb128 0
+ 1233 0044 02000000 		.4byte	.LCFI3
+ 1234 0048 04000000 		.4byte	.LCFI4
+ 1235 004c 0200     		.2byte	0x2
+ 1236 004e 7D       		.byte	0x7d
+ 1237 004f 04       		.sleb128 4
+ 1238 0050 04000000 		.4byte	.LCFI4
+ 1239 0054 26000000 		.4byte	.LFE1
+ 1240 0058 0200     		.2byte	0x2
+ 1241 005a 77       		.byte	0x77
+ 1242 005b 04       		.sleb128 4
+ 1243 005c 00000000 		.4byte	0
+ 1244 0060 00000000 		.4byte	0
+ 1245              	.LLST2:
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 36
+
+
+ 1246 0064 00000000 		.4byte	.LFB2
+ 1247 0068 02000000 		.4byte	.LCFI5
+ 1248 006c 0200     		.2byte	0x2
+ 1249 006e 7D       		.byte	0x7d
+ 1250 006f 00       		.sleb128 0
+ 1251 0070 02000000 		.4byte	.LCFI5
+ 1252 0074 04000000 		.4byte	.LCFI6
+ 1253 0078 0200     		.2byte	0x2
+ 1254 007a 7D       		.byte	0x7d
+ 1255 007b 08       		.sleb128 8
+ 1256 007c 04000000 		.4byte	.LCFI6
+ 1257 0080 2A000000 		.4byte	.LFE2
+ 1258 0084 0200     		.2byte	0x2
+ 1259 0086 77       		.byte	0x77
+ 1260 0087 08       		.sleb128 8
+ 1261 0088 00000000 		.4byte	0
+ 1262 008c 00000000 		.4byte	0
+ 1263              	.LLST3:
+ 1264 0090 00000000 		.4byte	.LFB3
+ 1265 0094 02000000 		.4byte	.LCFI7
+ 1266 0098 0200     		.2byte	0x2
+ 1267 009a 7D       		.byte	0x7d
+ 1268 009b 00       		.sleb128 0
+ 1269 009c 02000000 		.4byte	.LCFI7
+ 1270 00a0 04000000 		.4byte	.LCFI8
+ 1271 00a4 0200     		.2byte	0x2
+ 1272 00a6 7D       		.byte	0x7d
+ 1273 00a7 04       		.sleb128 4
+ 1274 00a8 04000000 		.4byte	.LCFI8
+ 1275 00ac 26000000 		.4byte	.LFE3
+ 1276 00b0 0200     		.2byte	0x2
+ 1277 00b2 77       		.byte	0x77
+ 1278 00b3 04       		.sleb128 4
+ 1279 00b4 00000000 		.4byte	0
+ 1280 00b8 00000000 		.4byte	0
+ 1281              	.LLST4:
+ 1282 00bc 00000000 		.4byte	.LFB4
+ 1283 00c0 02000000 		.4byte	.LCFI9
+ 1284 00c4 0200     		.2byte	0x2
+ 1285 00c6 7D       		.byte	0x7d
+ 1286 00c7 00       		.sleb128 0
+ 1287 00c8 02000000 		.4byte	.LCFI9
+ 1288 00cc 04000000 		.4byte	.LCFI10
+ 1289 00d0 0200     		.2byte	0x2
+ 1290 00d2 7D       		.byte	0x7d
+ 1291 00d3 04       		.sleb128 4
+ 1292 00d4 04000000 		.4byte	.LCFI10
+ 1293 00d8 06000000 		.4byte	.LCFI11
+ 1294 00dc 0200     		.2byte	0x2
+ 1295 00de 7D       		.byte	0x7d
+ 1296 00df 10       		.sleb128 16
+ 1297 00e0 06000000 		.4byte	.LCFI11
+ 1298 00e4 20000000 		.4byte	.LFE4
+ 1299 00e8 0200     		.2byte	0x2
+ 1300 00ea 77       		.byte	0x77
+ 1301 00eb 10       		.sleb128 16
+ 1302 00ec 00000000 		.4byte	0
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 37
+
+
+ 1303 00f0 00000000 		.4byte	0
+ 1304              	.LLST5:
+ 1305 00f4 00000000 		.4byte	.LFB5
+ 1306 00f8 02000000 		.4byte	.LCFI12
+ 1307 00fc 0200     		.2byte	0x2
+ 1308 00fe 7D       		.byte	0x7d
+ 1309 00ff 00       		.sleb128 0
+ 1310 0100 02000000 		.4byte	.LCFI12
+ 1311 0104 04000000 		.4byte	.LCFI13
+ 1312 0108 0200     		.2byte	0x2
+ 1313 010a 7D       		.byte	0x7d
+ 1314 010b 04       		.sleb128 4
+ 1315 010c 04000000 		.4byte	.LCFI13
+ 1316 0110 14000000 		.4byte	.LFE5
+ 1317 0114 0200     		.2byte	0x2
+ 1318 0116 77       		.byte	0x77
+ 1319 0117 04       		.sleb128 4
+ 1320 0118 00000000 		.4byte	0
+ 1321 011c 00000000 		.4byte	0
+ 1322              	.LLST6:
+ 1323 0120 00000000 		.4byte	.LFB6
+ 1324 0124 02000000 		.4byte	.LCFI14
+ 1325 0128 0200     		.2byte	0x2
+ 1326 012a 7D       		.byte	0x7d
+ 1327 012b 00       		.sleb128 0
+ 1328 012c 02000000 		.4byte	.LCFI14
+ 1329 0130 04000000 		.4byte	.LCFI15
+ 1330 0134 0200     		.2byte	0x2
+ 1331 0136 7D       		.byte	0x7d
+ 1332 0137 04       		.sleb128 4
+ 1333 0138 04000000 		.4byte	.LCFI15
+ 1334 013c 18000000 		.4byte	.LFE6
+ 1335 0140 0200     		.2byte	0x2
+ 1336 0142 77       		.byte	0x77
+ 1337 0143 04       		.sleb128 4
+ 1338 0144 00000000 		.4byte	0
+ 1339 0148 00000000 		.4byte	0
+ 1340              	.LLST7:
+ 1341 014c 00000000 		.4byte	.LFB7
+ 1342 0150 02000000 		.4byte	.LCFI16
+ 1343 0154 0200     		.2byte	0x2
+ 1344 0156 7D       		.byte	0x7d
+ 1345 0157 00       		.sleb128 0
+ 1346 0158 02000000 		.4byte	.LCFI16
+ 1347 015c 04000000 		.4byte	.LCFI17
+ 1348 0160 0200     		.2byte	0x2
+ 1349 0162 7D       		.byte	0x7d
+ 1350 0163 04       		.sleb128 4
+ 1351 0164 04000000 		.4byte	.LCFI17
+ 1352 0168 18000000 		.4byte	.LFE7
+ 1353 016c 0200     		.2byte	0x2
+ 1354 016e 77       		.byte	0x77
+ 1355 016f 04       		.sleb128 4
+ 1356 0170 00000000 		.4byte	0
+ 1357 0174 00000000 		.4byte	0
+ 1358              	.LLST8:
+ 1359 0178 00000000 		.4byte	.LFB8
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 38
+
+
+ 1360 017c 02000000 		.4byte	.LCFI18
+ 1361 0180 0200     		.2byte	0x2
+ 1362 0182 7D       		.byte	0x7d
+ 1363 0183 00       		.sleb128 0
+ 1364 0184 02000000 		.4byte	.LCFI18
+ 1365 0188 04000000 		.4byte	.LCFI19
+ 1366 018c 0200     		.2byte	0x2
+ 1367 018e 7D       		.byte	0x7d
+ 1368 018f 04       		.sleb128 4
+ 1369 0190 04000000 		.4byte	.LCFI19
+ 1370 0194 06000000 		.4byte	.LCFI20
+ 1371 0198 0200     		.2byte	0x2
+ 1372 019a 7D       		.byte	0x7d
+ 1373 019b 10       		.sleb128 16
+ 1374 019c 06000000 		.4byte	.LCFI20
+ 1375 01a0 20000000 		.4byte	.LFE8
+ 1376 01a4 0200     		.2byte	0x2
+ 1377 01a6 77       		.byte	0x77
+ 1378 01a7 10       		.sleb128 16
+ 1379 01a8 00000000 		.4byte	0
+ 1380 01ac 00000000 		.4byte	0
+ 1381              	.LLST9:
+ 1382 01b0 00000000 		.4byte	.LFB9
+ 1383 01b4 02000000 		.4byte	.LCFI21
+ 1384 01b8 0200     		.2byte	0x2
+ 1385 01ba 7D       		.byte	0x7d
+ 1386 01bb 00       		.sleb128 0
+ 1387 01bc 02000000 		.4byte	.LCFI21
+ 1388 01c0 04000000 		.4byte	.LCFI22
+ 1389 01c4 0200     		.2byte	0x2
+ 1390 01c6 7D       		.byte	0x7d
+ 1391 01c7 04       		.sleb128 4
+ 1392 01c8 04000000 		.4byte	.LCFI22
+ 1393 01cc 1A000000 		.4byte	.LFE9
+ 1394 01d0 0200     		.2byte	0x2
+ 1395 01d2 77       		.byte	0x77
+ 1396 01d3 04       		.sleb128 4
+ 1397 01d4 00000000 		.4byte	0
+ 1398 01d8 00000000 		.4byte	0
+ 1399              	.LLST10:
+ 1400 01dc 00000000 		.4byte	.LFB10
+ 1401 01e0 02000000 		.4byte	.LCFI23
+ 1402 01e4 0200     		.2byte	0x2
+ 1403 01e6 7D       		.byte	0x7d
+ 1404 01e7 00       		.sleb128 0
+ 1405 01e8 02000000 		.4byte	.LCFI23
+ 1406 01ec 04000000 		.4byte	.LCFI24
+ 1407 01f0 0200     		.2byte	0x2
+ 1408 01f2 7D       		.byte	0x7d
+ 1409 01f3 08       		.sleb128 8
+ 1410 01f4 04000000 		.4byte	.LCFI24
+ 1411 01f8 06000000 		.4byte	.LCFI25
+ 1412 01fc 0200     		.2byte	0x2
+ 1413 01fe 7D       		.byte	0x7d
+ 1414 01ff 10       		.sleb128 16
+ 1415 0200 06000000 		.4byte	.LCFI25
+ 1416 0204 1E000000 		.4byte	.LFE10
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 39
+
+
+ 1417 0208 0200     		.2byte	0x2
+ 1418 020a 77       		.byte	0x77
+ 1419 020b 10       		.sleb128 16
+ 1420 020c 00000000 		.4byte	0
+ 1421 0210 00000000 		.4byte	0
+ 1422              	.LLST11:
+ 1423 0214 00000000 		.4byte	.LFB11
+ 1424 0218 02000000 		.4byte	.LCFI26
+ 1425 021c 0200     		.2byte	0x2
+ 1426 021e 7D       		.byte	0x7d
+ 1427 021f 00       		.sleb128 0
+ 1428 0220 02000000 		.4byte	.LCFI26
+ 1429 0224 04000000 		.4byte	.LCFI27
+ 1430 0228 0200     		.2byte	0x2
+ 1431 022a 7D       		.byte	0x7d
+ 1432 022b 04       		.sleb128 4
+ 1433 022c 04000000 		.4byte	.LCFI27
+ 1434 0230 1A000000 		.4byte	.LFE11
+ 1435 0234 0200     		.2byte	0x2
+ 1436 0236 77       		.byte	0x77
+ 1437 0237 04       		.sleb128 4
+ 1438 0238 00000000 		.4byte	0
+ 1439 023c 00000000 		.4byte	0
+ 1440              	.LLST12:
+ 1441 0240 00000000 		.4byte	.LFB12
+ 1442 0244 02000000 		.4byte	.LCFI28
+ 1443 0248 0200     		.2byte	0x2
+ 1444 024a 7D       		.byte	0x7d
+ 1445 024b 00       		.sleb128 0
+ 1446 024c 02000000 		.4byte	.LCFI28
+ 1447 0250 04000000 		.4byte	.LCFI29
+ 1448 0254 0200     		.2byte	0x2
+ 1449 0256 7D       		.byte	0x7d
+ 1450 0257 08       		.sleb128 8
+ 1451 0258 04000000 		.4byte	.LCFI29
+ 1452 025c 06000000 		.4byte	.LCFI30
+ 1453 0260 0200     		.2byte	0x2
+ 1454 0262 7D       		.byte	0x7d
+ 1455 0263 10       		.sleb128 16
+ 1456 0264 06000000 		.4byte	.LCFI30
+ 1457 0268 1E000000 		.4byte	.LFE12
+ 1458 026c 0200     		.2byte	0x2
+ 1459 026e 77       		.byte	0x77
+ 1460 026f 10       		.sleb128 16
+ 1461 0270 00000000 		.4byte	0
+ 1462 0274 00000000 		.4byte	0
+ 1463              	.LLST13:
+ 1464 0278 00000000 		.4byte	.LFB13
+ 1465 027c 02000000 		.4byte	.LCFI31
+ 1466 0280 0200     		.2byte	0x2
+ 1467 0282 7D       		.byte	0x7d
+ 1468 0283 00       		.sleb128 0
+ 1469 0284 02000000 		.4byte	.LCFI31
+ 1470 0288 04000000 		.4byte	.LCFI32
+ 1471 028c 0200     		.2byte	0x2
+ 1472 028e 7D       		.byte	0x7d
+ 1473 028f 04       		.sleb128 4
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 40
+
+
+ 1474 0290 04000000 		.4byte	.LCFI32
+ 1475 0294 24000000 		.4byte	.LFE13
+ 1476 0298 0200     		.2byte	0x2
+ 1477 029a 77       		.byte	0x77
+ 1478 029b 04       		.sleb128 4
+ 1479 029c 00000000 		.4byte	0
+ 1480 02a0 00000000 		.4byte	0
+ 1481              	.LLST14:
+ 1482 02a4 00000000 		.4byte	.LFB14
+ 1483 02a8 02000000 		.4byte	.LCFI33
+ 1484 02ac 0200     		.2byte	0x2
+ 1485 02ae 7D       		.byte	0x7d
+ 1486 02af 00       		.sleb128 0
+ 1487 02b0 02000000 		.4byte	.LCFI33
+ 1488 02b4 04000000 		.4byte	.LCFI34
+ 1489 02b8 0200     		.2byte	0x2
+ 1490 02ba 7D       		.byte	0x7d
+ 1491 02bb 08       		.sleb128 8
+ 1492 02bc 04000000 		.4byte	.LCFI34
+ 1493 02c0 1A000000 		.4byte	.LFE14
+ 1494 02c4 0200     		.2byte	0x2
+ 1495 02c6 77       		.byte	0x77
+ 1496 02c7 08       		.sleb128 8
+ 1497 02c8 00000000 		.4byte	0
+ 1498 02cc 00000000 		.4byte	0
+ 1499              		.section	.debug_aranges,"",%progbits
+ 1500 0000 8C000000 		.4byte	0x8c
+ 1501 0004 0200     		.2byte	0x2
+ 1502 0006 00000000 		.4byte	.Ldebug_info0
+ 1503 000a 04       		.byte	0x4
+ 1504 000b 00       		.byte	0
+ 1505 000c 0000     		.2byte	0
+ 1506 000e 0000     		.2byte	0
+ 1507 0010 00000000 		.4byte	.LFB0
+ 1508 0014 56000000 		.4byte	.LFE0-.LFB0
+ 1509 0018 00000000 		.4byte	.LFB1
+ 1510 001c 26000000 		.4byte	.LFE1-.LFB1
+ 1511 0020 00000000 		.4byte	.LFB2
+ 1512 0024 2A000000 		.4byte	.LFE2-.LFB2
+ 1513 0028 00000000 		.4byte	.LFB3
+ 1514 002c 26000000 		.4byte	.LFE3-.LFB3
+ 1515 0030 00000000 		.4byte	.LFB4
+ 1516 0034 20000000 		.4byte	.LFE4-.LFB4
+ 1517 0038 00000000 		.4byte	.LFB5
+ 1518 003c 14000000 		.4byte	.LFE5-.LFB5
+ 1519 0040 00000000 		.4byte	.LFB6
+ 1520 0044 18000000 		.4byte	.LFE6-.LFB6
+ 1521 0048 00000000 		.4byte	.LFB7
+ 1522 004c 18000000 		.4byte	.LFE7-.LFB7
+ 1523 0050 00000000 		.4byte	.LFB8
+ 1524 0054 20000000 		.4byte	.LFE8-.LFB8
+ 1525 0058 00000000 		.4byte	.LFB9
+ 1526 005c 1A000000 		.4byte	.LFE9-.LFB9
+ 1527 0060 00000000 		.4byte	.LFB10
+ 1528 0064 1E000000 		.4byte	.LFE10-.LFB10
+ 1529 0068 00000000 		.4byte	.LFB11
+ 1530 006c 1A000000 		.4byte	.LFE11-.LFB11
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 41
+
+
+ 1531 0070 00000000 		.4byte	.LFB12
+ 1532 0074 1E000000 		.4byte	.LFE12-.LFB12
+ 1533 0078 00000000 		.4byte	.LFB13
+ 1534 007c 24000000 		.4byte	.LFE13-.LFB13
+ 1535 0080 00000000 		.4byte	.LFB14
+ 1536 0084 1A000000 		.4byte	.LFE14-.LFB14
+ 1537 0088 00000000 		.4byte	0
+ 1538 008c 00000000 		.4byte	0
+ 1539              		.section	.debug_ranges,"",%progbits
+ 1540              	.Ldebug_ranges0:
+ 1541 0000 00000000 		.4byte	.LFB0
+ 1542 0004 56000000 		.4byte	.LFE0
+ 1543 0008 00000000 		.4byte	.LFB1
+ 1544 000c 26000000 		.4byte	.LFE1
+ 1545 0010 00000000 		.4byte	.LFB2
+ 1546 0014 2A000000 		.4byte	.LFE2
+ 1547 0018 00000000 		.4byte	.LFB3
+ 1548 001c 26000000 		.4byte	.LFE3
+ 1549 0020 00000000 		.4byte	.LFB4
+ 1550 0024 20000000 		.4byte	.LFE4
+ 1551 0028 00000000 		.4byte	.LFB5
+ 1552 002c 14000000 		.4byte	.LFE5
+ 1553 0030 00000000 		.4byte	.LFB6
+ 1554 0034 18000000 		.4byte	.LFE6
+ 1555 0038 00000000 		.4byte	.LFB7
+ 1556 003c 18000000 		.4byte	.LFE7
+ 1557 0040 00000000 		.4byte	.LFB8
+ 1558 0044 20000000 		.4byte	.LFE8
+ 1559 0048 00000000 		.4byte	.LFB9
+ 1560 004c 1A000000 		.4byte	.LFE9
+ 1561 0050 00000000 		.4byte	.LFB10
+ 1562 0054 1E000000 		.4byte	.LFE10
+ 1563 0058 00000000 		.4byte	.LFB11
+ 1564 005c 1A000000 		.4byte	.LFE11
+ 1565 0060 00000000 		.4byte	.LFB12
+ 1566 0064 1E000000 		.4byte	.LFE12
+ 1567 0068 00000000 		.4byte	.LFB13
+ 1568 006c 24000000 		.4byte	.LFE13
+ 1569 0070 00000000 		.4byte	.LFB14
+ 1570 0074 1A000000 		.4byte	.LFE14
+ 1571 0078 00000000 		.4byte	0
+ 1572 007c 00000000 		.4byte	0
+ 1573              		.section	.debug_line,"",%progbits
+ 1574              	.Ldebug_line0:
+ 1575 0000 75010000 		.section	.debug_str,"MS",%progbits,1
+ 1575      02004900 
+ 1575      00000201 
+ 1575      FB0E0D00 
+ 1575      01010101 
+ 1576              	.LASF34:
+ 1577 0000 506F6C6C 		.ascii	"Poll_Timer_ReadCounter\000"
+ 1577      5F54696D 
+ 1577      65725F52 
+ 1577      65616443 
+ 1577      6F756E74 
+ 1578              	.LASF15:
+ 1579 0017 72656733 		.ascii	"reg32\000"
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 42
+
+
+ 1579      3200
+ 1580              	.LASF23:
+ 1581 001d 506F6C6C 		.ascii	"Poll_Timer_ReadStatusRegister\000"
+ 1581      5F54696D 
+ 1581      65725F52 
+ 1581      65616453 
+ 1581      74617475 
+ 1582              	.LASF38:
+ 1583 003b 433A5C55 		.ascii	"C:\\Users\\Colin\\Dropbox\\Grad School\\Spring 2014"
+ 1583      73657273 
+ 1583      5C436F6C 
+ 1583      696E5C44 
+ 1583      726F7062 
+ 1584 0069 5C4D4520 		.ascii	"\\ME 235\\Code\\USB_UART01\\Final_PSoC_Code\\USB_UA"
+ 1584      3233355C 
+ 1584      436F6465 
+ 1584      5C555342 
+ 1584      5F554152 
+ 1585 0097 52543031 		.ascii	"RT01-000.Bundle01\\USB_UART01.cydsn\000"
+ 1585      2D303030 
+ 1585      2E42756E 
+ 1585      646C6530 
+ 1585      315C5553 
+ 1586              	.LASF29:
+ 1587 00ba 506F6C6C 		.ascii	"Poll_Timer_WritePeriod\000"
+ 1587      5F54696D 
+ 1587      65725F57 
+ 1587      72697465 
+ 1587      50657269 
+ 1588              	.LASF30:
+ 1589 00d1 70657269 		.ascii	"period\000"
+ 1589      6F6400
+ 1590              	.LASF3:
+ 1591 00d8 73686F72 		.ascii	"short unsigned int\000"
+ 1591      7420756E 
+ 1591      7369676E 
+ 1591      65642069 
+ 1591      6E7400
+ 1592              	.LASF21:
+ 1593 00eb 506F6C6C 		.ascii	"Poll_Timer_SetInterruptMode\000"
+ 1593      5F54696D 
+ 1593      65725F53 
+ 1593      6574496E 
+ 1593      74657272 
+ 1594              	.LASF20:
+ 1595 0107 506F6C6C 		.ascii	"Poll_Timer_Init\000"
+ 1595      5F54696D 
+ 1595      65725F49 
+ 1595      6E697400 
+ 1596              	.LASF32:
+ 1597 0117 506F6C6C 		.ascii	"Poll_Timer_WriteCounter\000"
+ 1597      5F54696D 
+ 1597      65725F57 
+ 1597      72697465 
+ 1597      436F756E 
+ 1598              	.LASF11:
+ 1599 012f 666C6F61 		.ascii	"float\000"
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 43
+
+
+ 1599      7400
+ 1600              	.LASF33:
+ 1601 0135 636F756E 		.ascii	"counter\000"
+ 1601      74657200 
+ 1602              	.LASF1:
+ 1603 013d 756E7369 		.ascii	"unsigned char\000"
+ 1603      676E6564 
+ 1603      20636861 
+ 1603      7200
+ 1604              	.LASF14:
+ 1605 014b 72656738 		.ascii	"reg8\000"
+ 1605      00
+ 1606              	.LASF28:
+ 1607 0150 506F6C6C 		.ascii	"Poll_Timer_ReadPeriod\000"
+ 1607      5F54696D 
+ 1607      65725F52 
+ 1607      65616450 
+ 1607      6572696F 
+ 1608              	.LASF5:
+ 1609 0166 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1609      20756E73 
+ 1609      69676E65 
+ 1609      6420696E 
+ 1609      7400
+ 1610              	.LASF9:
+ 1611 0178 75696E74 		.ascii	"uint8\000"
+ 1611      3800
+ 1612              	.LASF27:
+ 1613 017e 636F6E74 		.ascii	"control\000"
+ 1613      726F6C00 
+ 1614              	.LASF12:
+ 1615 0186 646F7562 		.ascii	"double\000"
+ 1615      6C6500
+ 1616              	.LASF24:
+ 1617 018d 506F6C6C 		.ascii	"Poll_Timer_ReadControlRegister\000"
+ 1617      5F54696D 
+ 1617      65725F52 
+ 1617      65616443 
+ 1617      6F6E7472 
+ 1618              	.LASF10:
+ 1619 01ac 75696E74 		.ascii	"uint32\000"
+ 1619      333200
+ 1620              	.LASF8:
+ 1621 01b3 756E7369 		.ascii	"unsigned int\000"
+ 1621      676E6564 
+ 1621      20696E74 
+ 1621      00
+ 1622              	.LASF37:
+ 1623 01c0 2E5C4765 		.ascii	".\\Generated_Source\\PSoC5\\Poll_Timer.c\000"
+ 1623      6E657261 
+ 1623      7465645F 
+ 1623      536F7572 
+ 1623      63655C50 
+ 1624              	.LASF7:
+ 1625 01e6 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1625      206C6F6E 
+ 1625      6720756E 
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 44
+
+
+ 1625      7369676E 
+ 1625      65642069 
+ 1626              	.LASF31:
+ 1627 01fd 506F6C6C 		.ascii	"Poll_Timer_ReadCapture\000"
+ 1627      5F54696D 
+ 1627      65725F52 
+ 1627      65616443 
+ 1627      61707475 
+ 1628              	.LASF22:
+ 1629 0214 506F6C6C 		.ascii	"Poll_Timer_SoftwareCapture\000"
+ 1629      5F54696D 
+ 1629      65725F53 
+ 1629      6F667477 
+ 1629      61726543 
+ 1630              	.LASF17:
+ 1631 022f 506F6C6C 		.ascii	"Poll_Timer_Enable\000"
+ 1631      5F54696D 
+ 1631      65725F45 
+ 1631      6E61626C 
+ 1631      6500
+ 1632              	.LASF40:
+ 1633 0241 506F6C6C 		.ascii	"Poll_Timer_initVar\000"
+ 1633      5F54696D 
+ 1633      65725F69 
+ 1633      6E697456 
+ 1633      617200
+ 1634              	.LASF16:
+ 1635 0254 73697A65 		.ascii	"sizetype\000"
+ 1635      74797065 
+ 1635      00
+ 1636              	.LASF6:
+ 1637 025d 6C6F6E67 		.ascii	"long long int\000"
+ 1637      206C6F6E 
+ 1637      6720696E 
+ 1637      7400
+ 1638              	.LASF26:
+ 1639 026b 696E7465 		.ascii	"interruptMode\000"
+ 1639      72727570 
+ 1639      744D6F64 
+ 1639      6500
+ 1640              	.LASF18:
+ 1641 0279 506F6C6C 		.ascii	"Poll_Timer_Start\000"
+ 1641      5F54696D 
+ 1641      65725F53 
+ 1641      74617274 
+ 1641      00
+ 1642              	.LASF25:
+ 1643 028a 506F6C6C 		.ascii	"Poll_Timer_WriteControlRegister\000"
+ 1643      5F54696D 
+ 1643      65725F57 
+ 1643      72697465 
+ 1643      436F6E74 
+ 1644              	.LASF2:
+ 1645 02aa 73686F72 		.ascii	"short int\000"
+ 1645      7420696E 
+ 1645      7400
+ 1646              	.LASF36:
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccfBmISG.s 			page 45
+
+
+ 1647 02b4 474E5520 		.ascii	"GNU C 4.7.3 20130312 (release) [ARM/embedded-4_7-br"
+ 1647      4320342E 
+ 1647      372E3320 
+ 1647      32303133 
+ 1647      30333132 
+ 1648 02e7 616E6368 		.ascii	"anch revision 196615]\000"
+ 1648      20726576 
+ 1648      6973696F 
+ 1648      6E203139 
+ 1648      36363135 
+ 1649              	.LASF4:
+ 1650 02fd 6C6F6E67 		.ascii	"long int\000"
+ 1650      20696E74 
+ 1650      00
+ 1651              	.LASF13:
+ 1652 0306 63686172 		.ascii	"char\000"
+ 1652      00
+ 1653              	.LASF19:
+ 1654 030b 506F6C6C 		.ascii	"Poll_Timer_Stop\000"
+ 1654      5F54696D 
+ 1654      65725F53 
+ 1654      746F7000 
+ 1655              	.LASF0:
+ 1656 031b 7369676E 		.ascii	"signed char\000"
+ 1656      65642063 
+ 1656      68617200 
+ 1657              	.LASF39:
+ 1658 0327 506F6C6C 		.ascii	"Poll_Timer_interruptState\000"
+ 1658      5F54696D 
+ 1658      65725F69 
+ 1658      6E746572 
+ 1658      72757074 
+ 1659              	.LASF35:
+ 1660 0341 506F6C6C 		.ascii	"Poll_Timer_ClearFIFO\000"
+ 1660      5F54696D 
+ 1660      65725F43 
+ 1660      6C656172 
+ 1660      4649464F 
+ 1661              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.7.3 20130312 (release) [ARM/embedded-4_7-br

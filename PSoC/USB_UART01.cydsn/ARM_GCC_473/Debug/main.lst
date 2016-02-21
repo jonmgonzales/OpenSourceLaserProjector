@@ -1,0 +1,2233 @@
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"main.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global _printf_float
+  19              		.thumb
+  20              		.comm	buffer,50,4
+  21              		.comm	count,1,1
+  22              		.comm	pt_x,5,4
+  23              		.comm	pt_y,5,4
+  24              		.comm	ls,5,4
+  25              		.comm	interp_x,9,4
+  26              		.comm	interp_y,9,4
+  27              		.comm	interp_ls,9,4
+  28              		.comm	isInterpolated,1,1
+  29              		.comm	interp_index,1,1
+  30              		.comm	std_index,1,1
+  31              		.comm	interp_Mode,1,1
+  32              		.global	parity
+  33              		.section	.rodata
+  34              		.align	2
+  35              	.LC0:
+  36 0000 4E6F6E65 		.ascii	"None\000"
+  36      00
+  37 0005 000000   		.align	2
+  38              	.LC1:
+  39 0008 4F646400 		.ascii	"Odd\000"
+  40              		.align	2
+  41              	.LC2:
+  42 000c 4576656E 		.ascii	"Even\000"
+  42      00
+  43 0011 000000   		.align	2
+  44              	.LC3:
+  45 0014 4D61726B 		.ascii	"Mark\000"
+  45      00
+  46 0019 000000   		.align	2
+  47              	.LC4:
+  48 001c 53706163 		.ascii	"Space\000"
+  48      6500
+  49              		.data
+  50              		.align	2
+  51              		.type	parity, %object
+  52              		.size	parity, 20
+  53              	parity:
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 2
+
+
+  54 0000 00000000 		.word	.LC0
+  55 0004 08000000 		.word	.LC1
+  56 0008 0C000000 		.word	.LC2
+  57 000c 14000000 		.word	.LC3
+  58 0010 1C000000 		.word	.LC4
+  59              		.global	stop
+  60              		.section	.rodata
+  61 0022 0000     		.align	2
+  62              	.LC5:
+  63 0024 3100     		.ascii	"1\000"
+  64 0026 0000     		.align	2
+  65              	.LC6:
+  66 0028 312E3500 		.ascii	"1.5\000"
+  67              		.align	2
+  68              	.LC7:
+  69 002c 3200     		.ascii	"2\000"
+  70              		.data
+  71              		.align	2
+  72              		.type	stop, %object
+  73              		.size	stop, 12
+  74              	stop:
+  75 0014 24000000 		.word	.LC5
+  76 0018 28000000 		.word	.LC6
+  77 001c 2C000000 		.word	.LC7
+  78              		.comm	lineStr,20,4
+  79              		.section	.text.poll_ISR,"ax",%progbits
+  80              		.align	2
+  81              		.global	poll_ISR
+  82              		.thumb
+  83              		.thumb_func
+  84              		.type	poll_ISR, %function
+  85              	poll_ISR:
+  86              	.LFB56:
+  87              		.file 1 ".\\main.c"
+   1:.\main.c      **** /*******************************************************************************
+   2:.\main.c      **** * File Name: main.c
+   3:.\main.c      **** *
+   4:.\main.c      **** * Description: This file programs the PSoC to receive data from USB and send control
+   5:.\main.c      **** * signals to laser galvonometers 
+   6:.\main.c      **** *   
+   7:.\main.c      **** *******************************************************************************/
+   8:.\main.c      **** 
+   9:.\main.c      **** #include <project.h>
+  10:.\main.c      **** #include <stdio.h>
+  11:.\main.c      **** #include <stdlib.h>
+  12:.\main.c      **** 
+  13:.\main.c      **** #if defined (__GNUC__)
+  14:.\main.c      ****     /* Add an explicit reference to the floating point printf library */
+  15:.\main.c      ****     /* to allow the usage of floating point conversion specifiers. */
+  16:.\main.c      ****     /* This is not linked in by default with the newlib-nano library. */
+  17:.\main.c      ****     asm (".global _printf_float");
+  18:.\main.c      **** #endif
+  19:.\main.c      **** 
+  20:.\main.c      **** #define BUFFER_LEN  50u         // Buffer to receive USBUART data from PC
+  21:.\main.c      **** #define N_COORD 5u              // Number of coordinates per data packet
+  22:.\main.c      **** 
+  23:.\main.c      **** uint8 buffer[BUFFER_LEN];       // Buffer to store data received from PC
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 3
+
+
+  24:.\main.c      **** uint8 count;                    // Store number of bytes received
+  25:.\main.c      **** 
+  26:.\main.c      **** uint8 pt_x[N_COORD];            // x coordinates from data packet
+  27:.\main.c      **** uint8 pt_y[N_COORD];            // y coordinates from data packet
+  28:.\main.c      **** uint8 ls[N_COORD];              // laser state from data packet
+  29:.\main.c      **** 
+  30:.\main.c      **** uint8 interp_x[2*N_COORD-1];    // Interpolated x points
+  31:.\main.c      **** uint8 interp_y[2*N_COORD-1];    // Interpolated y points
+  32:.\main.c      **** uint8 interp_ls[2*N_COORD-1];   // Interpolated ls points
+  33:.\main.c      **** uint8 isInterpolated;   
+  34:.\main.c      **** 
+  35:.\main.c      **** uint8 interp_index;
+  36:.\main.c      **** uint8 std_index;
+  37:.\main.c      **** 
+  38:.\main.c      **** uint8 interp_Mode;                 // Switch between modes
+  39:.\main.c      **** 
+  40:.\main.c      **** char8 *parity[] = { "None", "Odd", "Even", "Mark", "Space" };
+  41:.\main.c      **** char8 *stop[] = { "1", "1.5", "2" };
+  42:.\main.c      **** 
+  43:.\main.c      **** char8 lineStr[20];              // String to update LCD
+  44:.\main.c      **** 
+  45:.\main.c      **** // Define Interrupt Service Routines for:
+  46:.\main.c      **** // 1. Polling USB data from PC
+  47:.\main.c      **** // 2. Sending out control signals to mirror galvonometers
+  48:.\main.c      **** // 3. Switching between interpolated points and standard points
+  49:.\main.c      **** 
+  50:.\main.c      **** CY_ISR(poll_ISR)
+  51:.\main.c      **** {    
+  88              		.loc 1 51 0
+  89              		.cfi_startproc
+  90              		@ args = 0, pretend = 0, frame = 8
+  91              		@ frame_needed = 1, uses_anonymous_args = 0
+  92 0000 80B5     		push	{r7, lr}
+  93              	.LCFI0:
+  94              		.cfi_def_cfa_offset 8
+  95              		.cfi_offset 7, -8
+  96              		.cfi_offset 14, -4
+  97 0002 82B0     		sub	sp, sp, #8
+  98              	.LCFI1:
+  99              		.cfi_def_cfa_offset 16
+ 100 0004 00AF     		add	r7, sp, #0
+ 101              	.LCFI2:
+ 102              		.cfi_def_cfa_register 7
+  52:.\main.c      ****        // Disasserted interrupt signal
+  53:.\main.c      ****        Poll_Timer_ReadStatusRegister();
+ 103              		.loc 1 53 0
+ 104 0006 FFF7FEFF 		bl	Poll_Timer_ReadStatusRegister
+  54:.\main.c      ****     
+  55:.\main.c      ****         // Check for input data from PC
+  56:.\main.c      ****         if(USBUART_1_DataIsReady() != 0u){             
+ 105              		.loc 1 56 0
+ 106 000a FFF7FEFF 		bl	USBUART_1_DataIsReady
+ 107 000e 0346     		mov	r3, r0
+ 108 0010 002B     		cmp	r3, #0
+ 109 0012 59D0     		beq	.L1
+  57:.\main.c      ****         
+  58:.\main.c      ****         // Read received data and re-enable OUT endpoint
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 4
+
+
+  59:.\main.c      ****         count = USBUART_1_GetAll(buffer);           
+ 110              		.loc 1 59 0
+ 111 0014 40F20000 		movw	r0, #:lower16:buffer
+ 112 0018 C0F20000 		movt	r0, #:upper16:buffer
+ 113 001c FFF7FEFF 		bl	USBUART_1_GetAll
+ 114 0020 0346     		mov	r3, r0
+ 115 0022 DAB2     		uxtb	r2, r3
+ 116 0024 40F20003 		movw	r3, #:lower16:count
+ 117 0028 C0F20003 		movt	r3, #:upper16:count
+ 118 002c 1A70     		strb	r2, [r3, #0]
+  60:.\main.c      ****         if(count != 0u){   
+ 119              		.loc 1 60 0
+ 120 002e 40F20003 		movw	r3, #:lower16:count
+ 121 0032 C0F20003 		movt	r3, #:upper16:count
+ 122 0036 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 123 0038 002B     		cmp	r3, #0
+ 124 003a 45D0     		beq	.L1
+ 125              	.LBB2:
+  61:.\main.c      ****             
+  62:.\main.c      ****             // Unbundle contents of data packet
+  63:.\main.c      ****             uint8 i;
+  64:.\main.c      ****             for(i = 0; i < N_COORD; i++){
+ 126              		.loc 1 64 0
+ 127 003c 4FF00003 		mov	r3, #0
+ 128 0040 FB71     		strb	r3, [r7, #7]
+ 129 0042 37E0     		b	.L3
+ 130              	.L4:
+  65:.\main.c      ****                 pt_x[i] = buffer[3*i+0];
+ 131              		.loc 1 65 0 discriminator 2
+ 132 0044 F979     		ldrb	r1, [r7, #7]	@ zero_extendqisi2
+ 133 0046 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 134 0048 1346     		mov	r3, r2
+ 135 004a 4FEA4303 		lsl	r3, r3, #1
+ 136 004e 9A18     		adds	r2, r3, r2
+ 137 0050 40F20003 		movw	r3, #:lower16:buffer
+ 138 0054 C0F20003 		movt	r3, #:upper16:buffer
+ 139 0058 9A5C     		ldrb	r2, [r3, r2]	@ zero_extendqisi2
+ 140 005a 40F20003 		movw	r3, #:lower16:pt_x
+ 141 005e C0F20003 		movt	r3, #:upper16:pt_x
+ 142 0062 5A54     		strb	r2, [r3, r1]
+  66:.\main.c      ****                 pt_y[i] = buffer[3*i+1];
+ 143              		.loc 1 66 0 discriminator 2
+ 144 0064 F979     		ldrb	r1, [r7, #7]	@ zero_extendqisi2
+ 145 0066 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 146 0068 1346     		mov	r3, r2
+ 147 006a 4FEA4303 		lsl	r3, r3, #1
+ 148 006e 9B18     		adds	r3, r3, r2
+ 149 0070 03F10102 		add	r2, r3, #1
+ 150 0074 40F20003 		movw	r3, #:lower16:buffer
+ 151 0078 C0F20003 		movt	r3, #:upper16:buffer
+ 152 007c 9A5C     		ldrb	r2, [r3, r2]	@ zero_extendqisi2
+ 153 007e 40F20003 		movw	r3, #:lower16:pt_y
+ 154 0082 C0F20003 		movt	r3, #:upper16:pt_y
+ 155 0086 5A54     		strb	r2, [r3, r1]
+  67:.\main.c      ****                 ls[i] = buffer[3*i+2];
+ 156              		.loc 1 67 0 discriminator 2
+ 157 0088 F979     		ldrb	r1, [r7, #7]	@ zero_extendqisi2
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 5
+
+
+ 158 008a FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 159 008c 1346     		mov	r3, r2
+ 160 008e 4FEA4303 		lsl	r3, r3, #1
+ 161 0092 9B18     		adds	r3, r3, r2
+ 162 0094 03F10202 		add	r2, r3, #2
+ 163 0098 40F20003 		movw	r3, #:lower16:buffer
+ 164 009c C0F20003 		movt	r3, #:upper16:buffer
+ 165 00a0 9A5C     		ldrb	r2, [r3, r2]	@ zero_extendqisi2
+ 166 00a2 40F20003 		movw	r3, #:lower16:ls
+ 167 00a6 C0F20003 		movt	r3, #:upper16:ls
+ 168 00aa 5A54     		strb	r2, [r3, r1]
+  64:.\main.c      ****             for(i = 0; i < N_COORD; i++){
+ 169              		.loc 1 64 0 discriminator 2
+ 170 00ac FB79     		ldrb	r3, [r7, #7]
+ 171 00ae 03F10103 		add	r3, r3, #1
+ 172 00b2 FB71     		strb	r3, [r7, #7]
+ 173              	.L3:
+  64:.\main.c      ****             for(i = 0; i < N_COORD; i++){
+ 174              		.loc 1 64 0 is_stmt 0 discriminator 1
+ 175 00b4 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 176 00b6 042B     		cmp	r3, #4
+ 177 00b8 C4D9     		bls	.L4
+  68:.\main.c      ****             }
+  69:.\main.c      ****             
+  70:.\main.c      ****             // New data is not yet interpolated
+  71:.\main.c      ****             isInterpolated = 0;
+ 178              		.loc 1 71 0 is_stmt 1
+ 179 00ba 40F20003 		movw	r3, #:lower16:isInterpolated
+ 180 00be C0F20003 		movt	r3, #:upper16:isInterpolated
+ 181 00c2 4FF00002 		mov	r2, #0
+ 182 00c6 1A70     		strb	r2, [r3, #0]
+ 183              	.L1:
+ 184              	.LBE2:
+  72:.\main.c      ****         }
+  73:.\main.c      ****     }
+  74:.\main.c      **** }
+ 185              		.loc 1 74 0
+ 186 00c8 07F10807 		add	r7, r7, #8
+ 187 00cc BD46     		mov	sp, r7
+ 188 00ce 80BD     		pop	{r7, pc}
+ 189              		.cfi_endproc
+ 190              	.LFE56:
+ 191              		.size	poll_ISR, .-poll_ISR
+ 192              		.section	.text.fire_ISR,"ax",%progbits
+ 193              		.align	2
+ 194              		.global	fire_ISR
+ 195              		.thumb
+ 196              		.thumb_func
+ 197              		.type	fire_ISR, %function
+ 198              	fire_ISR:
+ 199              	.LFB57:
+  75:.\main.c      **** 
+  76:.\main.c      **** CY_ISR(fire_ISR)
+  77:.\main.c      **** {
+ 200              		.loc 1 77 0
+ 201              		.cfi_startproc
+ 202              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 6
+
+
+ 203              		@ frame_needed = 1, uses_anonymous_args = 0
+ 204 0000 80B5     		push	{r7, lr}
+ 205              	.LCFI3:
+ 206              		.cfi_def_cfa_offset 8
+ 207              		.cfi_offset 7, -8
+ 208              		.cfi_offset 14, -4
+ 209 0002 00AF     		add	r7, sp, #0
+ 210              	.LCFI4:
+ 211              		.cfi_def_cfa_register 7
+  78:.\main.c      ****     // Disarrert interrupt signal
+  79:.\main.c      ****     Fire_Timer_ReadStatusRegister();
+ 212              		.loc 1 79 0
+ 213 0004 FFF7FEFF 		bl	Fire_Timer_ReadStatusRegister
+  80:.\main.c      ****     
+  81:.\main.c      ****     // Check Mode
+  82:.\main.c      ****     if(interp_Mode){
+ 214              		.loc 1 82 0
+ 215 0008 40F20003 		movw	r3, #:lower16:interp_Mode
+ 216 000c C0F20003 		movt	r3, #:upper16:interp_Mode
+ 217 0010 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 218 0012 002B     		cmp	r3, #0
+ 219 0014 47D0     		beq	.L6
+  83:.\main.c      ****         // Ensure data is interpolated
+  84:.\main.c      ****         if(isInterpolated){
+ 220              		.loc 1 84 0
+ 221 0016 40F20003 		movw	r3, #:lower16:isInterpolated
+ 222 001a C0F20003 		movt	r3, #:upper16:isInterpolated
+ 223 001e 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 224 0020 002B     		cmp	r3, #0
+ 225 0022 00F09580 		beq	.L5
+  85:.\main.c      ****             
+  86:.\main.c      ****             // Ensure the index is not overrun
+  87:.\main.c      ****             if(interp_index < (2*N_COORD-1)){
+ 226              		.loc 1 87 0
+ 227 0026 40F20003 		movw	r3, #:lower16:interp_index
+ 228 002a C0F20003 		movt	r3, #:upper16:interp_index
+ 229 002e 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 230 0030 082B     		cmp	r3, #8
+ 231 0032 00F28D80 		bhi	.L5
+  88:.\main.c      ****                 // Send out x,y,ls control signals
+  89:.\main.c      ****                 VDAC8_x_SetValue(interp_x[interp_index]);
+ 232              		.loc 1 89 0
+ 233 0036 40F20003 		movw	r3, #:lower16:interp_index
+ 234 003a C0F20003 		movt	r3, #:upper16:interp_index
+ 235 003e 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 236 0040 1A46     		mov	r2, r3
+ 237 0042 40F20003 		movw	r3, #:lower16:interp_x
+ 238 0046 C0F20003 		movt	r3, #:upper16:interp_x
+ 239 004a 9B5C     		ldrb	r3, [r3, r2]	@ zero_extendqisi2
+ 240 004c 1846     		mov	r0, r3
+ 241 004e FFF7FEFF 		bl	VDAC8_x_SetValue
+  90:.\main.c      ****                 VDAC8_y_SetValue(interp_y[interp_index]);
+ 242              		.loc 1 90 0
+ 243 0052 40F20003 		movw	r3, #:lower16:interp_index
+ 244 0056 C0F20003 		movt	r3, #:upper16:interp_index
+ 245 005a 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 246 005c 1A46     		mov	r2, r3
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 7
+
+
+ 247 005e 40F20003 		movw	r3, #:lower16:interp_y
+ 248 0062 C0F20003 		movt	r3, #:upper16:interp_y
+ 249 0066 9B5C     		ldrb	r3, [r3, r2]	@ zero_extendqisi2
+ 250 0068 1846     		mov	r0, r3
+ 251 006a FFF7FEFF 		bl	VDAC8_y_SetValue
+  91:.\main.c      ****                 laser_state_Write(interp_ls[interp_index]);
+ 252              		.loc 1 91 0
+ 253 006e 40F20003 		movw	r3, #:lower16:interp_index
+ 254 0072 C0F20003 		movt	r3, #:upper16:interp_index
+ 255 0076 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 256 0078 1A46     		mov	r2, r3
+ 257 007a 40F20003 		movw	r3, #:lower16:interp_ls
+ 258 007e C0F20003 		movt	r3, #:upper16:interp_ls
+ 259 0082 9B5C     		ldrb	r3, [r3, r2]	@ zero_extendqisi2
+ 260 0084 1846     		mov	r0, r3
+ 261 0086 FFF7FEFF 		bl	laser_state_Write
+  92:.\main.c      ****                 interp_index++;
+ 262              		.loc 1 92 0
+ 263 008a 40F20003 		movw	r3, #:lower16:interp_index
+ 264 008e C0F20003 		movt	r3, #:upper16:interp_index
+ 265 0092 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 266 0094 03F10103 		add	r3, r3, #1
+ 267 0098 DAB2     		uxtb	r2, r3
+ 268 009a 40F20003 		movw	r3, #:lower16:interp_index
+ 269 009e C0F20003 		movt	r3, #:upper16:interp_index
+ 270 00a2 1A70     		strb	r2, [r3, #0]
+ 271 00a4 54E0     		b	.L5
+ 272              	.L6:
+  93:.\main.c      ****             }
+  94:.\main.c      ****         }        
+  95:.\main.c      ****     }
+  96:.\main.c      ****     
+  97:.\main.c      ****     else{
+  98:.\main.c      ****         // Send data over every other coordinate (i.e. original coordiante data)
+  99:.\main.c      ****         if(!(interp_index%2)){
+ 273              		.loc 1 99 0
+ 274 00a6 40F20003 		movw	r3, #:lower16:interp_index
+ 275 00aa C0F20003 		movt	r3, #:upper16:interp_index
+ 276 00ae 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 277 00b0 03F00103 		and	r3, r3, #1
+ 278 00b4 DBB2     		uxtb	r3, r3
+ 279 00b6 002B     		cmp	r3, #0
+ 280 00b8 3DD1     		bne	.L8
+ 100:.\main.c      ****             
+ 101:.\main.c      ****            // Ensure the index is not overrun
+ 102:.\main.c      ****             if(std_index < N_COORD){
+ 281              		.loc 1 102 0
+ 282 00ba 40F20003 		movw	r3, #:lower16:std_index
+ 283 00be C0F20003 		movt	r3, #:upper16:std_index
+ 284 00c2 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 285 00c4 042B     		cmp	r3, #4
+ 286 00c6 36D8     		bhi	.L8
+ 103:.\main.c      ****             
+ 104:.\main.c      ****                 // Send out x,y,ls control signals
+ 105:.\main.c      ****                 VDAC8_x_SetValue(pt_x[std_index]);
+ 287              		.loc 1 105 0
+ 288 00c8 40F20003 		movw	r3, #:lower16:std_index
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 8
+
+
+ 289 00cc C0F20003 		movt	r3, #:upper16:std_index
+ 290 00d0 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 291 00d2 1A46     		mov	r2, r3
+ 292 00d4 40F20003 		movw	r3, #:lower16:pt_x
+ 293 00d8 C0F20003 		movt	r3, #:upper16:pt_x
+ 294 00dc 9B5C     		ldrb	r3, [r3, r2]	@ zero_extendqisi2
+ 295 00de 1846     		mov	r0, r3
+ 296 00e0 FFF7FEFF 		bl	VDAC8_x_SetValue
+ 106:.\main.c      ****                 VDAC8_y_SetValue(pt_y[std_index]);
+ 297              		.loc 1 106 0
+ 298 00e4 40F20003 		movw	r3, #:lower16:std_index
+ 299 00e8 C0F20003 		movt	r3, #:upper16:std_index
+ 300 00ec 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 301 00ee 1A46     		mov	r2, r3
+ 302 00f0 40F20003 		movw	r3, #:lower16:pt_y
+ 303 00f4 C0F20003 		movt	r3, #:upper16:pt_y
+ 304 00f8 9B5C     		ldrb	r3, [r3, r2]	@ zero_extendqisi2
+ 305 00fa 1846     		mov	r0, r3
+ 306 00fc FFF7FEFF 		bl	VDAC8_y_SetValue
+ 107:.\main.c      ****                 laser_state_Write(ls[std_index]); 
+ 307              		.loc 1 107 0
+ 308 0100 40F20003 		movw	r3, #:lower16:std_index
+ 309 0104 C0F20003 		movt	r3, #:upper16:std_index
+ 310 0108 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 311 010a 1A46     		mov	r2, r3
+ 312 010c 40F20003 		movw	r3, #:lower16:ls
+ 313 0110 C0F20003 		movt	r3, #:upper16:ls
+ 314 0114 9B5C     		ldrb	r3, [r3, r2]	@ zero_extendqisi2
+ 315 0116 1846     		mov	r0, r3
+ 316 0118 FFF7FEFF 		bl	laser_state_Write
+ 108:.\main.c      ****             
+ 109:.\main.c      ****                 std_index++;
+ 317              		.loc 1 109 0
+ 318 011c 40F20003 		movw	r3, #:lower16:std_index
+ 319 0120 C0F20003 		movt	r3, #:upper16:std_index
+ 320 0124 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 321 0126 03F10103 		add	r3, r3, #1
+ 322 012a DAB2     		uxtb	r2, r3
+ 323 012c 40F20003 		movw	r3, #:lower16:std_index
+ 324 0130 C0F20003 		movt	r3, #:upper16:std_index
+ 325 0134 1A70     		strb	r2, [r3, #0]
+ 326              	.L8:
+ 110:.\main.c      ****             }
+ 111:.\main.c      ****         }
+ 112:.\main.c      ****         
+ 113:.\main.c      ****         interp_index++;
+ 327              		.loc 1 113 0
+ 328 0136 40F20003 		movw	r3, #:lower16:interp_index
+ 329 013a C0F20003 		movt	r3, #:upper16:interp_index
+ 330 013e 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 331 0140 03F10103 		add	r3, r3, #1
+ 332 0144 DAB2     		uxtb	r2, r3
+ 333 0146 40F20003 		movw	r3, #:lower16:interp_index
+ 334 014a C0F20003 		movt	r3, #:upper16:interp_index
+ 335 014e 1A70     		strb	r2, [r3, #0]
+ 336              	.L5:
+ 114:.\main.c      ****     }
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 9
+
+
+ 115:.\main.c      **** 
+ 116:.\main.c      **** }
+ 337              		.loc 1 116 0
+ 338 0150 80BD     		pop	{r7, pc}
+ 339              		.cfi_endproc
+ 340              	.LFE57:
+ 341              		.size	fire_ISR, .-fire_ISR
+ 342 0152 00BF     		.section	.rodata
+ 343 002e 0000     		.align	2
+ 344              	.LC8:
+ 345 0030 496E7465 		.ascii	"Interpolated    \000"
+ 345      72706F6C 
+ 345      61746564 
+ 345      20202020 
+ 345      00
+ 346 0041 000000   		.align	2
+ 347              	.LC9:
+ 348 0044 5374616E 		.ascii	"Standard        \000"
+ 348      64617264 
+ 348      20202020 
+ 348      20202020 
+ 348      00
+ 349              		.section	.text.Mode_ISR,"ax",%progbits
+ 350              		.align	2
+ 351              		.global	Mode_ISR
+ 352              		.thumb
+ 353              		.thumb_func
+ 354              		.type	Mode_ISR, %function
+ 355              	Mode_ISR:
+ 356              	.LFB58:
+ 117:.\main.c      **** 
+ 118:.\main.c      **** CY_ISR(Mode_ISR)
+ 119:.\main.c      **** {    
+ 357              		.loc 1 119 0
+ 358              		.cfi_startproc
+ 359              		@ args = 0, pretend = 0, frame = 0
+ 360              		@ frame_needed = 1, uses_anonymous_args = 0
+ 361 0000 B0B5     		push	{r4, r5, r7, lr}
+ 362              	.LCFI5:
+ 363              		.cfi_def_cfa_offset 16
+ 364              		.cfi_offset 4, -16
+ 365              		.cfi_offset 5, -12
+ 366              		.cfi_offset 7, -8
+ 367              		.cfi_offset 14, -4
+ 368 0002 00AF     		add	r7, sp, #0
+ 369              	.LCFI6:
+ 370              		.cfi_def_cfa_register 7
+ 120:.\main.c      ****     // Switch mode
+ 121:.\main.c      ****     interp_Mode = !interp_Mode;
+ 371              		.loc 1 121 0
+ 372 0004 40F20003 		movw	r3, #:lower16:interp_Mode
+ 373 0008 C0F20003 		movt	r3, #:upper16:interp_Mode
+ 374 000c 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 375 000e 002B     		cmp	r3, #0
+ 376 0010 14BF     		ite	ne
+ 377 0012 0023     		movne	r3, #0
+ 378 0014 0123     		moveq	r3, #1
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 10
+
+
+ 379 0016 DBB2     		uxtb	r3, r3
+ 380 0018 1A46     		mov	r2, r3
+ 381 001a 40F20003 		movw	r3, #:lower16:interp_Mode
+ 382 001e C0F20003 		movt	r3, #:upper16:interp_Mode
+ 383 0022 1A70     		strb	r2, [r3, #0]
+ 122:.\main.c      ****     
+ 123:.\main.c      ****     // Reset indicies
+ 124:.\main.c      ****     interp_index = 0;
+ 384              		.loc 1 124 0
+ 385 0024 40F20003 		movw	r3, #:lower16:interp_index
+ 386 0028 C0F20003 		movt	r3, #:upper16:interp_index
+ 387 002c 4FF00002 		mov	r2, #0
+ 388 0030 1A70     		strb	r2, [r3, #0]
+ 125:.\main.c      ****     std_index = 0;
+ 389              		.loc 1 125 0
+ 390 0032 40F20003 		movw	r3, #:lower16:std_index
+ 391 0036 C0F20003 		movt	r3, #:upper16:std_index
+ 392 003a 4FF00002 		mov	r2, #0
+ 393 003e 1A70     		strb	r2, [r3, #0]
+ 126:.\main.c      ****     
+ 127:.\main.c      ****     // Display current mode on LCD
+ 128:.\main.c      ****     if(interp_Mode){
+ 394              		.loc 1 128 0
+ 395 0040 40F20003 		movw	r3, #:lower16:interp_Mode
+ 396 0044 C0F20003 		movt	r3, #:upper16:interp_Mode
+ 397 0048 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 398 004a 002B     		cmp	r3, #0
+ 399 004c 1AD0     		beq	.L10
+ 129:.\main.c      ****         sprintf(lineStr,"Interpolated    ");
+ 400              		.loc 1 129 0
+ 401 004e 40F20002 		movw	r2, #:lower16:lineStr
+ 402 0052 C0F20002 		movt	r2, #:upper16:lineStr
+ 403 0056 40F20003 		movw	r3, #:lower16:.LC8
+ 404 005a C0F20003 		movt	r3, #:upper16:.LC8
+ 405 005e 1446     		mov	r4, r2
+ 406 0060 1D46     		mov	r5, r3
+ 407 0062 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 408 0064 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 409 0066 2B68     		ldr	r3, [r5, #0]
+ 410 0068 2370     		strb	r3, [r4, #0]
+ 130:.\main.c      ****         LCD_Position(1u, 0u);
+ 411              		.loc 1 130 0
+ 412 006a 4FF00100 		mov	r0, #1
+ 413 006e 4FF00001 		mov	r1, #0
+ 414 0072 FFF7FEFF 		bl	LCD_Position
+ 131:.\main.c      ****         LCD_PrintString(lineStr);
+ 415              		.loc 1 131 0
+ 416 0076 40F20000 		movw	r0, #:lower16:lineStr
+ 417 007a C0F20000 		movt	r0, #:upper16:lineStr
+ 418 007e FFF7FEFF 		bl	LCD_PrintString
+ 419 0082 19E0     		b	.L9
+ 420              	.L10:
+ 132:.\main.c      ****     }
+ 133:.\main.c      ****     else{
+ 134:.\main.c      ****         sprintf(lineStr,"Standard        ");
+ 421              		.loc 1 134 0
+ 422 0084 40F20002 		movw	r2, #:lower16:lineStr
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 11
+
+
+ 423 0088 C0F20002 		movt	r2, #:upper16:lineStr
+ 424 008c 40F20003 		movw	r3, #:lower16:.LC9
+ 425 0090 C0F20003 		movt	r3, #:upper16:.LC9
+ 426 0094 1446     		mov	r4, r2
+ 427 0096 1D46     		mov	r5, r3
+ 428 0098 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 429 009a 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 430 009c 2B68     		ldr	r3, [r5, #0]
+ 431 009e 2370     		strb	r3, [r4, #0]
+ 135:.\main.c      ****         LCD_Position(1u, 0u);
+ 432              		.loc 1 135 0
+ 433 00a0 4FF00100 		mov	r0, #1
+ 434 00a4 4FF00001 		mov	r1, #0
+ 435 00a8 FFF7FEFF 		bl	LCD_Position
+ 136:.\main.c      ****         LCD_PrintString(lineStr);
+ 436              		.loc 1 136 0
+ 437 00ac 40F20000 		movw	r0, #:lower16:lineStr
+ 438 00b0 C0F20000 		movt	r0, #:upper16:lineStr
+ 439 00b4 FFF7FEFF 		bl	LCD_PrintString
+ 440              	.L9:
+ 137:.\main.c      ****     }
+ 138:.\main.c      **** 
+ 139:.\main.c      **** }
+ 441              		.loc 1 139 0
+ 442 00b8 B0BD     		pop	{r4, r5, r7, pc}
+ 443              		.cfi_endproc
+ 444              	.LFE58:
+ 445              		.size	Mode_ISR, .-Mode_ISR
+ 446 00ba 00BF     		.section	.rodata
+ 447 0055 000000   		.align	2
+ 448              	.LC10:
+ 449 0058 5553422D 		.ascii	"USB-UART example\000"
+ 449      55415254 
+ 449      20657861 
+ 449      6D706C65 
+ 449      00
+ 450              		.global	__aeabi_i2d
+ 451              		.global	__aeabi_dmul
+ 452              		.global	__aeabi_d2uiz
+ 453 0069 000000   		.align	2
+ 454              	.LC11:
+ 455 006c 42523A25 		.ascii	"BR:%4ld,DB:%d\000"
+ 455      346C642C 
+ 455      44423A25 
+ 455      6400
+ 456 007a 0000     		.align	2
+ 457              	.LC12:
+ 458 007c 20202020 		.ascii	"                    \000"
+ 458      20202020 
+ 458      20202020 
+ 458      20202020 
+ 458      20202020 
+ 459 0091 000000   		.align	2
+ 460              	.LC13:
+ 461 0094 53423A25 		.ascii	"SB:%s,Parity:%s\000"
+ 461      732C5061 
+ 461      72697479 
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 12
+
+
+ 461      3A257300 
+ 462              		.align	2
+ 463              	.LC14:
+ 464 00a4 4F4E00   		.ascii	"ON\000"
+ 465 00a7 00       		.align	2
+ 466              	.LC15:
+ 467 00a8 4F464600 		.ascii	"OFF\000"
+ 468              		.align	2
+ 469              	.LC16:
+ 470 00ac 4454523A 		.ascii	"DTR:%s,RTS:%s\000"
+ 470      25732C52 
+ 470      54533A25 
+ 470      7300
+ 471 00ba 0000     		.section	.text.main,"ax",%progbits
+ 472              		.align	2
+ 473              		.global	main
+ 474              		.thumb
+ 475              		.thumb_func
+ 476              		.type	main, %function
+ 477              	main:
+ 478              	.LFB59:
+ 140:.\main.c      **** 
+ 141:.\main.c      **** 
+ 142:.\main.c      **** void main()
+ 143:.\main.c      **** {
+ 479              		.loc 1 143 0
+ 480              		.cfi_startproc
+ 481              		@ args = 0, pretend = 0, frame = 8
+ 482              		@ frame_needed = 1, uses_anonymous_args = 0
+ 483 0000 90B5     		push	{r4, r7, lr}
+ 484              	.LCFI7:
+ 485              		.cfi_def_cfa_offset 12
+ 486              		.cfi_offset 4, -12
+ 487              		.cfi_offset 7, -8
+ 488              		.cfi_offset 14, -4
+ 489 0002 83B0     		sub	sp, sp, #12
+ 490              	.LCFI8:
+ 491              		.cfi_def_cfa_offset 24
+ 492 0004 00AF     		add	r7, sp, #0
+ 493              	.LCFI9:
+ 494              		.cfi_def_cfa_register 7
+ 144:.\main.c      ****     /* Declare storage variables */
+ 145:.\main.c      ****     uint8 state;
+ 146:.\main.c      ****     
+ 147:.\main.c      ****     /* Initialize variables */
+ 148:.\main.c      ****     interp_index = 0;
+ 495              		.loc 1 148 0
+ 496 0006 40F20003 		movw	r3, #:lower16:interp_index
+ 497 000a C0F20003 		movt	r3, #:upper16:interp_index
+ 498 000e 4FF00002 		mov	r2, #0
+ 499 0012 1A70     		strb	r2, [r3, #0]
+ 149:.\main.c      ****     std_index = 0;
+ 500              		.loc 1 149 0
+ 501 0014 40F20003 		movw	r3, #:lower16:std_index
+ 502 0018 C0F20003 		movt	r3, #:upper16:std_index
+ 503 001c 4FF00002 		mov	r2, #0
+ 504 0020 1A70     		strb	r2, [r3, #0]
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 13
+
+
+ 150:.\main.c      ****     
+ 151:.\main.c      ****     /*Initialized boolean flags */
+ 152:.\main.c      ****     isInterpolated = 0;
+ 505              		.loc 1 152 0
+ 506 0022 40F20003 		movw	r3, #:lower16:isInterpolated
+ 507 0026 C0F20003 		movt	r3, #:upper16:isInterpolated
+ 508 002a 4FF00002 		mov	r2, #0
+ 509 002e 1A70     		strb	r2, [r3, #0]
+ 153:.\main.c      ****     interp_Mode = 1;
+ 510              		.loc 1 153 0
+ 511 0030 40F20003 		movw	r3, #:lower16:interp_Mode
+ 512 0034 C0F20003 		movt	r3, #:upper16:interp_Mode
+ 513 0038 4FF00102 		mov	r2, #1
+ 514 003c 1A70     		strb	r2, [r3, #0]
+ 154:.\main.c      ****     
+ 155:.\main.c      ****     /* Enable Global Interrupts */
+ 156:.\main.c      ****     CyGlobalIntEnable;                        
+ 515              		.loc 1 156 0
+ 516              	@ 156 ".\main.c" 1
+ 517 003e 62B6     		CPSIE   i
+ 518              	@ 0 "" 2
+ 157:.\main.c      ****     
+ 158:.\main.c      ****     /* Start USBFS Operation with 3V operation */
+ 159:.\main.c      ****     USBUART_1_Start(0u, USBUART_1_3V_OPERATION);
+ 519              		.loc 1 159 0
+ 520              		.thumb
+ 521 0040 4FF00000 		mov	r0, #0
+ 522 0044 4FF00001 		mov	r1, #0
+ 523 0048 FFF7FEFF 		bl	USBUART_1_Start
+ 160:.\main.c      **** 
+ 161:.\main.c      ****     /* Start ADCs and Opamps */
+ 162:.\main.c      ****     VDAC8_x_Start();
+ 524              		.loc 1 162 0
+ 525 004c FFF7FEFF 		bl	VDAC8_x_Start
+ 163:.\main.c      ****     VDAC8_y_Start();
+ 526              		.loc 1 163 0
+ 527 0050 FFF7FEFF 		bl	VDAC8_y_Start
+ 164:.\main.c      ****     Opamp_x_Start();
+ 528              		.loc 1 164 0
+ 529 0054 FFF7FEFF 		bl	Opamp_x_Start
+ 165:.\main.c      ****     Opamp_y_Start();
+ 530              		.loc 1 165 0
+ 531 0058 FFF7FEFF 		bl	Opamp_y_Start
+ 166:.\main.c      ****         
+ 167:.\main.c      ****     /* Start Timers */
+ 168:.\main.c      ****     Poll_Timer_Start();
+ 532              		.loc 1 168 0
+ 533 005c FFF7FEFF 		bl	Poll_Timer_Start
+ 169:.\main.c      ****     Fire_Timer_Start();
+ 534              		.loc 1 169 0
+ 535 0060 FFF7FEFF 		bl	Fire_Timer_Start
+ 170:.\main.c      ****     
+ 171:.\main.c      ****     /* Start LCD */
+ 172:.\main.c      ****     LCD_Start();
+ 536              		.loc 1 172 0
+ 537 0064 FFF7FEFF 		bl	LCD_Start
+ 173:.\main.c      ****     LCD_PrintString("USB-UART example");
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 14
+
+
+ 538              		.loc 1 173 0
+ 539 0068 40F20000 		movw	r0, #:lower16:.LC10
+ 540 006c C0F20000 		movt	r0, #:upper16:.LC10
+ 541 0070 FFF7FEFF 		bl	LCD_PrintString
+ 174:.\main.c      ****     
+ 175:.\main.c      ****     /* Wait for Device to enumerate */
+ 176:.\main.c      ****     while(!USBUART_1_GetConfiguration());
+ 542              		.loc 1 176 0
+ 543 0074 00BF     		nop
+ 544              	.L13:
+ 545              		.loc 1 176 0 is_stmt 0 discriminator 1
+ 546 0076 FFF7FEFF 		bl	USBUART_1_GetConfiguration
+ 547 007a 0346     		mov	r3, r0
+ 548 007c 002B     		cmp	r3, #0
+ 549 007e FAD0     		beq	.L13
+ 177:.\main.c      ****     
+ 178:.\main.c      ****     /* Start the Polling and Writing Interrupts*/
+ 179:.\main.c      ****     Poll_Interrupt_StartEx(poll_ISR);
+ 550              		.loc 1 179 0 is_stmt 1
+ 551 0080 40F20000 		movw	r0, #:lower16:poll_ISR
+ 552 0084 C0F20000 		movt	r0, #:upper16:poll_ISR
+ 553 0088 FFF7FEFF 		bl	Poll_Interrupt_StartEx
+ 180:.\main.c      ****     Fire_Interrupt_StartEx(fire_ISR);
+ 554              		.loc 1 180 0
+ 555 008c 40F20000 		movw	r0, #:lower16:fire_ISR
+ 556 0090 C0F20000 		movt	r0, #:upper16:fire_ISR
+ 557 0094 FFF7FEFF 		bl	Fire_Interrupt_StartEx
+ 181:.\main.c      ****     Mode_Interrupt_StartEx(Mode_ISR);
+ 558              		.loc 1 181 0
+ 559 0098 40F20000 		movw	r0, #:lower16:Mode_ISR
+ 560 009c C0F20000 		movt	r0, #:upper16:Mode_ISR
+ 561 00a0 FFF7FEFF 		bl	Mode_Interrupt_StartEx
+ 182:.\main.c      **** 
+ 183:.\main.c      ****     /* Enumeration is done, enable OUT endpoint for receive data from Host */
+ 184:.\main.c      ****     USBUART_1_CDC_Init();
+ 562              		.loc 1 184 0
+ 563 00a4 FFF7FEFF 		bl	USBUART_1_CDC_Init
+ 564 00a8 00E0     		b	.L23
+ 565              	.L24:
+ 185:.\main.c      **** 
+ 186:.\main.c      ****     /* Main Loop: */
+ 187:.\main.c      ****     for(;;)
+ 188:.\main.c      ****     {           
+ 189:.\main.c      ****         // Interpolate points from new data packet
+ 190:.\main.c      ****         if(!isInterpolated){
+ 191:.\main.c      ****             // Initialize first entry in array
+ 192:.\main.c      ****             interp_x[0] = pt_x[0];
+ 193:.\main.c      ****             interp_y[0] = pt_y[0];
+ 194:.\main.c      ****             interp_ls[0] = ls[0];
+ 195:.\main.c      ****             
+ 196:.\main.c      ****             uint8 i;
+ 197:.\main.c      ****             for(i = 1; i < N_COORD; i++){
+ 198:.\main.c      ****                 // Interpolate between points for x coordinate
+ 199:.\main.c      ****                 interp_x[2*i-1] = 0.5*(pt_x[i-1]+pt_x[i]); 
+ 200:.\main.c      ****                 interp_x[2*i] = pt_x[i];
+ 201:.\main.c      ****                 
+ 202:.\main.c      ****                 // Interpolate between points for y coordinate
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 15
+
+
+ 203:.\main.c      ****                 interp_y[2*i-1] = 0.5*(pt_y[i-1]+pt_y[i]); 
+ 204:.\main.c      ****                 interp_y[2*i] = pt_y[i];
+ 205:.\main.c      ****                 
+ 206:.\main.c      ****                 // Interpolate laser state signal
+ 207:.\main.c      ****                 interp_ls[2*i-1] = ls[i-1];
+ 208:.\main.c      ****                 interp_ls[2*i] = ls[i];
+ 209:.\main.c      ****             }
+ 210:.\main.c      ****             
+ 211:.\main.c      ****             // Update boolean flags
+ 212:.\main.c      ****             isInterpolated = 1;
+ 213:.\main.c      ****             
+ 214:.\main.c      ****             // Reset firing indicies for either mode
+ 215:.\main.c      ****             interp_index = 0;
+ 216:.\main.c      ****             std_index = 0;
+ 217:.\main.c      ****         }
+ 218:.\main.c      ****         
+ 219:.\main.c      ****         // Start screen on LCD for USB connection
+ 220:.\main.c      ****         state = USBUART_1_IsLineChanged();              /* Check for Line settings changed */
+ 221:.\main.c      ****         if(state != 0u)
+ 222:.\main.c      ****         {  
+ 223:.\main.c      ****             if(state & USBUART_1_LINE_CODING_CHANGED)   /* Show new settings */
+ 224:.\main.c      ****             {
+ 225:.\main.c      ****                 sprintf(lineStr,"BR:%4ld,DB:%d",USBUART_1_GetDTERate(),(uint16)USBUART_1_GetDataBit
+ 226:.\main.c      ****                 LCD_Position(0u, 0u);
+ 227:.\main.c      ****                 LCD_PrintString("                    ");
+ 228:.\main.c      ****                 LCD_Position(0u, 0u);
+ 229:.\main.c      ****                 LCD_PrintString(lineStr);
+ 230:.\main.c      ****                 sprintf(lineStr,"SB:%s,Parity:%s", stop[(uint16)USBUART_1_GetCharFormat()], \
+ 231:.\main.c      ****                                                      parity[(uint16)USBUART_1_GetParityType()]);
+ 232:.\main.c      ****                 LCD_Position(1u, 0u);
+ 233:.\main.c      ****                 LCD_PrintString("                    ");
+ 234:.\main.c      ****                 LCD_Position(1u, 0u);
+ 235:.\main.c      ****                 LCD_PrintString(lineStr);
+ 236:.\main.c      ****             }
+ 237:.\main.c      ****             if(state & USBUART_1_LINE_CONTROL_CHANGED)  /* Show new settings */
+ 238:.\main.c      ****             {   
+ 239:.\main.c      ****                 state = USBUART_1_GetLineControl();
+ 240:.\main.c      ****                 sprintf(lineStr,"DTR:%s,RTS:%s",  (state & USBUART_1_LINE_CONTROL_DTR) ? "ON" : "OF
+ 241:.\main.c      ****                                                     (state & USBUART_1_LINE_CONTROL_RTS) ? "ON" : "
+ 242:.\main.c      ****                 LCD_Position(1u, 0u);
+ 243:.\main.c      ****                 LCD_PrintString("                    ");
+ 244:.\main.c      ****                 LCD_Position(1u, 0u);
+ 245:.\main.c      ****                 LCD_PrintString(lineStr);
+ 246:.\main.c      ****             
+ 247:.\main.c      ****             }
+ 248:.\main.c      ****         }
+ 249:.\main.c      ****     }   
+ 566              		.loc 1 249 0
+ 567 00aa 00BF     		nop
+ 568              	.L23:
+ 190:.\main.c      ****         if(!isInterpolated){
+ 569              		.loc 1 190 0
+ 570 00ac 40F20003 		movw	r3, #:lower16:isInterpolated
+ 571 00b0 C0F20003 		movt	r3, #:upper16:isInterpolated
+ 572 00b4 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 573 00b6 002B     		cmp	r3, #0
+ 574 00b8 40F0DD80 		bne	.L14
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 16
+
+
+ 575              	.LBB3:
+ 192:.\main.c      ****             interp_x[0] = pt_x[0];
+ 576              		.loc 1 192 0
+ 577 00bc 40F20003 		movw	r3, #:lower16:pt_x
+ 578 00c0 C0F20003 		movt	r3, #:upper16:pt_x
+ 579 00c4 1A78     		ldrb	r2, [r3, #0]	@ zero_extendqisi2
+ 580 00c6 40F20003 		movw	r3, #:lower16:interp_x
+ 581 00ca C0F20003 		movt	r3, #:upper16:interp_x
+ 582 00ce 1A70     		strb	r2, [r3, #0]
+ 193:.\main.c      ****             interp_y[0] = pt_y[0];
+ 583              		.loc 1 193 0
+ 584 00d0 40F20003 		movw	r3, #:lower16:pt_y
+ 585 00d4 C0F20003 		movt	r3, #:upper16:pt_y
+ 586 00d8 1A78     		ldrb	r2, [r3, #0]	@ zero_extendqisi2
+ 587 00da 40F20003 		movw	r3, #:lower16:interp_y
+ 588 00de C0F20003 		movt	r3, #:upper16:interp_y
+ 589 00e2 1A70     		strb	r2, [r3, #0]
+ 194:.\main.c      ****             interp_ls[0] = ls[0];
+ 590              		.loc 1 194 0
+ 591 00e4 40F20003 		movw	r3, #:lower16:ls
+ 592 00e8 C0F20003 		movt	r3, #:upper16:ls
+ 593 00ec 1A78     		ldrb	r2, [r3, #0]	@ zero_extendqisi2
+ 594 00ee 40F20003 		movw	r3, #:lower16:interp_ls
+ 595 00f2 C0F20003 		movt	r3, #:upper16:interp_ls
+ 596 00f6 1A70     		strb	r2, [r3, #0]
+ 197:.\main.c      ****             for(i = 1; i < N_COORD; i++){
+ 597              		.loc 1 197 0
+ 598 00f8 4FF00103 		mov	r3, #1
+ 599 00fc FB71     		strb	r3, [r7, #7]
+ 600 00fe A1E0     		b	.L15
+ 601              	.L16:
+ 199:.\main.c      ****                 interp_x[2*i-1] = 0.5*(pt_x[i-1]+pt_x[i]); 
+ 602              		.loc 1 199 0 discriminator 2
+ 603 0100 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 604 0102 4FEA4303 		lsl	r3, r3, #1
+ 605 0106 03F1FF34 		add	r4, r3, #-1
+ 606 010a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 607 010c 03F1FF32 		add	r2, r3, #-1
+ 608 0110 40F20003 		movw	r3, #:lower16:pt_x
+ 609 0114 C0F20003 		movt	r3, #:upper16:pt_x
+ 610 0118 9B5C     		ldrb	r3, [r3, r2]	@ zero_extendqisi2
+ 611 011a 1A46     		mov	r2, r3
+ 612 011c F979     		ldrb	r1, [r7, #7]	@ zero_extendqisi2
+ 613 011e 40F20003 		movw	r3, #:lower16:pt_x
+ 614 0122 C0F20003 		movt	r3, #:upper16:pt_x
+ 615 0126 5B5C     		ldrb	r3, [r3, r1]	@ zero_extendqisi2
+ 616 0128 D318     		adds	r3, r2, r3
+ 617 012a 1846     		mov	r0, r3
+ 618 012c FFF7FEFF 		bl	__aeabi_i2d
+ 619 0130 0246     		mov	r2, r0
+ 620 0132 0B46     		mov	r3, r1
+ 621 0134 1046     		mov	r0, r2
+ 622 0136 1946     		mov	r1, r3
+ 623 0138 4FF00002 		mov	r2, #0
+ 624 013c 4FF00003 		mov	r3, #0
+ 625 0140 C3F6E073 		movt	r3, 16352
+ 626 0144 FFF7FEFF 		bl	__aeabi_dmul
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 17
+
+
+ 627 0148 0246     		mov	r2, r0
+ 628 014a 0B46     		mov	r3, r1
+ 629 014c 1046     		mov	r0, r2
+ 630 014e 1946     		mov	r1, r3
+ 631 0150 FFF7FEFF 		bl	__aeabi_d2uiz
+ 632 0154 0346     		mov	r3, r0
+ 633 0156 DAB2     		uxtb	r2, r3
+ 634 0158 40F20003 		movw	r3, #:lower16:interp_x
+ 635 015c C0F20003 		movt	r3, #:upper16:interp_x
+ 636 0160 1A55     		strb	r2, [r3, r4]
+ 200:.\main.c      ****                 interp_x[2*i] = pt_x[i];
+ 637              		.loc 1 200 0 discriminator 2
+ 638 0162 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 639 0164 4FEA4302 		lsl	r2, r3, #1
+ 640 0168 F979     		ldrb	r1, [r7, #7]	@ zero_extendqisi2
+ 641 016a 40F20003 		movw	r3, #:lower16:pt_x
+ 642 016e C0F20003 		movt	r3, #:upper16:pt_x
+ 643 0172 595C     		ldrb	r1, [r3, r1]	@ zero_extendqisi2
+ 644 0174 40F20003 		movw	r3, #:lower16:interp_x
+ 645 0178 C0F20003 		movt	r3, #:upper16:interp_x
+ 646 017c 9954     		strb	r1, [r3, r2]
+ 203:.\main.c      ****                 interp_y[2*i-1] = 0.5*(pt_y[i-1]+pt_y[i]); 
+ 647              		.loc 1 203 0 discriminator 2
+ 648 017e FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 649 0180 4FEA4303 		lsl	r3, r3, #1
+ 650 0184 03F1FF34 		add	r4, r3, #-1
+ 651 0188 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 652 018a 03F1FF32 		add	r2, r3, #-1
+ 653 018e 40F20003 		movw	r3, #:lower16:pt_y
+ 654 0192 C0F20003 		movt	r3, #:upper16:pt_y
+ 655 0196 9B5C     		ldrb	r3, [r3, r2]	@ zero_extendqisi2
+ 656 0198 1A46     		mov	r2, r3
+ 657 019a F979     		ldrb	r1, [r7, #7]	@ zero_extendqisi2
+ 658 019c 40F20003 		movw	r3, #:lower16:pt_y
+ 659 01a0 C0F20003 		movt	r3, #:upper16:pt_y
+ 660 01a4 5B5C     		ldrb	r3, [r3, r1]	@ zero_extendqisi2
+ 661 01a6 D318     		adds	r3, r2, r3
+ 662 01a8 1846     		mov	r0, r3
+ 663 01aa FFF7FEFF 		bl	__aeabi_i2d
+ 664 01ae 0246     		mov	r2, r0
+ 665 01b0 0B46     		mov	r3, r1
+ 666 01b2 1046     		mov	r0, r2
+ 667 01b4 1946     		mov	r1, r3
+ 668 01b6 4FF00002 		mov	r2, #0
+ 669 01ba 4FF00003 		mov	r3, #0
+ 670 01be C3F6E073 		movt	r3, 16352
+ 671 01c2 FFF7FEFF 		bl	__aeabi_dmul
+ 672 01c6 0246     		mov	r2, r0
+ 673 01c8 0B46     		mov	r3, r1
+ 674 01ca 1046     		mov	r0, r2
+ 675 01cc 1946     		mov	r1, r3
+ 676 01ce FFF7FEFF 		bl	__aeabi_d2uiz
+ 677 01d2 0346     		mov	r3, r0
+ 678 01d4 DAB2     		uxtb	r2, r3
+ 679 01d6 40F20003 		movw	r3, #:lower16:interp_y
+ 680 01da C0F20003 		movt	r3, #:upper16:interp_y
+ 681 01de 1A55     		strb	r2, [r3, r4]
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 18
+
+
+ 204:.\main.c      ****                 interp_y[2*i] = pt_y[i];
+ 682              		.loc 1 204 0 discriminator 2
+ 683 01e0 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 684 01e2 4FEA4302 		lsl	r2, r3, #1
+ 685 01e6 F979     		ldrb	r1, [r7, #7]	@ zero_extendqisi2
+ 686 01e8 40F20003 		movw	r3, #:lower16:pt_y
+ 687 01ec C0F20003 		movt	r3, #:upper16:pt_y
+ 688 01f0 595C     		ldrb	r1, [r3, r1]	@ zero_extendqisi2
+ 689 01f2 40F20003 		movw	r3, #:lower16:interp_y
+ 690 01f6 C0F20003 		movt	r3, #:upper16:interp_y
+ 691 01fa 9954     		strb	r1, [r3, r2]
+ 207:.\main.c      ****                 interp_ls[2*i-1] = ls[i-1];
+ 692              		.loc 1 207 0 discriminator 2
+ 693 01fc FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 694 01fe 4FEA4303 		lsl	r3, r3, #1
+ 695 0202 03F1FF32 		add	r2, r3, #-1
+ 696 0206 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 697 0208 03F1FF31 		add	r1, r3, #-1
+ 698 020c 40F20003 		movw	r3, #:lower16:ls
+ 699 0210 C0F20003 		movt	r3, #:upper16:ls
+ 700 0214 595C     		ldrb	r1, [r3, r1]	@ zero_extendqisi2
+ 701 0216 40F20003 		movw	r3, #:lower16:interp_ls
+ 702 021a C0F20003 		movt	r3, #:upper16:interp_ls
+ 703 021e 9954     		strb	r1, [r3, r2]
+ 208:.\main.c      ****                 interp_ls[2*i] = ls[i];
+ 704              		.loc 1 208 0 discriminator 2
+ 705 0220 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 706 0222 4FEA4302 		lsl	r2, r3, #1
+ 707 0226 F979     		ldrb	r1, [r7, #7]	@ zero_extendqisi2
+ 708 0228 40F20003 		movw	r3, #:lower16:ls
+ 709 022c C0F20003 		movt	r3, #:upper16:ls
+ 710 0230 595C     		ldrb	r1, [r3, r1]	@ zero_extendqisi2
+ 711 0232 40F20003 		movw	r3, #:lower16:interp_ls
+ 712 0236 C0F20003 		movt	r3, #:upper16:interp_ls
+ 713 023a 9954     		strb	r1, [r3, r2]
+ 197:.\main.c      ****             for(i = 1; i < N_COORD; i++){
+ 714              		.loc 1 197 0 discriminator 2
+ 715 023c FB79     		ldrb	r3, [r7, #7]
+ 716 023e 03F10103 		add	r3, r3, #1
+ 717 0242 FB71     		strb	r3, [r7, #7]
+ 718              	.L15:
+ 197:.\main.c      ****             for(i = 1; i < N_COORD; i++){
+ 719              		.loc 1 197 0 is_stmt 0 discriminator 1
+ 720 0244 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 721 0246 042B     		cmp	r3, #4
+ 722 0248 7FF65AAF 		bls	.L16
+ 212:.\main.c      ****             isInterpolated = 1;
+ 723              		.loc 1 212 0 is_stmt 1
+ 724 024c 40F20003 		movw	r3, #:lower16:isInterpolated
+ 725 0250 C0F20003 		movt	r3, #:upper16:isInterpolated
+ 726 0254 4FF00102 		mov	r2, #1
+ 727 0258 1A70     		strb	r2, [r3, #0]
+ 215:.\main.c      ****             interp_index = 0;
+ 728              		.loc 1 215 0
+ 729 025a 40F20003 		movw	r3, #:lower16:interp_index
+ 730 025e C0F20003 		movt	r3, #:upper16:interp_index
+ 731 0262 4FF00002 		mov	r2, #0
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 19
+
+
+ 732 0266 1A70     		strb	r2, [r3, #0]
+ 216:.\main.c      ****             std_index = 0;
+ 733              		.loc 1 216 0
+ 734 0268 40F20003 		movw	r3, #:lower16:std_index
+ 735 026c C0F20003 		movt	r3, #:upper16:std_index
+ 736 0270 4FF00002 		mov	r2, #0
+ 737 0274 1A70     		strb	r2, [r3, #0]
+ 738              	.L14:
+ 739              	.LBE3:
+ 220:.\main.c      ****         state = USBUART_1_IsLineChanged();              /* Check for Line settings changed */
+ 740              		.loc 1 220 0
+ 741 0276 FFF7FEFF 		bl	USBUART_1_IsLineChanged
+ 742 027a 0346     		mov	r3, r0
+ 743 027c BB71     		strb	r3, [r7, #6]
+ 221:.\main.c      ****         if(state != 0u)
+ 744              		.loc 1 221 0
+ 745 027e BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+ 746 0280 002B     		cmp	r3, #0
+ 747 0282 3FF412AF 		beq	.L24
+ 223:.\main.c      ****             if(state & USBUART_1_LINE_CODING_CHANGED)   /* Show new settings */
+ 748              		.loc 1 223 0
+ 749 0286 BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+ 750 0288 03F00103 		and	r3, r3, #1
+ 751 028c 002B     		cmp	r3, #0
+ 752 028e 5FD0     		beq	.L18
+ 225:.\main.c      ****                 sprintf(lineStr,"BR:%4ld,DB:%d",USBUART_1_GetDTERate(),(uint16)USBUART_1_GetDataBit
+ 753              		.loc 1 225 0
+ 754 0290 FFF7FEFF 		bl	USBUART_1_GetDTERate
+ 755 0294 0446     		mov	r4, r0
+ 756 0296 FFF7FEFF 		bl	USBUART_1_GetDataBits
+ 757 029a 0346     		mov	r3, r0
+ 758 029c 40F20000 		movw	r0, #:lower16:lineStr
+ 759 02a0 C0F20000 		movt	r0, #:upper16:lineStr
+ 760 02a4 40F20001 		movw	r1, #:lower16:.LC11
+ 761 02a8 C0F20001 		movt	r1, #:upper16:.LC11
+ 762 02ac 2246     		mov	r2, r4
+ 763 02ae FFF7FEFF 		bl	sprintf
+ 226:.\main.c      ****                 LCD_Position(0u, 0u);
+ 764              		.loc 1 226 0
+ 765 02b2 4FF00000 		mov	r0, #0
+ 766 02b6 4FF00001 		mov	r1, #0
+ 767 02ba FFF7FEFF 		bl	LCD_Position
+ 227:.\main.c      ****                 LCD_PrintString("                    ");
+ 768              		.loc 1 227 0
+ 769 02be 40F20000 		movw	r0, #:lower16:.LC12
+ 770 02c2 C0F20000 		movt	r0, #:upper16:.LC12
+ 771 02c6 FFF7FEFF 		bl	LCD_PrintString
+ 228:.\main.c      ****                 LCD_Position(0u, 0u);
+ 772              		.loc 1 228 0
+ 773 02ca 4FF00000 		mov	r0, #0
+ 774 02ce 4FF00001 		mov	r1, #0
+ 775 02d2 FFF7FEFF 		bl	LCD_Position
+ 229:.\main.c      ****                 LCD_PrintString(lineStr);
+ 776              		.loc 1 229 0
+ 777 02d6 40F20000 		movw	r0, #:lower16:lineStr
+ 778 02da C0F20000 		movt	r0, #:upper16:lineStr
+ 779 02de FFF7FEFF 		bl	LCD_PrintString
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 20
+
+
+ 230:.\main.c      ****                 sprintf(lineStr,"SB:%s,Parity:%s", stop[(uint16)USBUART_1_GetCharFormat()], \
+ 780              		.loc 1 230 0
+ 781 02e2 FFF7FEFF 		bl	USBUART_1_GetCharFormat
+ 782 02e6 0346     		mov	r3, r0
+ 783 02e8 1A46     		mov	r2, r3
+ 784 02ea 40F20003 		movw	r3, #:lower16:stop
+ 785 02ee C0F20003 		movt	r3, #:upper16:stop
+ 786 02f2 53F82240 		ldr	r4, [r3, r2, lsl #2]
+ 231:.\main.c      ****                                                      parity[(uint16)USBUART_1_GetParityType()]);
+ 787              		.loc 1 231 0
+ 788 02f6 FFF7FEFF 		bl	USBUART_1_GetParityType
+ 789 02fa 0346     		mov	r3, r0
+ 230:.\main.c      ****                 sprintf(lineStr,"SB:%s,Parity:%s", stop[(uint16)USBUART_1_GetCharFormat()], \
+ 790              		.loc 1 230 0
+ 791 02fc 1A46     		mov	r2, r3
+ 792 02fe 40F20003 		movw	r3, #:lower16:parity
+ 793 0302 C0F20003 		movt	r3, #:upper16:parity
+ 794 0306 53F82230 		ldr	r3, [r3, r2, lsl #2]
+ 795 030a 40F20000 		movw	r0, #:lower16:lineStr
+ 796 030e C0F20000 		movt	r0, #:upper16:lineStr
+ 797 0312 40F20001 		movw	r1, #:lower16:.LC13
+ 798 0316 C0F20001 		movt	r1, #:upper16:.LC13
+ 799 031a 2246     		mov	r2, r4
+ 800 031c FFF7FEFF 		bl	sprintf
+ 232:.\main.c      ****                 LCD_Position(1u, 0u);
+ 801              		.loc 1 232 0
+ 802 0320 4FF00100 		mov	r0, #1
+ 803 0324 4FF00001 		mov	r1, #0
+ 804 0328 FFF7FEFF 		bl	LCD_Position
+ 233:.\main.c      ****                 LCD_PrintString("                    ");
+ 805              		.loc 1 233 0
+ 806 032c 40F20000 		movw	r0, #:lower16:.LC12
+ 807 0330 C0F20000 		movt	r0, #:upper16:.LC12
+ 808 0334 FFF7FEFF 		bl	LCD_PrintString
+ 234:.\main.c      ****                 LCD_Position(1u, 0u);
+ 809              		.loc 1 234 0
+ 810 0338 4FF00100 		mov	r0, #1
+ 811 033c 4FF00001 		mov	r1, #0
+ 812 0340 FFF7FEFF 		bl	LCD_Position
+ 235:.\main.c      ****                 LCD_PrintString(lineStr);
+ 813              		.loc 1 235 0
+ 814 0344 40F20000 		movw	r0, #:lower16:lineStr
+ 815 0348 C0F20000 		movt	r0, #:upper16:lineStr
+ 816 034c FFF7FEFF 		bl	LCD_PrintString
+ 817              	.L18:
+ 237:.\main.c      ****             if(state & USBUART_1_LINE_CONTROL_CHANGED)  /* Show new settings */
+ 818              		.loc 1 237 0
+ 819 0350 BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+ 820 0352 03F00203 		and	r3, r3, #2
+ 821 0356 002B     		cmp	r3, #0
+ 822 0358 3FF4A7AE 		beq	.L24
+ 239:.\main.c      ****                 state = USBUART_1_GetLineControl();
+ 823              		.loc 1 239 0
+ 824 035c FFF7FEFF 		bl	USBUART_1_GetLineControl
+ 825 0360 0346     		mov	r3, r0
+ 826 0362 BB71     		strb	r3, [r7, #6]
+ 240:.\main.c      ****                 sprintf(lineStr,"DTR:%s,RTS:%s",  (state & USBUART_1_LINE_CONTROL_DTR) ? "ON" : "OF
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 21
+
+
+ 827              		.loc 1 240 0
+ 828 0364 BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+ 829 0366 03F00103 		and	r3, r3, #1
+ 830 036a 002B     		cmp	r3, #0
+ 831 036c 04D0     		beq	.L19
+ 240:.\main.c      ****                 sprintf(lineStr,"DTR:%s,RTS:%s",  (state & USBUART_1_LINE_CONTROL_DTR) ? "ON" : "OF
+ 832              		.loc 1 240 0 is_stmt 0 discriminator 1
+ 833 036e 40F20002 		movw	r2, #:lower16:.LC14
+ 834 0372 C0F20002 		movt	r2, #:upper16:.LC14
+ 835 0376 03E0     		b	.L20
+ 836              	.L19:
+ 240:.\main.c      ****                 sprintf(lineStr,"DTR:%s,RTS:%s",  (state & USBUART_1_LINE_CONTROL_DTR) ? "ON" : "OF
+ 837              		.loc 1 240 0 discriminator 2
+ 838 0378 40F20002 		movw	r2, #:lower16:.LC15
+ 839 037c C0F20002 		movt	r2, #:upper16:.LC15
+ 840              	.L20:
+ 241:.\main.c      ****                                                     (state & USBUART_1_LINE_CONTROL_RTS) ? "ON" : "
+ 841              		.loc 1 241 0 is_stmt 1 discriminator 3
+ 842 0380 BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+ 843 0382 03F00203 		and	r3, r3, #2
+ 240:.\main.c      ****                 sprintf(lineStr,"DTR:%s,RTS:%s",  (state & USBUART_1_LINE_CONTROL_DTR) ? "ON" : "OF
+ 844              		.loc 1 240 0 discriminator 3
+ 845 0386 002B     		cmp	r3, #0
+ 846 0388 04D0     		beq	.L21
+ 240:.\main.c      ****                 sprintf(lineStr,"DTR:%s,RTS:%s",  (state & USBUART_1_LINE_CONTROL_DTR) ? "ON" : "OF
+ 847              		.loc 1 240 0 is_stmt 0 discriminator 4
+ 848 038a 40F20003 		movw	r3, #:lower16:.LC14
+ 849 038e C0F20003 		movt	r3, #:upper16:.LC14
+ 850 0392 03E0     		b	.L22
+ 851              	.L21:
+ 240:.\main.c      ****                 sprintf(lineStr,"DTR:%s,RTS:%s",  (state & USBUART_1_LINE_CONTROL_DTR) ? "ON" : "OF
+ 852              		.loc 1 240 0 discriminator 5
+ 853 0394 40F20003 		movw	r3, #:lower16:.LC15
+ 854 0398 C0F20003 		movt	r3, #:upper16:.LC15
+ 855              	.L22:
+ 240:.\main.c      ****                 sprintf(lineStr,"DTR:%s,RTS:%s",  (state & USBUART_1_LINE_CONTROL_DTR) ? "ON" : "OF
+ 856              		.loc 1 240 0 discriminator 6
+ 857 039c 40F20000 		movw	r0, #:lower16:lineStr
+ 858 03a0 C0F20000 		movt	r0, #:upper16:lineStr
+ 859 03a4 40F20001 		movw	r1, #:lower16:.LC16
+ 860 03a8 C0F20001 		movt	r1, #:upper16:.LC16
+ 861 03ac FFF7FEFF 		bl	sprintf
+ 242:.\main.c      ****                 LCD_Position(1u, 0u);
+ 862              		.loc 1 242 0 is_stmt 1 discriminator 6
+ 863 03b0 4FF00100 		mov	r0, #1
+ 864 03b4 4FF00001 		mov	r1, #0
+ 865 03b8 FFF7FEFF 		bl	LCD_Position
+ 243:.\main.c      ****                 LCD_PrintString("                    ");
+ 866              		.loc 1 243 0 discriminator 6
+ 867 03bc 40F20000 		movw	r0, #:lower16:.LC12
+ 868 03c0 C0F20000 		movt	r0, #:upper16:.LC12
+ 869 03c4 FFF7FEFF 		bl	LCD_PrintString
+ 244:.\main.c      ****                 LCD_Position(1u, 0u);
+ 870              		.loc 1 244 0 discriminator 6
+ 871 03c8 4FF00100 		mov	r0, #1
+ 872 03cc 4FF00001 		mov	r1, #0
+ 873 03d0 FFF7FEFF 		bl	LCD_Position
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 22
+
+
+ 245:.\main.c      ****                 LCD_PrintString(lineStr);
+ 874              		.loc 1 245 0 discriminator 6
+ 875 03d4 40F20000 		movw	r0, #:lower16:lineStr
+ 876 03d8 C0F20000 		movt	r0, #:upper16:lineStr
+ 877 03dc FFF7FEFF 		bl	LCD_PrintString
+ 878              		.loc 1 249 0 discriminator 6
+ 879 03e0 63E6     		b	.L24
+ 880              		.cfi_endproc
+ 881              	.LFE59:
+ 882              		.size	main, .-main
+ 883 03e2 00BF     		.text
+ 884              	.Letext0:
+ 885              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\3.0\\psoc creator\\import\\gnu_cs\\arm\\4
+ 886              		.file 3 "./Generated_Source/PSoC5/cytypes.h"
+ 887              		.file 4 "./Generated_Source/PSoC5/core_cm3.h"
+ 888              		.section	.debug_info,"",%progbits
+ 889              	.Ldebug_info0:
+ 890 0000 D5020000 		.4byte	0x2d5
+ 891 0004 0200     		.2byte	0x2
+ 892 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 893 000a 04       		.byte	0x4
+ 894 000b 01       		.uleb128 0x1
+ 895 000c BC010000 		.4byte	.LASF35
+ 896 0010 01       		.byte	0x1
+ 897 0011 B5000000 		.4byte	.LASF36
+ 898 0015 09000000 		.4byte	.LASF37
+ 899 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 900 001d 00000000 		.4byte	0
+ 901 0021 00000000 		.4byte	0
+ 902 0025 00000000 		.4byte	.Ldebug_line0
+ 903 0029 02       		.uleb128 0x2
+ 904 002a 01       		.byte	0x1
+ 905 002b 06       		.byte	0x6
+ 906 002c 17020000 		.4byte	.LASF0
+ 907 0030 02       		.uleb128 0x2
+ 908 0031 01       		.byte	0x1
+ 909 0032 08       		.byte	0x8
+ 910 0033 C4000000 		.4byte	.LASF1
+ 911 0037 02       		.uleb128 0x2
+ 912 0038 02       		.byte	0x2
+ 913 0039 05       		.byte	0x5
+ 914 003a A5010000 		.4byte	.LASF2
+ 915 003e 02       		.uleb128 0x2
+ 916 003f 02       		.byte	0x2
+ 917 0040 07       		.byte	0x7
+ 918 0041 EA000000 		.4byte	.LASF3
+ 919 0045 03       		.uleb128 0x3
+ 920 0046 6F010000 		.4byte	.LASF9
+ 921 004a 02       		.byte	0x2
+ 922 004b 4F       		.byte	0x4f
+ 923 004c 50000000 		.4byte	0x50
+ 924 0050 02       		.uleb128 0x2
+ 925 0051 04       		.byte	0x4
+ 926 0052 05       		.byte	0x5
+ 927 0053 05020000 		.4byte	.LASF4
+ 928 0057 02       		.uleb128 0x2
+ 929 0058 04       		.byte	0x4
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 23
+
+
+ 930 0059 07       		.byte	0x7
+ 931 005a D8000000 		.4byte	.LASF5
+ 932 005e 02       		.uleb128 0x2
+ 933 005f 08       		.byte	0x8
+ 934 0060 05       		.byte	0x5
+ 935 0061 80010000 		.4byte	.LASF6
+ 936 0065 02       		.uleb128 0x2
+ 937 0066 08       		.byte	0x8
+ 938 0067 07       		.byte	0x7
+ 939 0068 58010000 		.4byte	.LASF7
+ 940 006c 04       		.uleb128 0x4
+ 941 006d 04       		.byte	0x4
+ 942 006e 05       		.byte	0x5
+ 943 006f 696E7400 		.ascii	"int\000"
+ 944 0073 02       		.uleb128 0x2
+ 945 0074 04       		.byte	0x4
+ 946 0075 07       		.byte	0x7
+ 947 0076 4B010000 		.4byte	.LASF8
+ 948 007a 03       		.uleb128 0x3
+ 949 007b B6010000 		.4byte	.LASF10
+ 950 007f 03       		.byte	0x3
+ 951 0080 5B       		.byte	0x5b
+ 952 0081 30000000 		.4byte	0x30
+ 953 0085 03       		.uleb128 0x3
+ 954 0086 3A010000 		.4byte	.LASF11
+ 955 008a 03       		.byte	0x3
+ 956 008b 5C       		.byte	0x5c
+ 957 008c 3E000000 		.4byte	0x3e
+ 958 0090 02       		.uleb128 0x2
+ 959 0091 04       		.byte	0x4
+ 960 0092 04       		.byte	0x4
+ 961 0093 BE000000 		.4byte	.LASF12
+ 962 0097 02       		.uleb128 0x2
+ 963 0098 08       		.byte	0x8
+ 964 0099 04       		.byte	0x4
+ 965 009a 1E010000 		.4byte	.LASF13
+ 966 009e 03       		.uleb128 0x3
+ 967 009f D2000000 		.4byte	.LASF14
+ 968 00a3 03       		.byte	0x3
+ 969 00a4 6C       		.byte	0x6c
+ 970 00a5 A9000000 		.4byte	0xa9
+ 971 00a9 02       		.uleb128 0x2
+ 972 00aa 01       		.byte	0x1
+ 973 00ab 08       		.byte	0x8
+ 974 00ac 8E010000 		.4byte	.LASF15
+ 975 00b0 02       		.uleb128 0x2
+ 976 00b1 04       		.byte	0x4
+ 977 00b2 07       		.byte	0x7
+ 978 00b3 77010000 		.4byte	.LASF16
+ 979 00b7 05       		.uleb128 0x5
+ 980 00b8 01       		.byte	0x1
+ 981 00b9 25010000 		.4byte	.LASF38
+ 982 00bd 01       		.byte	0x1
+ 983 00be 32       		.byte	0x32
+ 984 00bf 01       		.byte	0x1
+ 985 00c0 00000000 		.4byte	.LFB56
+ 986 00c4 D0000000 		.4byte	.LFE56
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 24
+
+
+ 987 00c8 00000000 		.4byte	.LLST0
+ 988 00cc 01       		.byte	0x1
+ 989 00cd E8000000 		.4byte	0xe8
+ 990 00d1 06       		.uleb128 0x6
+ 991 00d2 3C000000 		.4byte	.LBB2
+ 992 00d6 C8000000 		.4byte	.LBE2
+ 993 00da 07       		.uleb128 0x7
+ 994 00db 6900     		.ascii	"i\000"
+ 995 00dd 01       		.byte	0x1
+ 996 00de 3F       		.byte	0x3f
+ 997 00df 7A000000 		.4byte	0x7a
+ 998 00e3 02       		.byte	0x2
+ 999 00e4 91       		.byte	0x91
+ 1000 00e5 77       		.sleb128 -9
+ 1001 00e6 00       		.byte	0
+ 1002 00e7 00       		.byte	0
+ 1003 00e8 08       		.uleb128 0x8
+ 1004 00e9 01       		.byte	0x1
+ 1005 00ea 00000000 		.4byte	.LASF17
+ 1006 00ee 01       		.byte	0x1
+ 1007 00ef 4C       		.byte	0x4c
+ 1008 00f0 01       		.byte	0x1
+ 1009 00f1 00000000 		.4byte	.LFB57
+ 1010 00f5 52010000 		.4byte	.LFE57
+ 1011 00f9 38000000 		.4byte	.LLST1
+ 1012 00fd 01       		.byte	0x1
+ 1013 00fe 08       		.uleb128 0x8
+ 1014 00ff 01       		.byte	0x1
+ 1015 0100 0E020000 		.4byte	.LASF18
+ 1016 0104 01       		.byte	0x1
+ 1017 0105 76       		.byte	0x76
+ 1018 0106 01       		.byte	0x1
+ 1019 0107 00000000 		.4byte	.LFB58
+ 1020 010b BA000000 		.4byte	.LFE58
+ 1021 010f 64000000 		.4byte	.LLST2
+ 1022 0113 01       		.byte	0x1
+ 1023 0114 09       		.uleb128 0x9
+ 1024 0115 01       		.byte	0x1
+ 1025 0116 46010000 		.4byte	.LASF39
+ 1026 011a 01       		.byte	0x1
+ 1027 011b 8E       		.byte	0x8e
+ 1028 011c 00000000 		.4byte	.LFB59
+ 1029 0120 E2030000 		.4byte	.LFE59
+ 1030 0124 90000000 		.4byte	.LLST3
+ 1031 0128 01       		.byte	0x1
+ 1032 0129 52010000 		.4byte	0x152
+ 1033 012d 0A       		.uleb128 0xa
+ 1034 012e AF000000 		.4byte	.LASF19
+ 1035 0132 01       		.byte	0x1
+ 1036 0133 91       		.byte	0x91
+ 1037 0134 7A000000 		.4byte	0x7a
+ 1038 0138 02       		.byte	0x2
+ 1039 0139 91       		.byte	0x91
+ 1040 013a 6E       		.sleb128 -18
+ 1041 013b 06       		.uleb128 0x6
+ 1042 013c BC000000 		.4byte	.LBB3
+ 1043 0140 76020000 		.4byte	.LBE3
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 25
+
+
+ 1044 0144 07       		.uleb128 0x7
+ 1045 0145 6900     		.ascii	"i\000"
+ 1046 0147 01       		.byte	0x1
+ 1047 0148 C4       		.byte	0xc4
+ 1048 0149 7A000000 		.4byte	0x7a
+ 1049 014d 02       		.byte	0x2
+ 1050 014e 91       		.byte	0x91
+ 1051 014f 6F       		.sleb128 -17
+ 1052 0150 00       		.byte	0
+ 1053 0151 00       		.byte	0
+ 1054 0152 0B       		.uleb128 0xb
+ 1055 0153 11010000 		.4byte	.LASF20
+ 1056 0157 04       		.byte	0x4
+ 1057 0158 1606     		.2byte	0x616
+ 1058 015a 60010000 		.4byte	0x160
+ 1059 015e 01       		.byte	0x1
+ 1060 015f 01       		.byte	0x1
+ 1061 0160 0C       		.uleb128 0xc
+ 1062 0161 45000000 		.4byte	0x45
+ 1063 0165 0D       		.uleb128 0xd
+ 1064 0166 7A000000 		.4byte	0x7a
+ 1065 016a 75010000 		.4byte	0x175
+ 1066 016e 0E       		.uleb128 0xe
+ 1067 016f B0000000 		.4byte	0xb0
+ 1068 0173 31       		.byte	0x31
+ 1069 0174 00       		.byte	0
+ 1070 0175 0F       		.uleb128 0xf
+ 1071 0176 AF010000 		.4byte	.LASF21
+ 1072 017a 01       		.byte	0x1
+ 1073 017b 17       		.byte	0x17
+ 1074 017c 65010000 		.4byte	0x165
+ 1075 0180 01       		.byte	0x1
+ 1076 0181 05       		.byte	0x5
+ 1077 0182 03       		.byte	0x3
+ 1078 0183 00000000 		.4byte	buffer
+ 1079 0187 0F       		.uleb128 0xf
+ 1080 0188 88000000 		.4byte	.LASF22
+ 1081 018c 01       		.byte	0x1
+ 1082 018d 18       		.byte	0x18
+ 1083 018e 7A000000 		.4byte	0x7a
+ 1084 0192 01       		.byte	0x1
+ 1085 0193 05       		.byte	0x5
+ 1086 0194 03       		.byte	0x3
+ 1087 0195 00000000 		.4byte	count
+ 1088 0199 0D       		.uleb128 0xd
+ 1089 019a 7A000000 		.4byte	0x7a
+ 1090 019e A9010000 		.4byte	0x1a9
+ 1091 01a2 0E       		.uleb128 0xe
+ 1092 01a3 B0000000 		.4byte	0xb0
+ 1093 01a7 04       		.byte	0x4
+ 1094 01a8 00       		.byte	0
+ 1095 01a9 0F       		.uleb128 0xf
+ 1096 01aa 23020000 		.4byte	.LASF23
+ 1097 01ae 01       		.byte	0x1
+ 1098 01af 1A       		.byte	0x1a
+ 1099 01b0 99010000 		.4byte	0x199
+ 1100 01b4 01       		.byte	0x1
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 26
+
+
+ 1101 01b5 05       		.byte	0x5
+ 1102 01b6 03       		.byte	0x3
+ 1103 01b7 00000000 		.4byte	pt_x
+ 1104 01bb 0F       		.uleb128 0xf
+ 1105 01bc 41010000 		.4byte	.LASF24
+ 1106 01c0 01       		.byte	0x1
+ 1107 01c1 1B       		.byte	0x1b
+ 1108 01c2 99010000 		.4byte	0x199
+ 1109 01c6 01       		.byte	0x1
+ 1110 01c7 05       		.byte	0x5
+ 1111 01c8 03       		.byte	0x3
+ 1112 01c9 00000000 		.4byte	pt_y
+ 1113 01cd 10       		.uleb128 0x10
+ 1114 01ce 6C7300   		.ascii	"ls\000"
+ 1115 01d1 01       		.byte	0x1
+ 1116 01d2 1C       		.byte	0x1c
+ 1117 01d3 99010000 		.4byte	0x199
+ 1118 01d7 01       		.byte	0x1
+ 1119 01d8 05       		.byte	0x5
+ 1120 01d9 03       		.byte	0x3
+ 1121 01da 00000000 		.4byte	ls
+ 1122 01de 0D       		.uleb128 0xd
+ 1123 01df 7A000000 		.4byte	0x7a
+ 1124 01e3 EE010000 		.4byte	0x1ee
+ 1125 01e7 0E       		.uleb128 0xe
+ 1126 01e8 B0000000 		.4byte	0xb0
+ 1127 01ec 08       		.byte	0x8
+ 1128 01ed 00       		.byte	0
+ 1129 01ee 0F       		.uleb128 0xf
+ 1130 01ef 93010000 		.4byte	.LASF25
+ 1131 01f3 01       		.byte	0x1
+ 1132 01f4 1E       		.byte	0x1e
+ 1133 01f5 DE010000 		.4byte	0x1de
+ 1134 01f9 01       		.byte	0x1
+ 1135 01fa 05       		.byte	0x5
+ 1136 01fb 03       		.byte	0x3
+ 1137 01fc 00000000 		.4byte	interp_x
+ 1138 0200 0F       		.uleb128 0xf
+ 1139 0201 9C010000 		.4byte	.LASF26
+ 1140 0205 01       		.byte	0x1
+ 1141 0206 1F       		.byte	0x1f
+ 1142 0207 DE010000 		.4byte	0x1de
+ 1143 020b 01       		.byte	0x1
+ 1144 020c 05       		.byte	0x5
+ 1145 020d 03       		.byte	0x3
+ 1146 020e 00000000 		.4byte	interp_y
+ 1147 0212 0F       		.uleb128 0xf
+ 1148 0213 9B000000 		.4byte	.LASF27
+ 1149 0217 01       		.byte	0x1
+ 1150 0218 20       		.byte	0x20
+ 1151 0219 DE010000 		.4byte	0x1de
+ 1152 021d 01       		.byte	0x1
+ 1153 021e 05       		.byte	0x5
+ 1154 021f 03       		.byte	0x3
+ 1155 0220 00000000 		.4byte	interp_ls
+ 1156 0224 0F       		.uleb128 0xf
+ 1157 0225 FD000000 		.4byte	.LASF28
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 27
+
+
+ 1158 0229 01       		.byte	0x1
+ 1159 022a 21       		.byte	0x21
+ 1160 022b 7A000000 		.4byte	0x7a
+ 1161 022f 01       		.byte	0x1
+ 1162 0230 05       		.byte	0x5
+ 1163 0231 03       		.byte	0x3
+ 1164 0232 00000000 		.4byte	isInterpolated
+ 1165 0236 0F       		.uleb128 0xf
+ 1166 0237 8E000000 		.4byte	.LASF29
+ 1167 023b 01       		.byte	0x1
+ 1168 023c 23       		.byte	0x23
+ 1169 023d 7A000000 		.4byte	0x7a
+ 1170 0241 01       		.byte	0x1
+ 1171 0242 05       		.byte	0x5
+ 1172 0243 03       		.byte	0x3
+ 1173 0244 00000000 		.4byte	interp_index
+ 1174 0248 0F       		.uleb128 0xf
+ 1175 0249 A5000000 		.4byte	.LASF30
+ 1176 024d 01       		.byte	0x1
+ 1177 024e 24       		.byte	0x24
+ 1178 024f 7A000000 		.4byte	0x7a
+ 1179 0253 01       		.byte	0x1
+ 1180 0254 05       		.byte	0x5
+ 1181 0255 03       		.byte	0x3
+ 1182 0256 00000000 		.4byte	std_index
+ 1183 025a 0F       		.uleb128 0xf
+ 1184 025b 2E010000 		.4byte	.LASF31
+ 1185 025f 01       		.byte	0x1
+ 1186 0260 26       		.byte	0x26
+ 1187 0261 7A000000 		.4byte	0x7a
+ 1188 0265 01       		.byte	0x1
+ 1189 0266 05       		.byte	0x5
+ 1190 0267 03       		.byte	0x3
+ 1191 0268 00000000 		.4byte	interp_Mode
+ 1192 026c 0D       		.uleb128 0xd
+ 1193 026d 7C020000 		.4byte	0x27c
+ 1194 0271 7C020000 		.4byte	0x27c
+ 1195 0275 0E       		.uleb128 0xe
+ 1196 0276 B0000000 		.4byte	0xb0
+ 1197 027a 04       		.byte	0x4
+ 1198 027b 00       		.byte	0
+ 1199 027c 11       		.uleb128 0x11
+ 1200 027d 04       		.byte	0x4
+ 1201 027e 9E000000 		.4byte	0x9e
+ 1202 0282 0F       		.uleb128 0xf
+ 1203 0283 28020000 		.4byte	.LASF32
+ 1204 0287 01       		.byte	0x1
+ 1205 0288 28       		.byte	0x28
+ 1206 0289 6C020000 		.4byte	0x26c
+ 1207 028d 01       		.byte	0x1
+ 1208 028e 05       		.byte	0x5
+ 1209 028f 03       		.byte	0x3
+ 1210 0290 00000000 		.4byte	parity
+ 1211 0294 0D       		.uleb128 0xd
+ 1212 0295 7C020000 		.4byte	0x27c
+ 1213 0299 A4020000 		.4byte	0x2a4
+ 1214 029d 0E       		.uleb128 0xe
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 28
+
+
+ 1215 029e B0000000 		.4byte	0xb0
+ 1216 02a2 02       		.byte	0x2
+ 1217 02a3 00       		.byte	0
+ 1218 02a4 0F       		.uleb128 0xf
+ 1219 02a5 0C010000 		.4byte	.LASF33
+ 1220 02a9 01       		.byte	0x1
+ 1221 02aa 29       		.byte	0x29
+ 1222 02ab 94020000 		.4byte	0x294
+ 1223 02af 01       		.byte	0x1
+ 1224 02b0 05       		.byte	0x5
+ 1225 02b1 03       		.byte	0x3
+ 1226 02b2 00000000 		.4byte	stop
+ 1227 02b6 0D       		.uleb128 0xd
+ 1228 02b7 9E000000 		.4byte	0x9e
+ 1229 02bb C6020000 		.4byte	0x2c6
+ 1230 02bf 0E       		.uleb128 0xe
+ 1231 02c0 B0000000 		.4byte	0xb0
+ 1232 02c4 13       		.byte	0x13
+ 1233 02c5 00       		.byte	0
+ 1234 02c6 0F       		.uleb128 0xf
+ 1235 02c7 2F020000 		.4byte	.LASF34
+ 1236 02cb 01       		.byte	0x1
+ 1237 02cc 2B       		.byte	0x2b
+ 1238 02cd B6020000 		.4byte	0x2b6
+ 1239 02d1 01       		.byte	0x1
+ 1240 02d2 05       		.byte	0x5
+ 1241 02d3 03       		.byte	0x3
+ 1242 02d4 00000000 		.4byte	lineStr
+ 1243 02d8 00       		.byte	0
+ 1244              		.section	.debug_abbrev,"",%progbits
+ 1245              	.Ldebug_abbrev0:
+ 1246 0000 01       		.uleb128 0x1
+ 1247 0001 11       		.uleb128 0x11
+ 1248 0002 01       		.byte	0x1
+ 1249 0003 25       		.uleb128 0x25
+ 1250 0004 0E       		.uleb128 0xe
+ 1251 0005 13       		.uleb128 0x13
+ 1252 0006 0B       		.uleb128 0xb
+ 1253 0007 03       		.uleb128 0x3
+ 1254 0008 0E       		.uleb128 0xe
+ 1255 0009 1B       		.uleb128 0x1b
+ 1256 000a 0E       		.uleb128 0xe
+ 1257 000b 55       		.uleb128 0x55
+ 1258 000c 06       		.uleb128 0x6
+ 1259 000d 11       		.uleb128 0x11
+ 1260 000e 01       		.uleb128 0x1
+ 1261 000f 52       		.uleb128 0x52
+ 1262 0010 01       		.uleb128 0x1
+ 1263 0011 10       		.uleb128 0x10
+ 1264 0012 06       		.uleb128 0x6
+ 1265 0013 00       		.byte	0
+ 1266 0014 00       		.byte	0
+ 1267 0015 02       		.uleb128 0x2
+ 1268 0016 24       		.uleb128 0x24
+ 1269 0017 00       		.byte	0
+ 1270 0018 0B       		.uleb128 0xb
+ 1271 0019 0B       		.uleb128 0xb
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 29
+
+
+ 1272 001a 3E       		.uleb128 0x3e
+ 1273 001b 0B       		.uleb128 0xb
+ 1274 001c 03       		.uleb128 0x3
+ 1275 001d 0E       		.uleb128 0xe
+ 1276 001e 00       		.byte	0
+ 1277 001f 00       		.byte	0
+ 1278 0020 03       		.uleb128 0x3
+ 1279 0021 16       		.uleb128 0x16
+ 1280 0022 00       		.byte	0
+ 1281 0023 03       		.uleb128 0x3
+ 1282 0024 0E       		.uleb128 0xe
+ 1283 0025 3A       		.uleb128 0x3a
+ 1284 0026 0B       		.uleb128 0xb
+ 1285 0027 3B       		.uleb128 0x3b
+ 1286 0028 0B       		.uleb128 0xb
+ 1287 0029 49       		.uleb128 0x49
+ 1288 002a 13       		.uleb128 0x13
+ 1289 002b 00       		.byte	0
+ 1290 002c 00       		.byte	0
+ 1291 002d 04       		.uleb128 0x4
+ 1292 002e 24       		.uleb128 0x24
+ 1293 002f 00       		.byte	0
+ 1294 0030 0B       		.uleb128 0xb
+ 1295 0031 0B       		.uleb128 0xb
+ 1296 0032 3E       		.uleb128 0x3e
+ 1297 0033 0B       		.uleb128 0xb
+ 1298 0034 03       		.uleb128 0x3
+ 1299 0035 08       		.uleb128 0x8
+ 1300 0036 00       		.byte	0
+ 1301 0037 00       		.byte	0
+ 1302 0038 05       		.uleb128 0x5
+ 1303 0039 2E       		.uleb128 0x2e
+ 1304 003a 01       		.byte	0x1
+ 1305 003b 3F       		.uleb128 0x3f
+ 1306 003c 0C       		.uleb128 0xc
+ 1307 003d 03       		.uleb128 0x3
+ 1308 003e 0E       		.uleb128 0xe
+ 1309 003f 3A       		.uleb128 0x3a
+ 1310 0040 0B       		.uleb128 0xb
+ 1311 0041 3B       		.uleb128 0x3b
+ 1312 0042 0B       		.uleb128 0xb
+ 1313 0043 27       		.uleb128 0x27
+ 1314 0044 0C       		.uleb128 0xc
+ 1315 0045 11       		.uleb128 0x11
+ 1316 0046 01       		.uleb128 0x1
+ 1317 0047 12       		.uleb128 0x12
+ 1318 0048 01       		.uleb128 0x1
+ 1319 0049 40       		.uleb128 0x40
+ 1320 004a 06       		.uleb128 0x6
+ 1321 004b 9642     		.uleb128 0x2116
+ 1322 004d 0C       		.uleb128 0xc
+ 1323 004e 01       		.uleb128 0x1
+ 1324 004f 13       		.uleb128 0x13
+ 1325 0050 00       		.byte	0
+ 1326 0051 00       		.byte	0
+ 1327 0052 06       		.uleb128 0x6
+ 1328 0053 0B       		.uleb128 0xb
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 30
+
+
+ 1329 0054 01       		.byte	0x1
+ 1330 0055 11       		.uleb128 0x11
+ 1331 0056 01       		.uleb128 0x1
+ 1332 0057 12       		.uleb128 0x12
+ 1333 0058 01       		.uleb128 0x1
+ 1334 0059 00       		.byte	0
+ 1335 005a 00       		.byte	0
+ 1336 005b 07       		.uleb128 0x7
+ 1337 005c 34       		.uleb128 0x34
+ 1338 005d 00       		.byte	0
+ 1339 005e 03       		.uleb128 0x3
+ 1340 005f 08       		.uleb128 0x8
+ 1341 0060 3A       		.uleb128 0x3a
+ 1342 0061 0B       		.uleb128 0xb
+ 1343 0062 3B       		.uleb128 0x3b
+ 1344 0063 0B       		.uleb128 0xb
+ 1345 0064 49       		.uleb128 0x49
+ 1346 0065 13       		.uleb128 0x13
+ 1347 0066 02       		.uleb128 0x2
+ 1348 0067 0A       		.uleb128 0xa
+ 1349 0068 00       		.byte	0
+ 1350 0069 00       		.byte	0
+ 1351 006a 08       		.uleb128 0x8
+ 1352 006b 2E       		.uleb128 0x2e
+ 1353 006c 00       		.byte	0
+ 1354 006d 3F       		.uleb128 0x3f
+ 1355 006e 0C       		.uleb128 0xc
+ 1356 006f 03       		.uleb128 0x3
+ 1357 0070 0E       		.uleb128 0xe
+ 1358 0071 3A       		.uleb128 0x3a
+ 1359 0072 0B       		.uleb128 0xb
+ 1360 0073 3B       		.uleb128 0x3b
+ 1361 0074 0B       		.uleb128 0xb
+ 1362 0075 27       		.uleb128 0x27
+ 1363 0076 0C       		.uleb128 0xc
+ 1364 0077 11       		.uleb128 0x11
+ 1365 0078 01       		.uleb128 0x1
+ 1366 0079 12       		.uleb128 0x12
+ 1367 007a 01       		.uleb128 0x1
+ 1368 007b 40       		.uleb128 0x40
+ 1369 007c 06       		.uleb128 0x6
+ 1370 007d 9642     		.uleb128 0x2116
+ 1371 007f 0C       		.uleb128 0xc
+ 1372 0080 00       		.byte	0
+ 1373 0081 00       		.byte	0
+ 1374 0082 09       		.uleb128 0x9
+ 1375 0083 2E       		.uleb128 0x2e
+ 1376 0084 01       		.byte	0x1
+ 1377 0085 3F       		.uleb128 0x3f
+ 1378 0086 0C       		.uleb128 0xc
+ 1379 0087 03       		.uleb128 0x3
+ 1380 0088 0E       		.uleb128 0xe
+ 1381 0089 3A       		.uleb128 0x3a
+ 1382 008a 0B       		.uleb128 0xb
+ 1383 008b 3B       		.uleb128 0x3b
+ 1384 008c 0B       		.uleb128 0xb
+ 1385 008d 11       		.uleb128 0x11
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 31
+
+
+ 1386 008e 01       		.uleb128 0x1
+ 1387 008f 12       		.uleb128 0x12
+ 1388 0090 01       		.uleb128 0x1
+ 1389 0091 40       		.uleb128 0x40
+ 1390 0092 06       		.uleb128 0x6
+ 1391 0093 9642     		.uleb128 0x2116
+ 1392 0095 0C       		.uleb128 0xc
+ 1393 0096 01       		.uleb128 0x1
+ 1394 0097 13       		.uleb128 0x13
+ 1395 0098 00       		.byte	0
+ 1396 0099 00       		.byte	0
+ 1397 009a 0A       		.uleb128 0xa
+ 1398 009b 34       		.uleb128 0x34
+ 1399 009c 00       		.byte	0
+ 1400 009d 03       		.uleb128 0x3
+ 1401 009e 0E       		.uleb128 0xe
+ 1402 009f 3A       		.uleb128 0x3a
+ 1403 00a0 0B       		.uleb128 0xb
+ 1404 00a1 3B       		.uleb128 0x3b
+ 1405 00a2 0B       		.uleb128 0xb
+ 1406 00a3 49       		.uleb128 0x49
+ 1407 00a4 13       		.uleb128 0x13
+ 1408 00a5 02       		.uleb128 0x2
+ 1409 00a6 0A       		.uleb128 0xa
+ 1410 00a7 00       		.byte	0
+ 1411 00a8 00       		.byte	0
+ 1412 00a9 0B       		.uleb128 0xb
+ 1413 00aa 34       		.uleb128 0x34
+ 1414 00ab 00       		.byte	0
+ 1415 00ac 03       		.uleb128 0x3
+ 1416 00ad 0E       		.uleb128 0xe
+ 1417 00ae 3A       		.uleb128 0x3a
+ 1418 00af 0B       		.uleb128 0xb
+ 1419 00b0 3B       		.uleb128 0x3b
+ 1420 00b1 05       		.uleb128 0x5
+ 1421 00b2 49       		.uleb128 0x49
+ 1422 00b3 13       		.uleb128 0x13
+ 1423 00b4 3F       		.uleb128 0x3f
+ 1424 00b5 0C       		.uleb128 0xc
+ 1425 00b6 3C       		.uleb128 0x3c
+ 1426 00b7 0C       		.uleb128 0xc
+ 1427 00b8 00       		.byte	0
+ 1428 00b9 00       		.byte	0
+ 1429 00ba 0C       		.uleb128 0xc
+ 1430 00bb 35       		.uleb128 0x35
+ 1431 00bc 00       		.byte	0
+ 1432 00bd 49       		.uleb128 0x49
+ 1433 00be 13       		.uleb128 0x13
+ 1434 00bf 00       		.byte	0
+ 1435 00c0 00       		.byte	0
+ 1436 00c1 0D       		.uleb128 0xd
+ 1437 00c2 01       		.uleb128 0x1
+ 1438 00c3 01       		.byte	0x1
+ 1439 00c4 49       		.uleb128 0x49
+ 1440 00c5 13       		.uleb128 0x13
+ 1441 00c6 01       		.uleb128 0x1
+ 1442 00c7 13       		.uleb128 0x13
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 32
+
+
+ 1443 00c8 00       		.byte	0
+ 1444 00c9 00       		.byte	0
+ 1445 00ca 0E       		.uleb128 0xe
+ 1446 00cb 21       		.uleb128 0x21
+ 1447 00cc 00       		.byte	0
+ 1448 00cd 49       		.uleb128 0x49
+ 1449 00ce 13       		.uleb128 0x13
+ 1450 00cf 2F       		.uleb128 0x2f
+ 1451 00d0 0B       		.uleb128 0xb
+ 1452 00d1 00       		.byte	0
+ 1453 00d2 00       		.byte	0
+ 1454 00d3 0F       		.uleb128 0xf
+ 1455 00d4 34       		.uleb128 0x34
+ 1456 00d5 00       		.byte	0
+ 1457 00d6 03       		.uleb128 0x3
+ 1458 00d7 0E       		.uleb128 0xe
+ 1459 00d8 3A       		.uleb128 0x3a
+ 1460 00d9 0B       		.uleb128 0xb
+ 1461 00da 3B       		.uleb128 0x3b
+ 1462 00db 0B       		.uleb128 0xb
+ 1463 00dc 49       		.uleb128 0x49
+ 1464 00dd 13       		.uleb128 0x13
+ 1465 00de 3F       		.uleb128 0x3f
+ 1466 00df 0C       		.uleb128 0xc
+ 1467 00e0 02       		.uleb128 0x2
+ 1468 00e1 0A       		.uleb128 0xa
+ 1469 00e2 00       		.byte	0
+ 1470 00e3 00       		.byte	0
+ 1471 00e4 10       		.uleb128 0x10
+ 1472 00e5 34       		.uleb128 0x34
+ 1473 00e6 00       		.byte	0
+ 1474 00e7 03       		.uleb128 0x3
+ 1475 00e8 08       		.uleb128 0x8
+ 1476 00e9 3A       		.uleb128 0x3a
+ 1477 00ea 0B       		.uleb128 0xb
+ 1478 00eb 3B       		.uleb128 0x3b
+ 1479 00ec 0B       		.uleb128 0xb
+ 1480 00ed 49       		.uleb128 0x49
+ 1481 00ee 13       		.uleb128 0x13
+ 1482 00ef 3F       		.uleb128 0x3f
+ 1483 00f0 0C       		.uleb128 0xc
+ 1484 00f1 02       		.uleb128 0x2
+ 1485 00f2 0A       		.uleb128 0xa
+ 1486 00f3 00       		.byte	0
+ 1487 00f4 00       		.byte	0
+ 1488 00f5 11       		.uleb128 0x11
+ 1489 00f6 0F       		.uleb128 0xf
+ 1490 00f7 00       		.byte	0
+ 1491 00f8 0B       		.uleb128 0xb
+ 1492 00f9 0B       		.uleb128 0xb
+ 1493 00fa 49       		.uleb128 0x49
+ 1494 00fb 13       		.uleb128 0x13
+ 1495 00fc 00       		.byte	0
+ 1496 00fd 00       		.byte	0
+ 1497 00fe 00       		.byte	0
+ 1498              		.section	.debug_loc,"",%progbits
+ 1499              	.Ldebug_loc0:
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 33
+
+
+ 1500              	.LLST0:
+ 1501 0000 00000000 		.4byte	.LFB56
+ 1502 0004 02000000 		.4byte	.LCFI0
+ 1503 0008 0200     		.2byte	0x2
+ 1504 000a 7D       		.byte	0x7d
+ 1505 000b 00       		.sleb128 0
+ 1506 000c 02000000 		.4byte	.LCFI0
+ 1507 0010 04000000 		.4byte	.LCFI1
+ 1508 0014 0200     		.2byte	0x2
+ 1509 0016 7D       		.byte	0x7d
+ 1510 0017 08       		.sleb128 8
+ 1511 0018 04000000 		.4byte	.LCFI1
+ 1512 001c 06000000 		.4byte	.LCFI2
+ 1513 0020 0200     		.2byte	0x2
+ 1514 0022 7D       		.byte	0x7d
+ 1515 0023 10       		.sleb128 16
+ 1516 0024 06000000 		.4byte	.LCFI2
+ 1517 0028 D0000000 		.4byte	.LFE56
+ 1518 002c 0200     		.2byte	0x2
+ 1519 002e 77       		.byte	0x77
+ 1520 002f 10       		.sleb128 16
+ 1521 0030 00000000 		.4byte	0
+ 1522 0034 00000000 		.4byte	0
+ 1523              	.LLST1:
+ 1524 0038 00000000 		.4byte	.LFB57
+ 1525 003c 02000000 		.4byte	.LCFI3
+ 1526 0040 0200     		.2byte	0x2
+ 1527 0042 7D       		.byte	0x7d
+ 1528 0043 00       		.sleb128 0
+ 1529 0044 02000000 		.4byte	.LCFI3
+ 1530 0048 04000000 		.4byte	.LCFI4
+ 1531 004c 0200     		.2byte	0x2
+ 1532 004e 7D       		.byte	0x7d
+ 1533 004f 08       		.sleb128 8
+ 1534 0050 04000000 		.4byte	.LCFI4
+ 1535 0054 52010000 		.4byte	.LFE57
+ 1536 0058 0200     		.2byte	0x2
+ 1537 005a 77       		.byte	0x77
+ 1538 005b 08       		.sleb128 8
+ 1539 005c 00000000 		.4byte	0
+ 1540 0060 00000000 		.4byte	0
+ 1541              	.LLST2:
+ 1542 0064 00000000 		.4byte	.LFB58
+ 1543 0068 02000000 		.4byte	.LCFI5
+ 1544 006c 0200     		.2byte	0x2
+ 1545 006e 7D       		.byte	0x7d
+ 1546 006f 00       		.sleb128 0
+ 1547 0070 02000000 		.4byte	.LCFI5
+ 1548 0074 04000000 		.4byte	.LCFI6
+ 1549 0078 0200     		.2byte	0x2
+ 1550 007a 7D       		.byte	0x7d
+ 1551 007b 10       		.sleb128 16
+ 1552 007c 04000000 		.4byte	.LCFI6
+ 1553 0080 BA000000 		.4byte	.LFE58
+ 1554 0084 0200     		.2byte	0x2
+ 1555 0086 77       		.byte	0x77
+ 1556 0087 10       		.sleb128 16
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 34
+
+
+ 1557 0088 00000000 		.4byte	0
+ 1558 008c 00000000 		.4byte	0
+ 1559              	.LLST3:
+ 1560 0090 00000000 		.4byte	.LFB59
+ 1561 0094 02000000 		.4byte	.LCFI7
+ 1562 0098 0200     		.2byte	0x2
+ 1563 009a 7D       		.byte	0x7d
+ 1564 009b 00       		.sleb128 0
+ 1565 009c 02000000 		.4byte	.LCFI7
+ 1566 00a0 04000000 		.4byte	.LCFI8
+ 1567 00a4 0200     		.2byte	0x2
+ 1568 00a6 7D       		.byte	0x7d
+ 1569 00a7 0C       		.sleb128 12
+ 1570 00a8 04000000 		.4byte	.LCFI8
+ 1571 00ac 06000000 		.4byte	.LCFI9
+ 1572 00b0 0200     		.2byte	0x2
+ 1573 00b2 7D       		.byte	0x7d
+ 1574 00b3 18       		.sleb128 24
+ 1575 00b4 06000000 		.4byte	.LCFI9
+ 1576 00b8 E2030000 		.4byte	.LFE59
+ 1577 00bc 0200     		.2byte	0x2
+ 1578 00be 77       		.byte	0x77
+ 1579 00bf 18       		.sleb128 24
+ 1580 00c0 00000000 		.4byte	0
+ 1581 00c4 00000000 		.4byte	0
+ 1582              		.section	.debug_aranges,"",%progbits
+ 1583 0000 34000000 		.4byte	0x34
+ 1584 0004 0200     		.2byte	0x2
+ 1585 0006 00000000 		.4byte	.Ldebug_info0
+ 1586 000a 04       		.byte	0x4
+ 1587 000b 00       		.byte	0
+ 1588 000c 0000     		.2byte	0
+ 1589 000e 0000     		.2byte	0
+ 1590 0010 00000000 		.4byte	.LFB56
+ 1591 0014 D0000000 		.4byte	.LFE56-.LFB56
+ 1592 0018 00000000 		.4byte	.LFB57
+ 1593 001c 52010000 		.4byte	.LFE57-.LFB57
+ 1594 0020 00000000 		.4byte	.LFB58
+ 1595 0024 BA000000 		.4byte	.LFE58-.LFB58
+ 1596 0028 00000000 		.4byte	.LFB59
+ 1597 002c E2030000 		.4byte	.LFE59-.LFB59
+ 1598 0030 00000000 		.4byte	0
+ 1599 0034 00000000 		.4byte	0
+ 1600              		.section	.debug_ranges,"",%progbits
+ 1601              	.Ldebug_ranges0:
+ 1602 0000 00000000 		.4byte	.LFB56
+ 1603 0004 D0000000 		.4byte	.LFE56
+ 1604 0008 00000000 		.4byte	.LFB57
+ 1605 000c 52010000 		.4byte	.LFE57
+ 1606 0010 00000000 		.4byte	.LFB58
+ 1607 0014 BA000000 		.4byte	.LFE58
+ 1608 0018 00000000 		.4byte	.LFB59
+ 1609 001c E2030000 		.4byte	.LFE59
+ 1610 0020 00000000 		.4byte	0
+ 1611 0024 00000000 		.4byte	0
+ 1612              		.section	.debug_line,"",%progbits
+ 1613              	.Ldebug_line0:
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 35
+
+
+ 1614 0000 2C020000 		.section	.debug_str,"MS",%progbits,1
+ 1614      0200F900 
+ 1614      00000201 
+ 1614      FB0E0D00 
+ 1614      01010101 
+ 1615              	.LASF17:
+ 1616 0000 66697265 		.ascii	"fire_ISR\000"
+ 1616      5F495352 
+ 1616      00
+ 1617              	.LASF37:
+ 1618 0009 433A5C55 		.ascii	"C:\\Users\\Colin\\Dropbox\\Grad School\\Spring 2014"
+ 1618      73657273 
+ 1618      5C436F6C 
+ 1618      696E5C44 
+ 1618      726F7062 
+ 1619 0037 5C4D4520 		.ascii	"\\ME 235\\Code\\USB_UART01\\Final_PSoC_Code\\USB_UA"
+ 1619      3233355C 
+ 1619      436F6465 
+ 1619      5C555342 
+ 1619      5F554152 
+ 1620 0065 52543031 		.ascii	"RT01-000.Bundle01\\USB_UART01.cydsn\000"
+ 1620      2D303030 
+ 1620      2E42756E 
+ 1620      646C6530 
+ 1620      315C5553 
+ 1621              	.LASF22:
+ 1622 0088 636F756E 		.ascii	"count\000"
+ 1622      7400
+ 1623              	.LASF29:
+ 1624 008e 696E7465 		.ascii	"interp_index\000"
+ 1624      72705F69 
+ 1624      6E646578 
+ 1624      00
+ 1625              	.LASF27:
+ 1626 009b 696E7465 		.ascii	"interp_ls\000"
+ 1626      72705F6C 
+ 1626      7300
+ 1627              	.LASF30:
+ 1628 00a5 7374645F 		.ascii	"std_index\000"
+ 1628      696E6465 
+ 1628      7800
+ 1629              	.LASF19:
+ 1630 00af 73746174 		.ascii	"state\000"
+ 1630      6500
+ 1631              	.LASF36:
+ 1632 00b5 2E5C6D61 		.ascii	".\\main.c\000"
+ 1632      696E2E63 
+ 1632      00
+ 1633              	.LASF12:
+ 1634 00be 666C6F61 		.ascii	"float\000"
+ 1634      7400
+ 1635              	.LASF1:
+ 1636 00c4 756E7369 		.ascii	"unsigned char\000"
+ 1636      676E6564 
+ 1636      20636861 
+ 1636      7200
+ 1637              	.LASF14:
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 36
+
+
+ 1638 00d2 63686172 		.ascii	"char8\000"
+ 1638      3800
+ 1639              	.LASF5:
+ 1640 00d8 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1640      20756E73 
+ 1640      69676E65 
+ 1640      6420696E 
+ 1640      7400
+ 1641              	.LASF3:
+ 1642 00ea 73686F72 		.ascii	"short unsigned int\000"
+ 1642      7420756E 
+ 1642      7369676E 
+ 1642      65642069 
+ 1642      6E7400
+ 1643              	.LASF28:
+ 1644 00fd 6973496E 		.ascii	"isInterpolated\000"
+ 1644      74657270 
+ 1644      6F6C6174 
+ 1644      656400
+ 1645              	.LASF33:
+ 1646 010c 73746F70 		.ascii	"stop\000"
+ 1646      00
+ 1647              	.LASF20:
+ 1648 0111 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 1648      52784275 
+ 1648      66666572 
+ 1648      00
+ 1649              	.LASF13:
+ 1650 011e 646F7562 		.ascii	"double\000"
+ 1650      6C6500
+ 1651              	.LASF38:
+ 1652 0125 706F6C6C 		.ascii	"poll_ISR\000"
+ 1652      5F495352 
+ 1652      00
+ 1653              	.LASF31:
+ 1654 012e 696E7465 		.ascii	"interp_Mode\000"
+ 1654      72705F4D 
+ 1654      6F646500 
+ 1655              	.LASF11:
+ 1656 013a 75696E74 		.ascii	"uint16\000"
+ 1656      313600
+ 1657              	.LASF24:
+ 1658 0141 70745F79 		.ascii	"pt_y\000"
+ 1658      00
+ 1659              	.LASF39:
+ 1660 0146 6D61696E 		.ascii	"main\000"
+ 1660      00
+ 1661              	.LASF8:
+ 1662 014b 756E7369 		.ascii	"unsigned int\000"
+ 1662      676E6564 
+ 1662      20696E74 
+ 1662      00
+ 1663              	.LASF7:
+ 1664 0158 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1664      206C6F6E 
+ 1664      6720756E 
+ 1664      7369676E 
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 37
+
+
+ 1664      65642069 
+ 1665              	.LASF9:
+ 1666 016f 696E7433 		.ascii	"int32_t\000"
+ 1666      325F7400 
+ 1667              	.LASF16:
+ 1668 0177 73697A65 		.ascii	"sizetype\000"
+ 1668      74797065 
+ 1668      00
+ 1669              	.LASF6:
+ 1670 0180 6C6F6E67 		.ascii	"long long int\000"
+ 1670      206C6F6E 
+ 1670      6720696E 
+ 1670      7400
+ 1671              	.LASF15:
+ 1672 018e 63686172 		.ascii	"char\000"
+ 1672      00
+ 1673              	.LASF25:
+ 1674 0193 696E7465 		.ascii	"interp_x\000"
+ 1674      72705F78 
+ 1674      00
+ 1675              	.LASF26:
+ 1676 019c 696E7465 		.ascii	"interp_y\000"
+ 1676      72705F79 
+ 1676      00
+ 1677              	.LASF2:
+ 1678 01a5 73686F72 		.ascii	"short int\000"
+ 1678      7420696E 
+ 1678      7400
+ 1679              	.LASF21:
+ 1680 01af 62756666 		.ascii	"buffer\000"
+ 1680      657200
+ 1681              	.LASF10:
+ 1682 01b6 75696E74 		.ascii	"uint8\000"
+ 1682      3800
+ 1683              	.LASF35:
+ 1684 01bc 474E5520 		.ascii	"GNU C 4.7.3 20130312 (release) [ARM/embedded-4_7-br"
+ 1684      4320342E 
+ 1684      372E3320 
+ 1684      32303133 
+ 1684      30333132 
+ 1685 01ef 616E6368 		.ascii	"anch revision 196615]\000"
+ 1685      20726576 
+ 1685      6973696F 
+ 1685      6E203139 
+ 1685      36363135 
+ 1686              	.LASF4:
+ 1687 0205 6C6F6E67 		.ascii	"long int\000"
+ 1687      20696E74 
+ 1687      00
+ 1688              	.LASF18:
+ 1689 020e 4D6F6465 		.ascii	"Mode_ISR\000"
+ 1689      5F495352 
+ 1689      00
+ 1690              	.LASF0:
+ 1691 0217 7369676E 		.ascii	"signed char\000"
+ 1691      65642063 
+ 1691      68617200 
+ARM GAS  C:\Users\Colin\AppData\Local\Temp\ccQWARav.s 			page 38
+
+
+ 1692              	.LASF23:
+ 1693 0223 70745F78 		.ascii	"pt_x\000"
+ 1693      00
+ 1694              	.LASF32:
+ 1695 0228 70617269 		.ascii	"parity\000"
+ 1695      747900
+ 1696              	.LASF34:
+ 1697 022f 6C696E65 		.ascii	"lineStr\000"
+ 1697      53747200 
+ 1698              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.7.3 20130312 (release) [ARM/embedded-4_7-br

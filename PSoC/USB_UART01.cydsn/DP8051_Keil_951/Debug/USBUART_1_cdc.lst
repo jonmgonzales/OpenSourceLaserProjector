@@ -1,0 +1,1741 @@
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 1   
+
+
+C51 COMPILER V9.51, COMPILATION OF MODULE USBUART_1_CDC
+OBJECT MODULE PLACED IN .\DP8051_Keil_951\Debug\USBUART_1_cdc.obj
+COMPILER INVOKED BY: C:\Program Files (x86)\Cypress\PSoC Creator\3.0\PSoC Creator\import\keil\pk51\9.51\C51\BIN\c51.exe 
+                    -.\Generated_Source\PSoC3\USBUART_1_cdc.c NOIV LARGE MODDP2 OMF2 VB(1) PR(.\DP8051_Keil_951\Debug\USBUART_1_cdc.lst) CD D
+                    -B NOIP OT(2,SIZE) INCDIR(.,.\Generated_Source\PSoC3) OJ(.\DP8051_Keil_951\Debug\USBUART_1_cdc.obj)
+
+line level    source
+
+   1          /*******************************************************************************
+   2          * File Name: USBUART_1_cdc.c
+   3          * Version 2.60
+   4          *
+   5          * Description:
+   6          *  USB HID Class request handler.
+   7          *
+   8          * Note:
+   9          *
+  10          ********************************************************************************
+  11          * Copyright 2012-2013, Cypress Semiconductor Corporation.  All rights reserved.
+  12          * You may use this file only in accordance with the license, terms, conditions,
+  13          * disclaimers, and limitations in the end user license agreement accompanying
+  14          * the software package with which this file was provided.
+  15          *******************************************************************************/
+  16          
+  17          #include "USBUART_1.h"
+  18          
+  19          #if defined(USBUART_1_ENABLE_CDC_CLASS)
+  20          
+  21          #include "USBUART_1_cdc.h"
+  22          #include "USBUART_1_pvt.h"
+  23          
+  24          
+  25          /***************************************
+  26          *    CDC Variables
+  27          ***************************************/
+  28          
+  29          volatile uint8 USBUART_1_lineCoding[USBUART_1_LINE_CODING_SIZE];
+  30          volatile uint8 USBUART_1_lineChanged;
+  31          volatile uint16 USBUART_1_lineControlBitmap;
+  32          volatile uint8 USBUART_1_cdc_data_in_ep;
+  33          volatile uint8 USBUART_1_cdc_data_out_ep;
+  34          
+  35          
+  36          /***************************************
+  37          *     Static Function Prototypes
+  38          ***************************************/
+  39          static uint16 USBUART_1_StrLen(const char8 string[]) ;
+  40          
+  41          
+  42          /***************************************
+  43          * Custom Declarations
+  44          ***************************************/
+  45          
+  46          /* `#START CDC_CUSTOM_DECLARATIONS` Place your declaration here */
+  47          
+  48          /* `#END` */
+  49          
+  50          
+  51          /*******************************************************************************
+  52          * Function Name: USBUART_1_DispatchCDCClassRqst
+  53          ********************************************************************************
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 2   
+
+  54          *
+  55          * Summary:
+  56          *  This routine dispatches CDC class requests.
+  57          *
+  58          * Parameters:
+  59          *  None.
+  60          *
+  61          * Return:
+  62          *  requestHandled
+  63          *
+  64          * Global variables:
+  65          *   USBUART_1_lineCoding: Contains the current line coding structure.
+  66          *     It is set by the Host using SET_LINE_CODING request and returned to the
+  67          *     user code by the USBFS_GetDTERate(), USBFS_GetCharFormat(),
+  68          *     USBFS_GetParityType(), USBFS_GetDataBits() APIs.
+  69          *   USBUART_1_lineControlBitmap: Contains the current control signal
+  70          *     bitmap. It is set by the Host using SET_CONTROL_LINE request and returned
+  71          *     to the user code by the USBFS_GetLineControl() API.
+  72          *   USBUART_1_lineChanged: This variable is used as a flag for the
+  73          *     USBFS_IsLineChanged() API, to be aware that Host has been sent request
+  74          *     for changing Line Coding or Control Bitmap.
+  75          *
+  76          * Reentrant:
+  77          *  No.
+  78          *
+  79          *******************************************************************************/
+  80          uint8 USBUART_1_DispatchCDCClassRqst(void) 
+  81          {
+  82   1          uint8 requestHandled = USBUART_1_FALSE;
+  83   1      
+  84   1          if ((CY_GET_REG8(USBUART_1_bmRequestType) & USBUART_1_RQST_DIR_MASK) == USBUART_1_RQST_DIR_D2H)
+  85   1          {   /* Control Read */
+  86   2              switch (CY_GET_REG8(USBUART_1_bRequest))
+  87   2              {
+  88   3                  case USBUART_1_CDC_GET_LINE_CODING:
+  89   3                      USBUART_1_currentTD.count = USBUART_1_LINE_CODING_SIZE;
+  90   3                      USBUART_1_currentTD.pData = USBUART_1_lineCoding;
+  91   3                      requestHandled  = USBUART_1_InitControlRead();
+  92   3                      break;
+  93   3      
+  94   3                  /* `#START CDC_READ_REQUESTS` Place other request handler here */
+  95   3      
+  96   3                  /* `#END` */
+  97   3      
+  98   3                  default:    /* requestHandled is initialized as FALSE by default */
+  99   3                      break;
+ 100   3              }
+ 101   2          }
+ 102   1          else if ((CY_GET_REG8(USBUART_1_bmRequestType) & USBUART_1_RQST_DIR_MASK) == \
+ 103   1                                                                                  USBUART_1_RQST_DIR_H2D)
+ 104   1          {   /* Control Write */
+ 105   2              switch (CY_GET_REG8(USBUART_1_bRequest))
+ 106   2              {
+ 107   3                  case USBUART_1_CDC_SET_LINE_CODING:
+ 108   3                      USBUART_1_currentTD.count = USBUART_1_LINE_CODING_SIZE;
+ 109   3                      USBUART_1_currentTD.pData = USBUART_1_lineCoding;
+ 110   3                      USBUART_1_lineChanged |= USBUART_1_LINE_CODING_CHANGED;
+ 111   3                      requestHandled = USBUART_1_InitControlWrite();
+ 112   3                      break;
+ 113   3      
+ 114   3                  case USBUART_1_CDC_SET_CONTROL_LINE_STATE:
+ 115   3                      USBUART_1_lineControlBitmap = CY_GET_REG8(USBUART_1_wValueLo);
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 3   
+
+ 116   3                      USBUART_1_lineChanged |= USBUART_1_LINE_CONTROL_CHANGED;
+ 117   3                      requestHandled = USBUART_1_InitNoDataControlTransfer();
+ 118   3                      break;
+ 119   3      
+ 120   3                  /* `#START CDC_WRITE_REQUESTS` Place other request handler here */
+ 121   3      
+ 122   3                  /* `#END` */
+ 123   3      
+ 124   3                  default:    /* requestHandled is initialized as FALSE by default */
+ 125   3                      break;
+ 126   3              }
+ 127   2          }
+ 128   1          else
+ 129   1          {   /* requestHandled is initialized as FALSE by default */
+ 130   2          }
+ 131   1      
+ 132   1          return(requestHandled);
+ 133   1      }
+ 134          
+ 135          
+ 136          /***************************************
+ 137          * Optional CDC APIs
+ 138          ***************************************/
+ 139          #if (USBUART_1_ENABLE_CDC_CLASS_API != 0u)
+ 140          
+ 141          
+ 142              /*******************************************************************************
+ 143              * Function Name: USBUART_1_CDC_Init
+ 144              ********************************************************************************
+ 145              *
+ 146              * Summary:
+ 147              *  This function initialize the CDC interface to be ready for the receive data
+ 148              *  from the PC.
+ 149              *
+ 150              * Parameters:
+ 151              *  None.
+ 152              *
+ 153              * Return:
+ 154              *  None.
+ 155              *
+ 156              * Global variables:
+ 157              *   USBUART_1_lineChanged: Initialized to zero.
+ 158              *   USBUART_1_cdc_data_out_ep: Used as an OUT endpoint number.
+ 159              *
+ 160              * Reentrant:
+ 161              *  No.
+ 162              *
+ 163              *******************************************************************************/
+ 164              void USBUART_1_CDC_Init(void) 
+ 165              {
+ 166   1              USBUART_1_lineChanged = 0u;
+ 167   1              USBUART_1_EnableOutEP(USBUART_1_cdc_data_out_ep);
+ 168   1          }
+ 169          
+ 170          
+ 171              /*******************************************************************************
+ 172              * Function Name: USBUART_1_PutData
+ 173              ********************************************************************************
+ 174              *
+ 175              * Summary:
+ 176              *  Sends a specified number of bytes from the location specified by a
+ 177              *  pointer to the PC.
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 4   
+
+ 178              *
+ 179              * Parameters:
+ 180              *  pData: pointer to the buffer containing data to be sent.
+ 181              *  length: Specifies the number of bytes to send from the pData
+ 182              *  buffer. Maximum length will be limited by the maximum packet
+ 183              *  size for the endpoint.
+ 184              *
+ 185              * Return:
+ 186              *  None.
+ 187              *
+ 188              * Global variables:
+ 189              *   USBUART_1_cdc_data_in_ep: CDC IN endpoint number used for sending
+ 190              *     data.
+ 191              *
+ 192              * Reentrant:
+ 193              *  No.
+ 194              *
+ 195              *******************************************************************************/
+ 196              void USBUART_1_PutData(const uint8* pData, uint16 length) 
+ 197              {
+ 198   1              /* Limits length to maximum packet size for the EP */
+ 199   1              if(length > USBUART_1_EP[USBUART_1_cdc_data_in_ep].bufferSize)
+ 200   1              {
+ 201   2                  /* Caution: Data will be lost if length is greater than Max Packet Length */
+ 202   2                  length = USBUART_1_EP[USBUART_1_cdc_data_in_ep].bufferSize;
+ 203   2                   /* Halt CPU in debug mode */
+ 204   2                  CYASSERT(0u != 0u);
+ 205   2              }
+ 206   1              USBUART_1_LoadInEP(USBUART_1_cdc_data_in_ep, pData, length);
+ 207   1          }
+ 208          
+ 209          
+ 210              /*******************************************************************************
+ 211              * Function Name: USBUART_1_StrLen
+ 212              ********************************************************************************
+ 213              *
+ 214              * Summary:
+ 215              *  Calculates length of a null terminated string.
+ 216              *
+ 217              * Parameters:
+ 218              *  string: pointer to the string.
+ 219              *
+ 220              * Return:
+ 221              *  Length of the string
+ 222              *
+ 223              *******************************************************************************/
+ 224              static uint16 USBUART_1_StrLen(const char8 string[]) 
+ 225              {
+ 226   1              uint16 len = 0u;
+ 227   1      
+ 228   1              while (string[len] != (char8)0)
+ 229   1              {
+ 230   2                  len++;
+ 231   2              }
+ 232   1      
+ 233   1              return (len);
+ 234   1          }
+ 235          
+ 236          
+ 237              /*******************************************************************************
+ 238              * Function Name: USBUART_1_PutString
+ 239              ********************************************************************************
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 5   
+
+ 240              *
+ 241              * Summary:
+ 242              *  Sends a null terminated string to the PC.
+ 243              *
+ 244              * Parameters:
+ 245              *  string: pointer to the string to be sent to the PC
+ 246              *
+ 247              * Return:
+ 248              *  None.
+ 249              *
+ 250              * Global variables:
+ 251              *   USBUART_1_cdc_data_in_ep: CDC IN endpoint number used for sending
+ 252              *     data.
+ 253              *
+ 254              * Reentrant:
+ 255              *  No.
+ 256              *
+ 257              * Theory:
+ 258              *  This function will block if there is not enough memory to place the whole
+ 259              *  string, it will block until the entire string has been written to the
+ 260              *  transmit buffer.
+ 261              *
+ 262              *******************************************************************************/
+ 263              void USBUART_1_PutString(const char8 string[]) 
+ 264              {
+ 265   1              uint16 str_length;
+ 266   1              uint16 send_length;
+ 267   1              uint16 buf_index = 0u;
+ 268   1      
+ 269   1              /* Get length of the null terminated string */
+ 270   1              str_length = USBUART_1_StrLen(string);
+ 271   1              do
+ 272   1              {
+ 273   2                  /* Limits length to maximum packet size for the EP */
+ 274   2                  send_length = (str_length > USBUART_1_EP[USBUART_1_cdc_data_in_ep].bufferSize) ?
+ 275   2                                USBUART_1_EP[USBUART_1_cdc_data_in_ep].bufferSize : str_length;
+ 276   2                   /* Enable IN transfer */
+ 277   2                  USBUART_1_LoadInEP(USBUART_1_cdc_data_in_ep, (const uint8 *)&string[buf_index], send_length);
+ 278   2                  str_length -= send_length;
+ 279   2      
+ 280   2                  /* If more data are present to send */
+ 281   2                  if(str_length > 0u)
+ 282   2                  {
+ 283   3                      buf_index += send_length;
+ 284   3                      /* Wait for the Host to read it. */
+ 285   3                      while(USBUART_1_EP[USBUART_1_cdc_data_in_ep].apiEpState ==
+ 286   3                                                USBUART_1_IN_BUFFER_FULL)
+ 287   3                      {
+ 288   4                          ;
+ 289   4                      }
+ 290   3                  }
+ 291   2              }while(str_length > 0u);
+ 292   1          }
+ 293          
+ 294          
+ 295              /*******************************************************************************
+ 296              * Function Name: USBUART_1_PutChar
+ 297              ********************************************************************************
+ 298              *
+ 299              * Summary:
+ 300              *  Writes a single character to the PC.
+ 301              *
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 6   
+
+ 302              * Parameters:
+ 303              *  txDataByte: Character to be sent to the PC.
+ 304              *
+ 305              * Return:
+ 306              *  None.
+ 307              *
+ 308              * Global variables:
+ 309              *   USBUART_1_cdc_data_in_ep: CDC IN endpoint number used for sending
+ 310              *     data.
+ 311              *
+ 312              * Reentrant:
+ 313              *  No.
+ 314              *
+ 315              *******************************************************************************/
+ 316              void USBUART_1_PutChar(char8 txDataByte) 
+ 317              {
+ 318   1              uint8 dataByte;
+ 319   1              dataByte = (uint8)txDataByte;
+ 320   1      
+ 321   1              USBUART_1_LoadInEP(USBUART_1_cdc_data_in_ep, &dataByte, 1u);
+ 322   1          }
+ 323          
+ 324          
+ 325              /*******************************************************************************
+ 326              * Function Name: USBUART_1_PutCRLF
+ 327              ********************************************************************************
+ 328              *
+ 329              * Summary:
+ 330              *  Sends a carriage return (0x0D) and line feed (0x0A) to the PC
+ 331              *
+ 332              * Parameters:
+ 333              *  None.
+ 334              *
+ 335              * Return:
+ 336              *  None.
+ 337              *
+ 338              * Global variables:
+ 339              *   USBUART_1_cdc_data_in_ep: CDC IN endpoint number used for sending
+ 340              *     data.
+ 341              *
+ 342              * Reentrant:
+ 343              *  No.
+ 344              *
+ 345              *******************************************************************************/
+ 346              void USBUART_1_PutCRLF(void) 
+ 347              {
+ 348   1              const uint8 CYCODE txData[] = {0x0Du, 0x0Au};
+ 349   1      
+ 350   1              USBUART_1_LoadInEP(USBUART_1_cdc_data_in_ep, (const uint8 *)txData, 2u);
+ 351   1          }
+ 352          
+ 353          
+ 354              /*******************************************************************************
+ 355              * Function Name: USBUART_1_GetCount
+ 356              ********************************************************************************
+ 357              *
+ 358              * Summary:
+ 359              *  This function returns the number of bytes that were received from the PC.
+ 360              *
+ 361              * Parameters:
+ 362              *  None.
+ 363              *
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 7   
+
+ 364              * Return:
+ 365              *  Returns the number of received bytes.
+ 366              *
+ 367              * Global variables:
+ 368              *   USBUART_1_cdc_data_out_ep: CDC OUT endpoint number used.
+ 369              *
+ 370              *******************************************************************************/
+ 371              uint16 USBUART_1_GetCount(void) 
+ 372              {
+ 373   1              uint16 bytesCount = 0u;
+ 374   1      
+ 375   1              if (USBUART_1_EP[USBUART_1_cdc_data_out_ep].apiEpState == USBUART_1_OUT_BUFFER_FULL)
+ 376   1              {
+ 377   2                  bytesCount = USBUART_1_GetEPCount(USBUART_1_cdc_data_out_ep);
+ 378   2              }
+ 379   1      
+ 380   1              return(bytesCount);
+ 381   1          }
+ 382          
+ 383          
+ 384              /*******************************************************************************
+ 385              * Function Name: USBUART_1_DataIsReady
+ 386              ********************************************************************************
+ 387              *
+ 388              * Summary:
+ 389              *  Returns a nonzero value if the component received data or received
+ 390              *  zero-length packet. The GetAll() or GetData() API should be called to read
+ 391              *  data from the buffer and re-init OUT endpoint even when zero-length packet
+ 392              *  received.
+ 393              *
+ 394              * Parameters:
+ 395              *  None.
+ 396              *
+ 397              * Return:
+ 398              *  If the OUT packet received this function returns a nonzero value.
+ 399              *  Otherwise zero is returned.
+ 400              *
+ 401              * Global variables:
+ 402              *   USBUART_1_cdc_data_out_ep: CDC OUT endpoint number used.
+ 403              *
+ 404              *******************************************************************************/
+ 405              uint8 USBUART_1_DataIsReady(void) 
+ 406              {
+ 407   1              return(USBUART_1_EP[USBUART_1_cdc_data_out_ep].apiEpState);
+ 408   1          }
+ 409          
+ 410          
+ 411              /*******************************************************************************
+ 412              * Function Name: USBUART_1_CDCIsReady
+ 413              ********************************************************************************
+ 414              *
+ 415              * Summary:
+ 416              *  Returns a nonzero value if the component is ready to send more data to the
+ 417              *  PC. Otherwise returns zero. Should be called before sending new data to
+ 418              *  ensure the previous data has finished sending.This function returns the
+ 419              *  number of bytes that were received from the PC.
+ 420              *
+ 421              * Parameters:
+ 422              *  None.
+ 423              *
+ 424              * Return:
+ 425              *  If the buffer can accept new data then this function returns a nonzero value.
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 8   
+
+ 426              *  Otherwise zero is returned.
+ 427              *
+ 428              * Global variables:
+ 429              *   USBUART_1_cdc_data_in_ep: CDC IN endpoint number used.
+ 430              *
+ 431              *******************************************************************************/
+ 432              uint8 USBUART_1_CDCIsReady(void) 
+ 433              {
+ 434   1              return(USBUART_1_EP[USBUART_1_cdc_data_in_ep].apiEpState);
+ 435   1          }
+ 436          
+ 437          
+ 438              /*******************************************************************************
+ 439              * Function Name: USBUART_1_GetData
+ 440              ********************************************************************************
+ 441              *
+ 442              * Summary:
+ 443              *  Gets a specified number of bytes from the input buffer and places it in a
+ 444              *  data array specified by the passed pointer.
+ 445              *  USBUART_1_DataIsReady() API should be called before, to be sure
+ 446              *  that data is received from the Host.
+ 447              *
+ 448              * Parameters:
+ 449              *  pData: Pointer to the data array where data will be placed.
+ 450              *  Length: Number of bytes to read into the data array from the RX buffer.
+ 451              *          Maximum length is limited by the the number of received bytes.
+ 452              *
+ 453              * Return:
+ 454              *  Number of bytes received.
+ 455              *
+ 456              * Global variables:
+ 457              *   USBUART_1_cdc_data_out_ep: CDC OUT endpoint number used.
+ 458              *
+ 459              * Reentrant:
+ 460              *  No.
+ 461              *
+ 462              *******************************************************************************/
+ 463              uint16 USBUART_1_GetData(uint8* pData, uint16 length) 
+ 464              {
+ 465   1              return(USBUART_1_ReadOutEP(USBUART_1_cdc_data_out_ep, pData, length));
+ 466   1          }
+ 467          
+ 468          
+ 469              /*******************************************************************************
+ 470              * Function Name: USBUART_1_GetAll
+ 471              ********************************************************************************
+ 472              *
+ 473              * Summary:
+ 474              *  Gets all bytes of received data from the input buffer and places it into a
+ 475              *  specified data array. USBUART_1_DataIsReady() API should be called
+ 476              *  before, to be sure that data is received from the Host.
+ 477              *
+ 478              * Parameters:
+ 479              *  pData: Pointer to the data array where data will be placed.
+ 480              *
+ 481              * Return:
+ 482              *  Number of bytes received.
+ 483              *
+ 484              * Global variables:
+ 485              *   USBUART_1_cdc_data_out_ep: CDC OUT endpoint number used.
+ 486              *   USBUART_1_EP[].bufferSize: EP max packet size is used as a length
+ 487              *     to read all data from the EP buffer.
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 9   
+
+ 488              *
+ 489              * Reentrant:
+ 490              *  No.
+ 491              *
+ 492              *******************************************************************************/
+ 493              uint16 USBUART_1_GetAll(uint8* pData) 
+ 494              {
+ 495   1              return (USBUART_1_ReadOutEP(USBUART_1_cdc_data_out_ep, pData,
+ 496   1                                                 USBUART_1_EP[USBUART_1_cdc_data_out_ep].bufferSize));
+ 497   1          }
+ 498          
+ 499          
+ 500              /*******************************************************************************
+ 501              * Function Name: USBUART_1_GetChar
+ 502              ********************************************************************************
+ 503              *
+ 504              * Summary:
+ 505              *  Reads one byte of received data from the buffer.
+ 506              *
+ 507              * Parameters:
+ 508              *  None.
+ 509              *
+ 510              * Return:
+ 511              *  Received one character.
+ 512              *
+ 513              * Global variables:
+ 514              *   USBUART_1_cdc_data_out_ep: CDC OUT endpoint number used.
+ 515              *
+ 516              * Reentrant:
+ 517              *  No.
+ 518              *
+ 519              *******************************************************************************/
+ 520              uint8 USBUART_1_GetChar(void) 
+ 521              {
+ 522   1               uint8 rxData;
+ 523   1      
+ 524   1              (void) USBUART_1_ReadOutEP(USBUART_1_cdc_data_out_ep, &rxData, 1u);
+ 525   1      
+ 526   1              return(rxData);
+ 527   1          }
+ 528          
+ 529              /*******************************************************************************
+ 530              * Function Name: USBUART_1_IsLineChanged
+ 531              ********************************************************************************
+ 532              *
+ 533              * Summary:
+ 534              *  This function returns clear on read status of the line.
+ 535              *
+ 536              * Parameters:
+ 537              *  None.
+ 538              *
+ 539              * Return:
+ 540              *  If SET_LINE_CODING or CDC_SET_CONTROL_LINE_STATE request received then not
+ 541              *  zero value returned. Otherwise zero is returned.
+ 542              *
+ 543              * Global variables:
+ 544              *  USBUART_1_transferState - it is checked to be sure then OUT data
+ 545              *    phase has been complete, and data written to the lineCoding or Control
+ 546              *    Bitmap buffer.
+ 547              *  USBUART_1_lineChanged: used as a flag to be aware that Host has been
+ 548              *    sent request for changing Line Coding or Control Bitmap.
+ 549              *
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 10  
+
+ 550              *******************************************************************************/
+ 551              uint8 USBUART_1_IsLineChanged(void) 
+ 552              {
+ 553   1              uint8 state = 0u;
+ 554   1      
+ 555   1              /* transferState is checked to be sure then OUT data phase has been complete */
+ 556   1              if(USBUART_1_transferState == USBUART_1_TRANS_STATE_IDLE)
+ 557   1              {
+ 558   2                  if(USBUART_1_lineChanged != 0u)
+ 559   2                  {
+ 560   3                      state = USBUART_1_lineChanged;
+ 561   3                      USBUART_1_lineChanged = 0u;
+ 562   3                  }
+ 563   2              }
+ 564   1      
+ 565   1              return(state);
+ 566   1          }
+ 567          
+ 568          
+ 569              /*******************************************************************************
+ 570              * Function Name: USBUART_1_GetDTERate
+ 571              ********************************************************************************
+ 572              *
+ 573              * Summary:
+ 574              *  Returns the data terminal rate set for this port in bits per second.
+ 575              *
+ 576              * Parameters:
+ 577              *  None.
+ 578              *
+ 579              * Return:
+ 580              *  Returns a uint32 value of the data rate in bits per second.
+ 581              *
+ 582              * Global variables:
+ 583              *  USBUART_1_lineCoding: First four bytes converted to uint32
+ 584              *    depend on compiler, and returned as a data rate.
+ 585              *
+ 586              *******************************************************************************/
+ 587              uint32 USBUART_1_GetDTERate(void) 
+ 588              {
+ 589   1              uint32 rate;
+ 590   1      
+ 591   1              rate = USBUART_1_lineCoding[USBUART_1_LINE_CODING_RATE + 3u];
+ 592   1              rate = (rate << 8u) | USBUART_1_lineCoding[USBUART_1_LINE_CODING_RATE + 2u];
+ 593   1              rate = (rate << 8u) | USBUART_1_lineCoding[USBUART_1_LINE_CODING_RATE + 1u];
+ 594   1              rate = (rate << 8u) | USBUART_1_lineCoding[USBUART_1_LINE_CODING_RATE];
+ 595   1      
+ 596   1              return(rate);
+ 597   1          }
+ 598          
+ 599          
+ 600              /*******************************************************************************
+ 601              * Function Name: USBUART_1_GetCharFormat
+ 602              ********************************************************************************
+ 603              *
+ 604              * Summary:
+ 605              *  Returns the number of stop bits.
+ 606              *
+ 607              * Parameters:
+ 608              *  None.
+ 609              *
+ 610              * Return:
+ 611              *  Returns the number of stop bits.
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 11  
+
+ 612              *
+ 613              * Global variables:
+ 614              *  USBUART_1_lineCoding: used to get a parameter.
+ 615              *
+ 616              *******************************************************************************/
+ 617              uint8 USBUART_1_GetCharFormat(void) 
+ 618              {
+ 619   1              return(USBUART_1_lineCoding[USBUART_1_LINE_CODING_STOP_BITS]);
+ 620   1          }
+ 621          
+ 622          
+ 623              /*******************************************************************************
+ 624              * Function Name: USBUART_1_GetParityType
+ 625              ********************************************************************************
+ 626              *
+ 627              * Summary:
+ 628              *  Returns the parity type for the CDC port.
+ 629              *
+ 630              * Parameters:
+ 631              *  None.
+ 632              *
+ 633              * Return:
+ 634              *  Returns the parity type.
+ 635              *
+ 636              * Global variables:
+ 637              *  USBUART_1_lineCoding: used to get a parameter.
+ 638              *
+ 639              *******************************************************************************/
+ 640              uint8 USBUART_1_GetParityType(void) 
+ 641              {
+ 642   1              return(USBUART_1_lineCoding[USBUART_1_LINE_CODING_PARITY]);
+ 643   1          }
+ 644          
+ 645          
+ 646              /*******************************************************************************
+ 647              * Function Name: USBUART_1_GetDataBits
+ 648              ********************************************************************************
+ 649              *
+ 650              * Summary:
+ 651              *  Returns the number of data bits for the CDC port.
+ 652              *
+ 653              * Parameters:
+ 654              *  None.
+ 655              *
+ 656              * Return:
+ 657              *  Returns the number of data bits.
+ 658              *  The number of data bits can be 5, 6, 7, 8 or 16.
+ 659              *
+ 660              * Global variables:
+ 661              *  USBUART_1_lineCoding: used to get a parameter.
+ 662              *
+ 663              *******************************************************************************/
+ 664              uint8 USBUART_1_GetDataBits(void) 
+ 665              {
+ 666   1              return(USBUART_1_lineCoding[USBUART_1_LINE_CODING_DATA_BITS]);
+ 667   1          }
+ 668          
+ 669          
+ 670              /*******************************************************************************
+ 671              * Function Name: USBUART_1_GetLineControl
+ 672              ********************************************************************************
+ 673              *
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 12  
+
+ 674              * Summary:
+ 675              *  Returns Line control bitmap.
+ 676              *
+ 677              * Parameters:
+ 678              *  None.
+ 679              *
+ 680              * Return:
+ 681              *  Returns Line control bitmap.
+ 682              *
+ 683              * Global variables:
+ 684              *  USBUART_1_lineControlBitmap: used to get a parameter.
+ 685              *
+ 686              *******************************************************************************/
+ 687              uint16 USBUART_1_GetLineControl(void) 
+ 688              {
+ 689   1              return(USBUART_1_lineControlBitmap);
+ 690   1          }
+ 691          
+ 692          #endif  /* End USBUART_1_ENABLE_CDC_CLASS_API*/
+ 693          
+ 694          
+ 695          /*******************************************************************************
+ 696          * Additional user functions supporting CDC Requests
+ 697          ********************************************************************************/
+ 698          
+ 699          /* `#START CDC_FUNCTIONS` Place any additional functions here */
+ 700          
+ 701          /* `#END` */
+ 702          
+ 703          #endif  /* End USBUART_1_ENABLE_CDC_CLASS*/
+ 704          
+ 705          
+ 706          /* [] END OF FILE */
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 13  
+
+ASSEMBLY LISTING OF GENERATED OBJECT CODE
+
+
+             ; FUNCTION USBUART_1_DispatchCDCClassRqst (BEGIN)
+                                           ; SOURCE LINE # 80
+                                           ; SOURCE LINE # 81
+                                           ; SOURCE LINE # 82
+0000 900000      R     MOV     DPTR,#requestHandled
+0003 E4                CLR     A
+0004 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 84
+0005 906000            MOV     DPTR,#06000H
+0008 E0                MOVX    A,@DPTR
+0009 FF                MOV     R7,A
+000A EF                MOV     A,R7
+000B 5480              ANL     A,#080H
+000D FF                MOV     R7,A
+000E 7E00              MOV     R6,#00H
+0010 EF                MOV     A,R7
+0011 6480              XRL     A,#080H
+0013 4E                ORL     A,R6
+0014 7031              JNZ     ?C0001
+                                           ; SOURCE LINE # 85
+                                           ; SOURCE LINE # 86
+0016 906001            MOV     DPTR,#06001H
+0019 E0                MOVX    A,@DPTR
+001A FF                MOV     R7,A
+001B EF                MOV     A,R7
+001C 120000      E     LCALL   ?C?CCASE
+001F 0000        R     DW      ?C0003
+0021 21                DB      021H
+0022 0000              DW      00H
+0024 0000        R     DW      ?C0005
+                                           ; SOURCE LINE # 87
+                                           ; SOURCE LINE # 88
+0026         ?C0003:
+                                           ; SOURCE LINE # 89
+0026 900000      E     MOV     DPTR,#USBUART_1_currentTD
+0029 E4                CLR     A
+002A F0                MOVX    @DPTR,A
+002B A3                INC     DPTR
+002C 7407              MOV     A,#07H
+002E F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 90
+002F 7B01              MOV     R3,#01H
+0031 7A00        R     MOV     R2,#HIGH USBUART_1_lineCoding
+0033 7900        R     MOV     R1,#LOW USBUART_1_lineCoding
+0035 900000      E     MOV     DPTR,#USBUART_1_currentTD+02H
+0038 120000      E     LCALL   ?C?PSTXDATA
+                                           ; SOURCE LINE # 91
+003B 120000      E     LCALL   USBUART_1_InitControlRead
+003E 900000      R     MOV     DPTR,#requestHandled
+0041 EF                MOV     A,R7
+0042 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 92
+0043 8076              SJMP    ?C0005
+                                           ; SOURCE LINE # 98
+                                           ; SOURCE LINE # 99
+                                           ; SOURCE LINE # 100
+                                           ; SOURCE LINE # 101
+0045 8074              SJMP    ?C0005
+0047         ?C0001:
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 14  
+
+                                           ; SOURCE LINE # 102
+0047 906000            MOV     DPTR,#06000H
+004A E0                MOVX    A,@DPTR
+004B FF                MOV     R7,A
+004C EF                MOV     A,R7
+004D 5480              ANL     A,#080H
+004F FF                MOV     R7,A
+0050 7E00              MOV     R6,#00H
+0052 EF                MOV     A,R7
+0053 4E                ORL     A,R6
+0054 7065              JNZ     ?C0005
+                                           ; SOURCE LINE # 104
+                                           ; SOURCE LINE # 105
+0056 906001            MOV     DPTR,#06001H
+0059 E0                MOVX    A,@DPTR
+005A FF                MOV     R7,A
+005B EF                MOV     A,R7
+005C 120000      E     LCALL   ?C?CCASE
+005F 0000        R     DW      ?C0008
+0061 20                DB      020H
+0062 0000        R     DW      ?C0009
+0064 22                DB      022H
+0065 0000              DW      00H
+0067 0000        R     DW      ?C0005
+                                           ; SOURCE LINE # 106
+                                           ; SOURCE LINE # 107
+0069         ?C0008:
+                                           ; SOURCE LINE # 108
+0069 900000      E     MOV     DPTR,#USBUART_1_currentTD
+006C E4                CLR     A
+006D F0                MOVX    @DPTR,A
+006E A3                INC     DPTR
+006F 7407              MOV     A,#07H
+0071 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 109
+0072 7B01              MOV     R3,#01H
+0074 7A00        R     MOV     R2,#HIGH USBUART_1_lineCoding
+0076 7900        R     MOV     R1,#LOW USBUART_1_lineCoding
+0078 900000      E     MOV     DPTR,#USBUART_1_currentTD+02H
+007B 120000      E     LCALL   ?C?PSTXDATA
+                                           ; SOURCE LINE # 110
+007E 900000      R     MOV     DPTR,#USBUART_1_lineChanged
+0081 E0                MOVX    A,@DPTR
+0082 FF                MOV     R7,A
+0083 EF                MOV     A,R7
+0084 4401              ORL     A,#01H
+0086 FF                MOV     R7,A
+0087 900000      R     MOV     DPTR,#USBUART_1_lineChanged
+008A EF                MOV     A,R7
+008B F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 111
+008C 120000      E     LCALL   USBUART_1_InitControlWrite
+008F 900000      R     MOV     DPTR,#requestHandled
+0092 EF                MOV     A,R7
+0093 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 112
+0094 8025              SJMP    ?C0005
+                                           ; SOURCE LINE # 114
+0096         ?C0009:
+                                           ; SOURCE LINE # 115
+0096 906002            MOV     DPTR,#06002H
+0099 E0                MOVX    A,@DPTR
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 15  
+
+009A FF                MOV     R7,A
+009B 7E00              MOV     R6,#00H
+009D 900000      R     MOV     DPTR,#USBUART_1_lineControlBitmap
+00A0 EE                MOV     A,R6
+00A1 F0                MOVX    @DPTR,A
+00A2 A3                INC     DPTR
+00A3 EF                MOV     A,R7
+00A4 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 116
+00A5 900000      R     MOV     DPTR,#USBUART_1_lineChanged
+00A8 E0                MOVX    A,@DPTR
+00A9 FF                MOV     R7,A
+00AA EF                MOV     A,R7
+00AB 4402              ORL     A,#02H
+00AD FF                MOV     R7,A
+00AE 900000      R     MOV     DPTR,#USBUART_1_lineChanged
+00B1 EF                MOV     A,R7
+00B2 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 117
+00B3 120000      E     LCALL   USBUART_1_InitNoDataControlTransfer
+00B6 900000      R     MOV     DPTR,#requestHandled
+00B9 EF                MOV     A,R7
+00BA F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 118
+                                           ; SOURCE LINE # 124
+                                           ; SOURCE LINE # 125
+                                           ; SOURCE LINE # 126
+                                           ; SOURCE LINE # 127
+                                           ; SOURCE LINE # 129
+                                           ; SOURCE LINE # 130
+00BB         ?C0005:
+                                           ; SOURCE LINE # 132
+00BB 900000      R     MOV     DPTR,#requestHandled
+00BE E0                MOVX    A,@DPTR
+00BF FF                MOV     R7,A
+                                           ; SOURCE LINE # 133
+00C0         ?C0012:
+00C0 22                RET     
+             ; FUNCTION USBUART_1_DispatchCDCClassRqst (END)
+
+             ; FUNCTION USBUART_1_CDC_Init (BEGIN)
+                                           ; SOURCE LINE # 164
+                                           ; SOURCE LINE # 165
+                                           ; SOURCE LINE # 166
+0000 900000      R     MOV     DPTR,#USBUART_1_lineChanged
+0003 E4                CLR     A
+0004 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 167
+0005 900000      R     MOV     DPTR,#USBUART_1_cdc_data_out_ep
+0008 E0                MOVX    A,@DPTR
+0009 FF                MOV     R7,A
+000A 120000      E     LCALL   _USBUART_1_EnableOutEP
+                                           ; SOURCE LINE # 168
+000D 22                RET     
+             ; FUNCTION USBUART_1_CDC_Init (END)
+
+             ; FUNCTION _USBUART_1_PutData (BEGIN)
+                                           ; SOURCE LINE # 196
+0000 900000      R     MOV     DPTR,#pData
+0003 120000      E     LCALL   ?C?PSTXDATA
+0006 900000      R     MOV     DPTR,#length
+0009 EC                MOV     A,R4
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 16  
+
+000A F0                MOVX    @DPTR,A
+000B A3                INC     DPTR
+000C ED                MOV     A,R5
+000D F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 197
+                                           ; SOURCE LINE # 199
+000E 900000      R     MOV     DPTR,#USBUART_1_cdc_data_in_ep
+0011 E0                MOVX    A,@DPTR
+0012 FF                MOV     R7,A
+0013 EF                MOV     A,R7
+0014 75F00B            MOV     B,#0BH
+0017 A4                MUL     AB
+0018 2400        E     ADD     A,#LOW USBUART_1_EP+08H
+001A F582              MOV     DPL,A
+001C E4                CLR     A
+001D 3400        E     ADDC    A,#HIGH USBUART_1_EP+08H
+001F F583              MOV     DPH,A
+0021 E0                MOVX    A,@DPTR
+0022 FE                MOV     R6,A
+0023 A3                INC     DPTR
+0024 E0                MOVX    A,@DPTR
+0025 FF                MOV     R7,A
+0026 900000      R     MOV     DPTR,#length
+0029 E0                MOVX    A,@DPTR
+002A FC                MOV     R4,A
+002B A3                INC     DPTR
+002C E0                MOVX    A,@DPTR
+002D FD                MOV     R5,A
+002E D3                SETB    C
+002F ED                MOV     A,R5
+0030 9F                SUBB    A,R7
+0031 EC                MOV     A,R4
+0032 9E                SUBB    A,R6
+0033 4025              JC      ?C0014
+                                           ; SOURCE LINE # 200
+                                           ; SOURCE LINE # 202
+0035 900000      R     MOV     DPTR,#USBUART_1_cdc_data_in_ep
+0038 E0                MOVX    A,@DPTR
+0039 FF                MOV     R7,A
+003A EF                MOV     A,R7
+003B 75F00B            MOV     B,#0BH
+003E A4                MUL     AB
+003F 2400        E     ADD     A,#LOW USBUART_1_EP+08H
+0041 F582              MOV     DPL,A
+0043 E4                CLR     A
+0044 3400        E     ADDC    A,#HIGH USBUART_1_EP+08H
+0046 F583              MOV     DPH,A
+0048 E0                MOVX    A,@DPTR
+0049 FE                MOV     R6,A
+004A A3                INC     DPTR
+004B E0                MOVX    A,@DPTR
+004C FF                MOV     R7,A
+004D 900000      R     MOV     DPTR,#length
+0050 EE                MOV     A,R6
+0051 F0                MOVX    @DPTR,A
+0052 A3                INC     DPTR
+0053 EF                MOV     A,R7
+0054 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 204
+0055 7F00              MOV     R7,#00H
+0057 120000      E     LCALL   _?CyHalt
+                                           ; SOURCE LINE # 205
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 17  
+
+005A         ?C0014:
+                                           ; SOURCE LINE # 206
+005A 900000      R     MOV     DPTR,#USBUART_1_cdc_data_in_ep
+005D E0                MOVX    A,@DPTR
+005E FF                MOV     R7,A
+005F 900000      R     MOV     DPTR,#pData
+0062 120000      E     LCALL   ?C?PLDXDATA
+0065 900000      R     MOV     DPTR,#length
+0068 E0                MOVX    A,@DPTR
+0069 FC                MOV     R4,A
+006A A3                INC     DPTR
+006B E0                MOVX    A,@DPTR
+006C FD                MOV     R5,A
+006D 900000      E     MOV     DPTR,#?_USBUART_1_LoadInEP?BYTE+04H
+0070 EC                MOV     A,R4
+0071 F0                MOVX    @DPTR,A
+0072 A3                INC     DPTR
+0073 ED                MOV     A,R5
+0074 F0                MOVX    @DPTR,A
+0075 120000      E     LCALL   _USBUART_1_LoadInEP
+                                           ; SOURCE LINE # 207
+0078 22                RET     
+             ; FUNCTION _USBUART_1_PutData (END)
+
+             ; FUNCTION _USBUART_1_StrLen (BEGIN)
+                                           ; SOURCE LINE # 224
+0000 900000      R     MOV     DPTR,#string
+0003 120000      E     LCALL   ?C?PSTXDATA
+                                           ; SOURCE LINE # 225
+                                           ; SOURCE LINE # 226
+0006 900000      R     MOV     DPTR,#len
+0009 E4                CLR     A
+000A F0                MOVX    @DPTR,A
+000B A3                INC     DPTR
+000C E4                CLR     A
+000D F0                MOVX    @DPTR,A
+000E         ?C0017:
+                                           ; SOURCE LINE # 228
+000E 900000      R     MOV     DPTR,#string
+0011 120000      E     LCALL   ?C?PLDXDATA
+0014 900000      R     MOV     DPTR,#len
+0017 E0                MOVX    A,@DPTR
+0018 FE                MOV     R6,A
+0019 A3                INC     DPTR
+001A E0                MOVX    A,@DPTR
+001B FF                MOV     R7,A
+001C E9                MOV     A,R1
+001D 2F                ADD     A,R7
+001E F9                MOV     R1,A
+001F EA                MOV     A,R2
+0020 3E                ADDC    A,R6
+0021 FA                MOV     R2,A
+0022 120000      E     LCALL   ?C?CLDPTR
+0025 FF                MOV     R7,A
+0026 EF                MOV     A,R7
+0027 600C              JZ      ?C0018
+                                           ; SOURCE LINE # 229
+                                           ; SOURCE LINE # 230
+0029 900000      R     MOV     DPTR,#len
+002C E4                CLR     A
+002D 75F001            MOV     B,#01H
+0030 120000      E     LCALL   ?C?IILDX
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 18  
+
+                                           ; SOURCE LINE # 231
+0033 80D9              SJMP    ?C0017
+0035         ?C0018:
+                                           ; SOURCE LINE # 233
+0035 900000      R     MOV     DPTR,#len
+0038 E0                MOVX    A,@DPTR
+0039 FE                MOV     R6,A
+003A A3                INC     DPTR
+003B E0                MOVX    A,@DPTR
+003C FF                MOV     R7,A
+                                           ; SOURCE LINE # 234
+003D         ?C0019:
+003D 22                RET     
+             ; FUNCTION _USBUART_1_StrLen (END)
+
+             ; FUNCTION _USBUART_1_PutString (BEGIN)
+                                           ; SOURCE LINE # 263
+0000 900000      R     MOV     DPTR,#string
+0003 120000      E     LCALL   ?C?PSTXDATA
+                                           ; SOURCE LINE # 264
+                                           ; SOURCE LINE # 267
+0006 900000      R     MOV     DPTR,#buf_index
+0009 E4                CLR     A
+000A F0                MOVX    @DPTR,A
+000B A3                INC     DPTR
+000C E4                CLR     A
+000D F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 270
+000E 900000      R     MOV     DPTR,#string
+0011 120000      E     LCALL   ?C?PLDXDATA
+0014 120000      R     LCALL   _USBUART_1_StrLen
+0017 900000      R     MOV     DPTR,#str_length
+001A EE                MOV     A,R6
+001B F0                MOVX    @DPTR,A
+001C A3                INC     DPTR
+001D EF                MOV     A,R7
+001E F0                MOVX    @DPTR,A
+001F         ?C0022:
+                                           ; SOURCE LINE # 272
+                                           ; SOURCE LINE # 274
+001F 900000      R     MOV     DPTR,#USBUART_1_cdc_data_in_ep
+0022 E0                MOVX    A,@DPTR
+0023 FF                MOV     R7,A
+0024 EF                MOV     A,R7
+0025 75F00B            MOV     B,#0BH
+0028 A4                MUL     AB
+0029 2400        E     ADD     A,#LOW USBUART_1_EP+08H
+002B F582              MOV     DPL,A
+002D E4                CLR     A
+002E 3400        E     ADDC    A,#HIGH USBUART_1_EP+08H
+0030 F583              MOV     DPH,A
+0032 E0                MOVX    A,@DPTR
+0033 FE                MOV     R6,A
+0034 A3                INC     DPTR
+0035 E0                MOVX    A,@DPTR
+0036 FF                MOV     R7,A
+0037 900000      R     MOV     DPTR,#str_length
+003A E0                MOVX    A,@DPTR
+003B FC                MOV     R4,A
+003C A3                INC     DPTR
+003D E0                MOVX    A,@DPTR
+003E FD                MOV     R5,A
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 19  
+
+003F D3                SETB    C
+0040 ED                MOV     A,R5
+0041 9F                SUBB    A,R7
+0042 EC                MOV     A,R4
+0043 9E                SUBB    A,R6
+0044 401A              JC      ?C0023
+0046 900000      R     MOV     DPTR,#USBUART_1_cdc_data_in_ep
+0049 E0                MOVX    A,@DPTR
+004A FF                MOV     R7,A
+004B EF                MOV     A,R7
+004C 75F00B            MOV     B,#0BH
+004F A4                MUL     AB
+0050 2400        E     ADD     A,#LOW USBUART_1_EP+08H
+0052 F582              MOV     DPL,A
+0054 E4                CLR     A
+0055 3400        E     ADDC    A,#HIGH USBUART_1_EP+08H
+0057 F583              MOV     DPH,A
+0059 E0                MOVX    A,@DPTR
+005A FE                MOV     R6,A
+005B A3                INC     DPTR
+005C E0                MOVX    A,@DPTR
+005D FF                MOV     R7,A
+005E 8008              SJMP    ?C0024
+0060         ?C0023:
+0060 900000      R     MOV     DPTR,#str_length
+0063 E0                MOVX    A,@DPTR
+0064 FE                MOV     R6,A
+0065 A3                INC     DPTR
+0066 E0                MOVX    A,@DPTR
+0067 FF                MOV     R7,A
+0068         ?C0024:
+0068 900000      R     MOV     DPTR,#send_length
+006B EE                MOV     A,R6
+006C F0                MOVX    @DPTR,A
+006D A3                INC     DPTR
+006E EF                MOV     A,R7
+006F F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 277
+0070 900000      R     MOV     DPTR,#USBUART_1_cdc_data_in_ep
+0073 E0                MOVX    A,@DPTR
+0074 FF                MOV     R7,A
+0075 900000      R     MOV     DPTR,#string
+0078 120000      E     LCALL   ?C?PLDXDATA
+007B 900000      R     MOV     DPTR,#buf_index
+007E E0                MOVX    A,@DPTR
+007F FC                MOV     R4,A
+0080 A3                INC     DPTR
+0081 E0                MOVX    A,@DPTR
+0082 FD                MOV     R5,A
+0083 E9                MOV     A,R1
+0084 2D                ADD     A,R5
+0085 F9                MOV     R1,A
+0086 EA                MOV     A,R2
+0087 3C                ADDC    A,R4
+0088 FA                MOV     R2,A
+0089 900000      R     MOV     DPTR,#send_length
+008C E0                MOVX    A,@DPTR
+008D FC                MOV     R4,A
+008E A3                INC     DPTR
+008F E0                MOVX    A,@DPTR
+0090 FD                MOV     R5,A
+0091 900000      E     MOV     DPTR,#?_USBUART_1_LoadInEP?BYTE+04H
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 20  
+
+0094 EC                MOV     A,R4
+0095 F0                MOVX    @DPTR,A
+0096 A3                INC     DPTR
+0097 ED                MOV     A,R5
+0098 F0                MOVX    @DPTR,A
+0099 120000      E     LCALL   _USBUART_1_LoadInEP
+                                           ; SOURCE LINE # 278
+009C 900000      R     MOV     DPTR,#str_length
+009F E0                MOVX    A,@DPTR
+00A0 FE                MOV     R6,A
+00A1 A3                INC     DPTR
+00A2 E0                MOVX    A,@DPTR
+00A3 FF                MOV     R7,A
+00A4 900000      R     MOV     DPTR,#send_length
+00A7 E0                MOVX    A,@DPTR
+00A8 FC                MOV     R4,A
+00A9 A3                INC     DPTR
+00AA E0                MOVX    A,@DPTR
+00AB FD                MOV     R5,A
+00AC C3                CLR     C
+00AD EF                MOV     A,R7
+00AE 9D                SUBB    A,R5
+00AF FF                MOV     R7,A
+00B0 EE                MOV     A,R6
+00B1 9C                SUBB    A,R4
+00B2 FE                MOV     R6,A
+00B3 900000      R     MOV     DPTR,#str_length
+00B6 EE                MOV     A,R6
+00B7 F0                MOVX    @DPTR,A
+00B8 A3                INC     DPTR
+00B9 EF                MOV     A,R7
+00BA F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 281
+00BB 900000      R     MOV     DPTR,#str_length
+00BE E0                MOVX    A,@DPTR
+00BF FE                MOV     R6,A
+00C0 A3                INC     DPTR
+00C1 E0                MOVX    A,@DPTR
+00C2 FF                MOV     R7,A
+00C3 D3                SETB    C
+00C4 EF                MOV     A,R7
+00C5 9400              SUBB    A,#00H
+00C7 EE                MOV     A,R6
+00C8 9400              SUBB    A,#00H
+00CA 4029              JC      ?C0020
+                                           ; SOURCE LINE # 282
+                                           ; SOURCE LINE # 283
+00CC 900000      R     MOV     DPTR,#send_length
+00CF E0                MOVX    A,@DPTR
+00D0 FE                MOV     R6,A
+00D1 A3                INC     DPTR
+00D2 E0                MOVX    A,@DPTR
+00D3 FF                MOV     R7,A
+00D4 900000      R     MOV     DPTR,#buf_index
+00D7 EE                MOV     A,R6
+00D8 8FF0              MOV     B,R7
+00DA 120000      E     LCALL   ?C?IILDX
+00DD         ?C0026:
+                                           ; SOURCE LINE # 285
+00DD 900000      R     MOV     DPTR,#USBUART_1_cdc_data_in_ep
+00E0 E0                MOVX    A,@DPTR
+00E1 FF                MOV     R7,A
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 21  
+
+00E2 EF                MOV     A,R7
+00E3 75F00B            MOV     B,#0BH
+00E6 A4                MUL     AB
+00E7 2400        E     ADD     A,#LOW USBUART_1_EP+01H
+00E9 F582              MOV     DPL,A
+00EB E4                CLR     A
+00EC 3400        E     ADDC    A,#HIGH USBUART_1_EP+01H
+00EE F583              MOV     DPH,A
+00F0 E0                MOVX    A,@DPTR
+00F1 FF                MOV     R7,A
+00F2 EF                MOV     A,R7
+00F3 60E8              JZ      ?C0026
+                                           ; SOURCE LINE # 287
+                                           ; SOURCE LINE # 289
+00F5         ?C0027:
+                                           ; SOURCE LINE # 290
+                                           ; SOURCE LINE # 291
+00F5         ?C0020:
+00F5 900000      R     MOV     DPTR,#str_length
+00F8 E0                MOVX    A,@DPTR
+00F9 FE                MOV     R6,A
+00FA A3                INC     DPTR
+00FB E0                MOVX    A,@DPTR
+00FC FF                MOV     R7,A
+00FD D3                SETB    C
+00FE EF                MOV     A,R7
+00FF 9400              SUBB    A,#00H
+0101 EE                MOV     A,R6
+0102 9400              SUBB    A,#00H
+0104 4003              JC      $ + 5H
+0106 020000      R     LJMP    ?C0022
+                                           ; SOURCE LINE # 292
+0109 22                RET     
+             ; FUNCTION _USBUART_1_PutString (END)
+
+             ; FUNCTION _USBUART_1_PutChar (BEGIN)
+                                           ; SOURCE LINE # 316
+0000 900000      R     MOV     DPTR,#txDataByte
+0003 EF                MOV     A,R7
+0004 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 317
+                                           ; SOURCE LINE # 319
+0005 900000      R     MOV     DPTR,#txDataByte
+0008 E0                MOVX    A,@DPTR
+0009 FF                MOV     R7,A
+000A 900000      R     MOV     DPTR,#dataByte
+000D EF                MOV     A,R7
+000E F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 321
+000F 900000      R     MOV     DPTR,#USBUART_1_cdc_data_in_ep
+0012 E0                MOVX    A,@DPTR
+0013 FF                MOV     R7,A
+0014 7B01              MOV     R3,#01H
+0016 7A00        R     MOV     R2,#HIGH dataByte
+0018 7900        R     MOV     R1,#LOW dataByte
+001A 900000      E     MOV     DPTR,#?_USBUART_1_LoadInEP?BYTE+04H
+001D E4                CLR     A
+001E F0                MOVX    @DPTR,A
+001F A3                INC     DPTR
+0020 7401              MOV     A,#01H
+0022 F0                MOVX    @DPTR,A
+0023 120000      E     LCALL   _USBUART_1_LoadInEP
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 22  
+
+                                           ; SOURCE LINE # 322
+0026 22                RET     
+             ; FUNCTION _USBUART_1_PutChar (END)
+
+             ; FUNCTION USBUART_1_PutCRLF (BEGIN)
+                                           ; SOURCE LINE # 346
+                                           ; SOURCE LINE # 347
+                                           ; SOURCE LINE # 350
+0000 900000      R     MOV     DPTR,#USBUART_1_cdc_data_in_ep
+0003 E0                MOVX    A,@DPTR
+0004 FF                MOV     R7,A
+0005 7BFF              MOV     R3,#0FFH
+0007 7A00        R     MOV     R2,#HIGH txData
+0009 7900        R     MOV     R1,#LOW txData
+000B 900000      E     MOV     DPTR,#?_USBUART_1_LoadInEP?BYTE+04H
+000E E4                CLR     A
+000F F0                MOVX    @DPTR,A
+0010 A3                INC     DPTR
+0011 7402              MOV     A,#02H
+0013 F0                MOVX    @DPTR,A
+0014 120000      E     LCALL   _USBUART_1_LoadInEP
+                                           ; SOURCE LINE # 351
+0017 22                RET     
+             ; FUNCTION USBUART_1_PutCRLF (END)
+
+             ; FUNCTION USBUART_1_GetCount (BEGIN)
+                                           ; SOURCE LINE # 371
+                                           ; SOURCE LINE # 372
+                                           ; SOURCE LINE # 373
+0000 900000      R     MOV     DPTR,#bytesCount
+0003 E4                CLR     A
+0004 F0                MOVX    @DPTR,A
+0005 A3                INC     DPTR
+0006 E4                CLR     A
+0007 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 375
+0008 900000      R     MOV     DPTR,#USBUART_1_cdc_data_out_ep
+000B E0                MOVX    A,@DPTR
+000C FF                MOV     R7,A
+000D EF                MOV     A,R7
+000E 75F00B            MOV     B,#0BH
+0011 A4                MUL     AB
+0012 2400        E     ADD     A,#LOW USBUART_1_EP+01H
+0014 F582              MOV     DPL,A
+0016 E4                CLR     A
+0017 3400        E     ADDC    A,#HIGH USBUART_1_EP+01H
+0019 F583              MOV     DPH,A
+001B E0                MOVX    A,@DPTR
+001C FF                MOV     R7,A
+001D EF                MOV     A,R7
+001E B40110            CJNE    A,#01H,?C0031
+                                           ; SOURCE LINE # 376
+                                           ; SOURCE LINE # 377
+0021 900000      R     MOV     DPTR,#USBUART_1_cdc_data_out_ep
+0024 E0                MOVX    A,@DPTR
+0025 FF                MOV     R7,A
+0026 120000      E     LCALL   _USBUART_1_GetEPCount
+0029 900000      R     MOV     DPTR,#bytesCount
+002C EE                MOV     A,R6
+002D F0                MOVX    @DPTR,A
+002E A3                INC     DPTR
+002F EF                MOV     A,R7
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 23  
+
+0030 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 378
+0031         ?C0031:
+                                           ; SOURCE LINE # 380
+0031 900000      R     MOV     DPTR,#bytesCount
+0034 E0                MOVX    A,@DPTR
+0035 FE                MOV     R6,A
+0036 A3                INC     DPTR
+0037 E0                MOVX    A,@DPTR
+0038 FF                MOV     R7,A
+                                           ; SOURCE LINE # 381
+0039         ?C0032:
+0039 22                RET     
+             ; FUNCTION USBUART_1_GetCount (END)
+
+             ; FUNCTION USBUART_1_DataIsReady (BEGIN)
+                                           ; SOURCE LINE # 405
+                                           ; SOURCE LINE # 406
+                                           ; SOURCE LINE # 407
+0000 900000      R     MOV     DPTR,#USBUART_1_cdc_data_out_ep
+0003 E0                MOVX    A,@DPTR
+0004 FF                MOV     R7,A
+0005 EF                MOV     A,R7
+0006 75F00B            MOV     B,#0BH
+0009 A4                MUL     AB
+000A 2400        E     ADD     A,#LOW USBUART_1_EP+01H
+000C F582              MOV     DPL,A
+000E E4                CLR     A
+000F 3400        E     ADDC    A,#HIGH USBUART_1_EP+01H
+0011 F583              MOV     DPH,A
+0013 E0                MOVX    A,@DPTR
+0014 FF                MOV     R7,A
+                                           ; SOURCE LINE # 408
+0015         ?C0033:
+0015 22                RET     
+             ; FUNCTION USBUART_1_DataIsReady (END)
+
+             ; FUNCTION USBUART_1_CDCIsReady (BEGIN)
+                                           ; SOURCE LINE # 432
+                                           ; SOURCE LINE # 433
+                                           ; SOURCE LINE # 434
+0000 900000      R     MOV     DPTR,#USBUART_1_cdc_data_in_ep
+0003 E0                MOVX    A,@DPTR
+0004 FF                MOV     R7,A
+0005 EF                MOV     A,R7
+0006 75F00B            MOV     B,#0BH
+0009 A4                MUL     AB
+000A 2400        E     ADD     A,#LOW USBUART_1_EP+01H
+000C F582              MOV     DPL,A
+000E E4                CLR     A
+000F 3400        E     ADDC    A,#HIGH USBUART_1_EP+01H
+0011 F583              MOV     DPH,A
+0013 E0                MOVX    A,@DPTR
+0014 FF                MOV     R7,A
+                                           ; SOURCE LINE # 435
+0015         ?C0034:
+0015 22                RET     
+             ; FUNCTION USBUART_1_CDCIsReady (END)
+
+             ; FUNCTION _USBUART_1_GetData (BEGIN)
+                                           ; SOURCE LINE # 463
+0000 900000      R     MOV     DPTR,#pData
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 24  
+
+0003 120000      E     LCALL   ?C?PSTXDATA
+0006 900000      R     MOV     DPTR,#length
+0009 EC                MOV     A,R4
+000A F0                MOVX    @DPTR,A
+000B A3                INC     DPTR
+000C ED                MOV     A,R5
+000D F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 464
+                                           ; SOURCE LINE # 465
+000E 900000      R     MOV     DPTR,#USBUART_1_cdc_data_out_ep
+0011 E0                MOVX    A,@DPTR
+0012 FF                MOV     R7,A
+0013 900000      R     MOV     DPTR,#pData
+0016 120000      E     LCALL   ?C?PLDXDATA
+0019 900000      R     MOV     DPTR,#length
+001C E0                MOVX    A,@DPTR
+001D FC                MOV     R4,A
+001E A3                INC     DPTR
+001F E0                MOVX    A,@DPTR
+0020 FD                MOV     R5,A
+0021 900000      E     MOV     DPTR,#?_USBUART_1_ReadOutEP?BYTE+04H
+0024 EC                MOV     A,R4
+0025 F0                MOVX    @DPTR,A
+0026 A3                INC     DPTR
+0027 ED                MOV     A,R5
+0028 F0                MOVX    @DPTR,A
+0029 120000      E     LCALL   _USBUART_1_ReadOutEP
+                                           ; SOURCE LINE # 466
+002C         ?C0035:
+002C 22                RET     
+             ; FUNCTION _USBUART_1_GetData (END)
+
+             ; FUNCTION _USBUART_1_GetAll (BEGIN)
+                                           ; SOURCE LINE # 493
+0000 900000      R     MOV     DPTR,#pData
+0003 120000      E     LCALL   ?C?PSTXDATA
+                                           ; SOURCE LINE # 494
+                                           ; SOURCE LINE # 495
+0006 900000      R     MOV     DPTR,#USBUART_1_cdc_data_out_ep
+0009 E0                MOVX    A,@DPTR
+000A FF                MOV     R7,A
+000B 900000      R     MOV     DPTR,#pData
+000E 120000      E     LCALL   ?C?PLDXDATA
+0011 900000      R     MOV     DPTR,#USBUART_1_cdc_data_out_ep
+0014 E0                MOVX    A,@DPTR
+0015 FE                MOV     R6,A
+0016 EE                MOV     A,R6
+0017 75F00B            MOV     B,#0BH
+001A A4                MUL     AB
+001B 2400        E     ADD     A,#LOW USBUART_1_EP+08H
+001D F582              MOV     DPL,A
+001F E4                CLR     A
+0020 3400        E     ADDC    A,#HIGH USBUART_1_EP+08H
+0022 F583              MOV     DPH,A
+0024 E0                MOVX    A,@DPTR
+0025 FC                MOV     R4,A
+0026 A3                INC     DPTR
+0027 E0                MOVX    A,@DPTR
+0028 FD                MOV     R5,A
+0029 900000      E     MOV     DPTR,#?_USBUART_1_ReadOutEP?BYTE+04H
+002C EC                MOV     A,R4
+002D F0                MOVX    @DPTR,A
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 25  
+
+002E A3                INC     DPTR
+002F ED                MOV     A,R5
+0030 F0                MOVX    @DPTR,A
+0031 120000      E     LCALL   _USBUART_1_ReadOutEP
+                                           ; SOURCE LINE # 497
+0034         ?C0036:
+0034 22                RET     
+             ; FUNCTION _USBUART_1_GetAll (END)
+
+             ; FUNCTION USBUART_1_GetChar (BEGIN)
+                                           ; SOURCE LINE # 520
+                                           ; SOURCE LINE # 521
+                                           ; SOURCE LINE # 524
+0000 900000      R     MOV     DPTR,#USBUART_1_cdc_data_out_ep
+0003 E0                MOVX    A,@DPTR
+0004 FF                MOV     R7,A
+0005 7B01              MOV     R3,#01H
+0007 7A00        R     MOV     R2,#HIGH rxData
+0009 7900        R     MOV     R1,#LOW rxData
+000B 900000      E     MOV     DPTR,#?_USBUART_1_ReadOutEP?BYTE+04H
+000E E4                CLR     A
+000F F0                MOVX    @DPTR,A
+0010 A3                INC     DPTR
+0011 7401              MOV     A,#01H
+0013 F0                MOVX    @DPTR,A
+0014 120000      E     LCALL   _USBUART_1_ReadOutEP
+                                           ; SOURCE LINE # 526
+0017 900000      R     MOV     DPTR,#rxData
+001A E0                MOVX    A,@DPTR
+001B FF                MOV     R7,A
+                                           ; SOURCE LINE # 527
+001C         ?C0037:
+001C 22                RET     
+             ; FUNCTION USBUART_1_GetChar (END)
+
+             ; FUNCTION USBUART_1_IsLineChanged (BEGIN)
+                                           ; SOURCE LINE # 551
+                                           ; SOURCE LINE # 552
+                                           ; SOURCE LINE # 553
+0000 900000      R     MOV     DPTR,#state
+0003 E4                CLR     A
+0004 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 556
+0005 900000      E     MOV     DPTR,#USBUART_1_transferState
+0008 E0                MOVX    A,@DPTR
+0009 FF                MOV     R7,A
+000A EF                MOV     A,R7
+000B 7017              JNZ     ?C0038
+                                           ; SOURCE LINE # 557
+                                           ; SOURCE LINE # 558
+000D 900000      R     MOV     DPTR,#USBUART_1_lineChanged
+0010 E0                MOVX    A,@DPTR
+0011 FF                MOV     R7,A
+0012 EF                MOV     A,R7
+0013 600F              JZ      ?C0038
+                                           ; SOURCE LINE # 559
+                                           ; SOURCE LINE # 560
+0015 900000      R     MOV     DPTR,#USBUART_1_lineChanged
+0018 E0                MOVX    A,@DPTR
+0019 FF                MOV     R7,A
+001A 900000      R     MOV     DPTR,#state
+001D EF                MOV     A,R7
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 26  
+
+001E F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 561
+001F 900000      R     MOV     DPTR,#USBUART_1_lineChanged
+0022 E4                CLR     A
+0023 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 562
+                                           ; SOURCE LINE # 563
+0024         ?C0038:
+                                           ; SOURCE LINE # 565
+0024 900000      R     MOV     DPTR,#state
+0027 E0                MOVX    A,@DPTR
+0028 FF                MOV     R7,A
+                                           ; SOURCE LINE # 566
+0029         ?C0040:
+0029 22                RET     
+             ; FUNCTION USBUART_1_IsLineChanged (END)
+
+             ; FUNCTION USBUART_1_GetDTERate (BEGIN)
+                                           ; SOURCE LINE # 587
+                                           ; SOURCE LINE # 588
+                                           ; SOURCE LINE # 591
+0000 900000      R     MOV     DPTR,#USBUART_1_lineCoding+03H
+0003 E0                MOVX    A,@DPTR
+0004 FF                MOV     R7,A
+0005 E4                CLR     A
+0006 FC                MOV     R4,A
+0007 FD                MOV     R5,A
+0008 FE                MOV     R6,A
+0009 900000      R     MOV     DPTR,#rate
+000C 120000      E     LCALL   ?C?LSTXDATA
+                                           ; SOURCE LINE # 592
+000F 900000      R     MOV     DPTR,#rate
+0012 120000      E     LCALL   ?C?LLDXDATA
+0015 7808              MOV     R0,#08H
+0017 120000      E     LCALL   ?C?LSHL
+001A A804              MOV     R0,AR4
+001C A905              MOV     R1,AR5
+001E AA06              MOV     R2,AR6
+0020 AB07              MOV     R3,AR7
+0022 900000      R     MOV     DPTR,#USBUART_1_lineCoding+02H
+0025 E0                MOVX    A,@DPTR
+0026 FF                MOV     R7,A
+0027 E4                CLR     A
+0028 FC                MOV     R4,A
+0029 FD                MOV     R5,A
+002A FE                MOV     R6,A
+002B 120000      E     LCALL   ?C?LOR
+002E 900000      R     MOV     DPTR,#rate
+0031 120000      E     LCALL   ?C?LSTXDATA
+                                           ; SOURCE LINE # 593
+0034 900000      R     MOV     DPTR,#rate
+0037 120000      E     LCALL   ?C?LLDXDATA
+003A 7808              MOV     R0,#08H
+003C 120000      E     LCALL   ?C?LSHL
+003F A804              MOV     R0,AR4
+0041 A905              MOV     R1,AR5
+0043 AA06              MOV     R2,AR6
+0045 AB07              MOV     R3,AR7
+0047 900000      R     MOV     DPTR,#USBUART_1_lineCoding+01H
+004A E0                MOVX    A,@DPTR
+004B FF                MOV     R7,A
+004C E4                CLR     A
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 27  
+
+004D FC                MOV     R4,A
+004E FD                MOV     R5,A
+004F FE                MOV     R6,A
+0050 120000      E     LCALL   ?C?LOR
+0053 900000      R     MOV     DPTR,#rate
+0056 120000      E     LCALL   ?C?LSTXDATA
+                                           ; SOURCE LINE # 594
+0059 900000      R     MOV     DPTR,#rate
+005C 120000      E     LCALL   ?C?LLDXDATA
+005F 7808              MOV     R0,#08H
+0061 120000      E     LCALL   ?C?LSHL
+0064 A804              MOV     R0,AR4
+0066 A905              MOV     R1,AR5
+0068 AA06              MOV     R2,AR6
+006A AB07              MOV     R3,AR7
+006C 900000      R     MOV     DPTR,#USBUART_1_lineCoding
+006F E0                MOVX    A,@DPTR
+0070 FF                MOV     R7,A
+0071 E4                CLR     A
+0072 FC                MOV     R4,A
+0073 FD                MOV     R5,A
+0074 FE                MOV     R6,A
+0075 120000      E     LCALL   ?C?LOR
+0078 900000      R     MOV     DPTR,#rate
+007B 120000      E     LCALL   ?C?LSTXDATA
+                                           ; SOURCE LINE # 596
+007E 900000      R     MOV     DPTR,#rate
+0081 120000      E     LCALL   ?C?LLDXDATA
+                                           ; SOURCE LINE # 597
+0084         ?C0041:
+0084 22                RET     
+             ; FUNCTION USBUART_1_GetDTERate (END)
+
+             ; FUNCTION USBUART_1_GetCharFormat (BEGIN)
+                                           ; SOURCE LINE # 617
+                                           ; SOURCE LINE # 618
+                                           ; SOURCE LINE # 619
+0000 900000      R     MOV     DPTR,#USBUART_1_lineCoding+04H
+0003 E0                MOVX    A,@DPTR
+0004 FF                MOV     R7,A
+                                           ; SOURCE LINE # 620
+0005         ?C0042:
+0005 22                RET     
+             ; FUNCTION USBUART_1_GetCharFormat (END)
+
+             ; FUNCTION USBUART_1_GetParityType (BEGIN)
+                                           ; SOURCE LINE # 640
+                                           ; SOURCE LINE # 641
+                                           ; SOURCE LINE # 642
+0000 900000      R     MOV     DPTR,#USBUART_1_lineCoding+05H
+0003 E0                MOVX    A,@DPTR
+0004 FF                MOV     R7,A
+                                           ; SOURCE LINE # 643
+0005         ?C0043:
+0005 22                RET     
+             ; FUNCTION USBUART_1_GetParityType (END)
+
+             ; FUNCTION USBUART_1_GetDataBits (BEGIN)
+                                           ; SOURCE LINE # 664
+                                           ; SOURCE LINE # 665
+                                           ; SOURCE LINE # 666
+0000 900000      R     MOV     DPTR,#USBUART_1_lineCoding+06H
+C51 COMPILER V9.51   USBUART_1_CDC                                                         03/25/2014 11:26:58 PAGE 28  
+
+0003 E0                MOVX    A,@DPTR
+0004 FF                MOV     R7,A
+                                           ; SOURCE LINE # 667
+0005         ?C0044:
+0005 22                RET     
+             ; FUNCTION USBUART_1_GetDataBits (END)
+
+             ; FUNCTION USBUART_1_GetLineControl (BEGIN)
+                                           ; SOURCE LINE # 687
+                                           ; SOURCE LINE # 688
+                                           ; SOURCE LINE # 689
+0000 900000      R     MOV     DPTR,#USBUART_1_lineControlBitmap
+0003 E0                MOVX    A,@DPTR
+0004 FE                MOV     R6,A
+0005 A3                INC     DPTR
+0006 E0                MOVX    A,@DPTR
+0007 FF                MOV     R7,A
+                                           ; SOURCE LINE # 690
+0008         ?C0045:
+0008 22                RET     
+             ; FUNCTION USBUART_1_GetLineControl (END)
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1150    ----
+   CONSTANT SIZE    =      2    ----
+   XDATA SIZE       =     12      38
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

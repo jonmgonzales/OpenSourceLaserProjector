@@ -1,0 +1,2637 @@
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"Write_Timer.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global	Write_Timer_initVar
+  19              		.bss
+  20              		.type	Write_Timer_initVar, %object
+  21              		.size	Write_Timer_initVar, 1
+  22              	Write_Timer_initVar:
+  23 0000 00       		.space	1
+  24              		.section	.text.Write_Timer_Init,"ax",%progbits
+  25              		.align	2
+  26              		.global	Write_Timer_Init
+  27              		.thumb
+  28              		.thumb_func
+  29              		.type	Write_Timer_Init, %function
+  30              	Write_Timer_Init:
+  31              	.LFB0:
+  32              		.file 1 ".\\Generated_Source\\PSoC5\\Write_Timer.c"
+   1:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+   2:.\Generated_Source\PSoC5/Write_Timer.c **** * File Name: Write_Timer.c
+   3:.\Generated_Source\PSoC5/Write_Timer.c **** * Version 2.50
+   4:.\Generated_Source\PSoC5/Write_Timer.c **** *
+   5:.\Generated_Source\PSoC5/Write_Timer.c **** * Description:
+   6:.\Generated_Source\PSoC5/Write_Timer.c **** *  The Timer component consists of a 8, 16, 24 or 32-bit timer with
+   7:.\Generated_Source\PSoC5/Write_Timer.c **** *  a selectable period between 2 and 2^Width - 1.  The timer may free run
+   8:.\Generated_Source\PSoC5/Write_Timer.c **** *  or be used as a capture timer as well.  The capture can be initiated
+   9:.\Generated_Source\PSoC5/Write_Timer.c **** *  by a positive or negative edge signal as well as via software.
+  10:.\Generated_Source\PSoC5/Write_Timer.c **** *  A trigger input can be programmed to enable the timer on rising edge
+  11:.\Generated_Source\PSoC5/Write_Timer.c **** *  falling edge, either edge or continous run.
+  12:.\Generated_Source\PSoC5/Write_Timer.c **** *  Interrupts may be generated due to a terminal count condition
+  13:.\Generated_Source\PSoC5/Write_Timer.c **** *  or a capture event.
+  14:.\Generated_Source\PSoC5/Write_Timer.c **** *
+  15:.\Generated_Source\PSoC5/Write_Timer.c **** * Note:
+  16:.\Generated_Source\PSoC5/Write_Timer.c **** *
+  17:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+  18:.\Generated_Source\PSoC5/Write_Timer.c **** * Copyright 2008-2012, Cypress Semiconductor Corporation.  All rights reserved.
+  19:.\Generated_Source\PSoC5/Write_Timer.c **** * You may use this file only in accordance with the license, terms, conditions,
+  20:.\Generated_Source\PSoC5/Write_Timer.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  21:.\Generated_Source\PSoC5/Write_Timer.c **** * the software package with which this file was provided.
+  22:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************/
+  23:.\Generated_Source\PSoC5/Write_Timer.c **** 
+  24:.\Generated_Source\PSoC5/Write_Timer.c **** #include "Write_Timer.h"
+  25:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 2
+
+
+  26:.\Generated_Source\PSoC5/Write_Timer.c **** uint8 Write_Timer_initVar = 0u;
+  27:.\Generated_Source\PSoC5/Write_Timer.c **** 
+  28:.\Generated_Source\PSoC5/Write_Timer.c **** 
+  29:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+  30:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_Init
+  31:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+  32:.\Generated_Source\PSoC5/Write_Timer.c **** *
+  33:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+  34:.\Generated_Source\PSoC5/Write_Timer.c **** *  Initialize to the schematic state
+  35:.\Generated_Source\PSoC5/Write_Timer.c **** *
+  36:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+  37:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+  38:.\Generated_Source\PSoC5/Write_Timer.c **** *
+  39:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+  40:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+  41:.\Generated_Source\PSoC5/Write_Timer.c **** *
+  42:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+  43:.\Generated_Source\PSoC5/Write_Timer.c **** void Write_Timer_Init(void) 
+  44:.\Generated_Source\PSoC5/Write_Timer.c **** {
+  33              		.loc 1 44 0
+  34              		.cfi_startproc
+  35              		@ args = 0, pretend = 0, frame = 8
+  36              		@ frame_needed = 1, uses_anonymous_args = 0
+  37 0000 80B5     		push	{r7, lr}
+  38              	.LCFI0:
+  39              		.cfi_def_cfa_offset 8
+  40              		.cfi_offset 7, -8
+  41              		.cfi_offset 14, -4
+  42 0002 82B0     		sub	sp, sp, #8
+  43              	.LCFI1:
+  44              		.cfi_def_cfa_offset 16
+  45 0004 00AF     		add	r7, sp, #0
+  46              	.LCFI2:
+  47              		.cfi_def_cfa_register 7
+  45:.\Generated_Source\PSoC5/Write_Timer.c ****     #if(!Write_Timer_UsingFixedFunction)
+  46:.\Generated_Source\PSoC5/Write_Timer.c ****             /* Interrupt State Backup for Critical Region*/
+  47:.\Generated_Source\PSoC5/Write_Timer.c ****             uint8 Write_Timer_interruptState;
+  48:.\Generated_Source\PSoC5/Write_Timer.c ****     #endif /* Interrupt state back up for Fixed Function only */
+  49:.\Generated_Source\PSoC5/Write_Timer.c **** 
+  50:.\Generated_Source\PSoC5/Write_Timer.c ****     #if (Write_Timer_UsingFixedFunction)
+  51:.\Generated_Source\PSoC5/Write_Timer.c ****         /* Clear all bits but the enable bit (if it's already set) for Timer operation */
+  52:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_CONTROL &= Write_Timer_CTRL_ENABLE;
+  53:.\Generated_Source\PSoC5/Write_Timer.c **** 
+  54:.\Generated_Source\PSoC5/Write_Timer.c ****         /* Clear the mode bits for continuous run mode */
+  55:.\Generated_Source\PSoC5/Write_Timer.c ****         #if (CY_PSOC5A)
+  56:.\Generated_Source\PSoC5/Write_Timer.c ****             Write_Timer_CONTROL2 &= ((uint8)(~Write_Timer_CTRL_MODE_MASK));
+  57:.\Generated_Source\PSoC5/Write_Timer.c ****         #endif /* Clear bits in CONTROL2 only in PSOC5A */
+  58:.\Generated_Source\PSoC5/Write_Timer.c **** 
+  59:.\Generated_Source\PSoC5/Write_Timer.c ****         #if (CY_PSOC3 || CY_PSOC5LP)
+  60:.\Generated_Source\PSoC5/Write_Timer.c ****             Write_Timer_CONTROL3 &= ((uint8)(~Write_Timer_CTRL_MODE_MASK));
+  61:.\Generated_Source\PSoC5/Write_Timer.c ****         #endif /* CONTROL3 register exists only in PSoC3 OR PSoC5LP */
+  62:.\Generated_Source\PSoC5/Write_Timer.c **** 
+  63:.\Generated_Source\PSoC5/Write_Timer.c ****         /* Check if One Shot mode is enabled i.e. RunMode !=0*/
+  64:.\Generated_Source\PSoC5/Write_Timer.c ****         #if (Write_Timer_RunModeUsed != 0x0u)
+  65:.\Generated_Source\PSoC5/Write_Timer.c ****             /* Set 3rd bit of Control register to enable one shot mode */
+  66:.\Generated_Source\PSoC5/Write_Timer.c ****             Write_Timer_CONTROL |= 0x04u;
+  67:.\Generated_Source\PSoC5/Write_Timer.c ****         #endif /* One Shot enabled only when RunModeUsed is not Continuous*/
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 3
+
+
+  68:.\Generated_Source\PSoC5/Write_Timer.c **** 
+  69:.\Generated_Source\PSoC5/Write_Timer.c ****         #if (Write_Timer_RunModeUsed == 2)
+  70:.\Generated_Source\PSoC5/Write_Timer.c ****             #if (CY_PSOC5A)
+  71:.\Generated_Source\PSoC5/Write_Timer.c ****                 /* Set last 2 bits of control2 register if one shot(halt on
+  72:.\Generated_Source\PSoC5/Write_Timer.c ****                 interrupt) is enabled*/
+  73:.\Generated_Source\PSoC5/Write_Timer.c ****                 Write_Timer_CONTROL2 |= 0x03u;
+  74:.\Generated_Source\PSoC5/Write_Timer.c ****             #endif /* Set One-Shot Halt on Interrupt bit in CONTROL2 for PSoC5A */
+  75:.\Generated_Source\PSoC5/Write_Timer.c **** 
+  76:.\Generated_Source\PSoC5/Write_Timer.c ****             #if (CY_PSOC3 || CY_PSOC5LP)
+  77:.\Generated_Source\PSoC5/Write_Timer.c ****                 /* Set last 2 bits of control3 register if one shot(halt on
+  78:.\Generated_Source\PSoC5/Write_Timer.c ****                 interrupt) is enabled*/
+  79:.\Generated_Source\PSoC5/Write_Timer.c ****                 Write_Timer_CONTROL3 |= 0x03u;
+  80:.\Generated_Source\PSoC5/Write_Timer.c ****             #endif /* Set One-Shot Halt on Interrupt bit in CONTROL3 for PSoC3 or PSoC5LP */
+  81:.\Generated_Source\PSoC5/Write_Timer.c **** 
+  82:.\Generated_Source\PSoC5/Write_Timer.c ****         #endif /* Remove section if One Shot Halt on Interrupt is not enabled */
+  83:.\Generated_Source\PSoC5/Write_Timer.c **** 
+  84:.\Generated_Source\PSoC5/Write_Timer.c ****         #if (Write_Timer_UsingHWEnable != 0)
+  85:.\Generated_Source\PSoC5/Write_Timer.c ****             #if (CY_PSOC5A)
+  86:.\Generated_Source\PSoC5/Write_Timer.c ****                 /* Set the default Run Mode of the Timer to Continuous */
+  87:.\Generated_Source\PSoC5/Write_Timer.c ****                 Write_Timer_CONTROL2 |= Write_Timer_CTRL_MODE_PULSEWIDTH;
+  88:.\Generated_Source\PSoC5/Write_Timer.c ****             #endif /* Set Continuous Run Mode in CONTROL2 for PSoC5A */
+  89:.\Generated_Source\PSoC5/Write_Timer.c **** 
+  90:.\Generated_Source\PSoC5/Write_Timer.c ****             #if (CY_PSOC3 || CY_PSOC5LP)
+  91:.\Generated_Source\PSoC5/Write_Timer.c ****                 /* Clear and Set ROD and COD bits of CFG2 register */
+  92:.\Generated_Source\PSoC5/Write_Timer.c ****                 Write_Timer_CONTROL3 &= ((uint8)(~Write_Timer_CTRL_RCOD_MASK));
+  93:.\Generated_Source\PSoC5/Write_Timer.c ****                 Write_Timer_CONTROL3 |= Write_Timer_CTRL_RCOD;
+  94:.\Generated_Source\PSoC5/Write_Timer.c **** 
+  95:.\Generated_Source\PSoC5/Write_Timer.c ****                 /* Clear and Enable the HW enable bit in CFG2 register */
+  96:.\Generated_Source\PSoC5/Write_Timer.c ****                 Write_Timer_CONTROL3 &= ((uint8)(~Write_Timer_CTRL_ENBL_MASK));
+  97:.\Generated_Source\PSoC5/Write_Timer.c ****                 Write_Timer_CONTROL3 |= Write_Timer_CTRL_ENBL;
+  98:.\Generated_Source\PSoC5/Write_Timer.c **** 
+  99:.\Generated_Source\PSoC5/Write_Timer.c ****                 /* Set the default Run Mode of the Timer to Continuous */
+ 100:.\Generated_Source\PSoC5/Write_Timer.c ****                 Write_Timer_CONTROL3 |= Write_Timer_CTRL_MODE_CONTINUOUS;
+ 101:.\Generated_Source\PSoC5/Write_Timer.c ****             #endif /* Set Continuous Run Mode in CONTROL3 for PSoC3ES3 or PSoC5A */
+ 102:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 103:.\Generated_Source\PSoC5/Write_Timer.c ****         #endif /* Configure Run Mode with hardware enable */
+ 104:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 105:.\Generated_Source\PSoC5/Write_Timer.c ****         /* Clear and Set SYNCTC and SYNCCMP bits of RT1 register */
+ 106:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_RT1 &= ((uint8)(~Write_Timer_RT1_MASK));
+ 107:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_RT1 |= Write_Timer_SYNC;
+ 108:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 109:.\Generated_Source\PSoC5/Write_Timer.c ****         /*Enable DSI Sync all all inputs of the Timer*/
+ 110:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_RT1 &= ((uint8)(~Write_Timer_SYNCDSI_MASK));
+ 111:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_RT1 |= Write_Timer_SYNCDSI_EN;
+ 112:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 113:.\Generated_Source\PSoC5/Write_Timer.c ****         /* Set the IRQ to use the status register interrupts */
+ 114:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_CONTROL2 |= Write_Timer_CTRL2_IRQ_SEL;
+ 115:.\Generated_Source\PSoC5/Write_Timer.c ****     #endif /* Configuring registers of fixed function implementation */
+ 116:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 117:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Set Initial values from Configuration */
+ 118:.\Generated_Source\PSoC5/Write_Timer.c ****     Write_Timer_WritePeriod(Write_Timer_INIT_PERIOD);
+  48              		.loc 1 118 0
+  49 0006 4FF0FF00 		mov	r0, #255
+  50 000a FFF7FEFF 		bl	Write_Timer_WritePeriod
+ 119:.\Generated_Source\PSoC5/Write_Timer.c ****     Write_Timer_WriteCounter(Write_Timer_INIT_PERIOD);
+  51              		.loc 1 119 0
+  52 000e 4FF0FF00 		mov	r0, #255
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 4
+
+
+  53 0012 FFF7FEFF 		bl	Write_Timer_WriteCounter
+ 120:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 121:.\Generated_Source\PSoC5/Write_Timer.c ****     #if (Write_Timer_UsingHWCaptureCounter)/* Capture counter is enabled */
+ 122:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_CAPTURE_COUNT_CTRL |= Write_Timer_CNTR_ENABLE;
+ 123:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_SetCaptureCount(Write_Timer_INIT_CAPTURE_COUNT);
+ 124:.\Generated_Source\PSoC5/Write_Timer.c ****     #endif /* Configure capture counter value */
+ 125:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 126:.\Generated_Source\PSoC5/Write_Timer.c ****     #if (!Write_Timer_UsingFixedFunction)
+ 127:.\Generated_Source\PSoC5/Write_Timer.c ****         #if (Write_Timer_SoftwareCaptureMode)
+ 128:.\Generated_Source\PSoC5/Write_Timer.c ****             Write_Timer_SetCaptureMode(Write_Timer_INIT_CAPTURE_MODE);
+ 129:.\Generated_Source\PSoC5/Write_Timer.c ****         #endif /* Set Capture Mode for UDB implementation if capture mode is software controlled */
+ 130:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 131:.\Generated_Source\PSoC5/Write_Timer.c ****         #if (Write_Timer_SoftwareTriggerMode)
+ 132:.\Generated_Source\PSoC5/Write_Timer.c ****             if (0u == (Write_Timer_CONTROL & Write_Timer__B_TIMER__TM_SOFTWARE))
+ 133:.\Generated_Source\PSoC5/Write_Timer.c ****             {
+ 134:.\Generated_Source\PSoC5/Write_Timer.c ****                 Write_Timer_SetTriggerMode(Write_Timer_INIT_TRIGGER_MODE);
+ 135:.\Generated_Source\PSoC5/Write_Timer.c ****             }
+ 136:.\Generated_Source\PSoC5/Write_Timer.c ****         #endif /* Set trigger mode for UDB Implementation if trigger mode is software controlled */
+ 137:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 138:.\Generated_Source\PSoC5/Write_Timer.c ****         /* CyEnterCriticalRegion and CyExitCriticalRegion are used to mark following region critica
+ 139:.\Generated_Source\PSoC5/Write_Timer.c ****         /* Enter Critical Region*/
+ 140:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_interruptState = CyEnterCriticalSection();
+  54              		.loc 1 140 0
+  55 0016 FFF7FEFF 		bl	CyEnterCriticalSection
+  56 001a 0346     		mov	r3, r0
+  57 001c FB71     		strb	r3, [r7, #7]
+ 141:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 142:.\Generated_Source\PSoC5/Write_Timer.c ****         /* Use the interrupt output of the status register for IRQ output */
+ 143:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_STATUS_AUX_CTRL |= Write_Timer_STATUS_ACTL_INT_EN_MASK;
+  58              		.loc 1 143 0
+  59 001e 46F29E43 		movw	r3, #25758
+  60 0022 C4F20003 		movt	r3, 16384
+  61 0026 46F29E42 		movw	r2, #25758
+  62 002a C4F20002 		movt	r2, 16384
+  63 002e 1278     		ldrb	r2, [r2, #0]
+  64 0030 D2B2     		uxtb	r2, r2
+  65 0032 42F01002 		orr	r2, r2, #16
+  66 0036 D2B2     		uxtb	r2, r2
+  67 0038 1A70     		strb	r2, [r3, #0]
+ 144:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 145:.\Generated_Source\PSoC5/Write_Timer.c ****         /* Exit Critical Region*/
+ 146:.\Generated_Source\PSoC5/Write_Timer.c ****         CyExitCriticalSection(Write_Timer_interruptState);
+  68              		.loc 1 146 0
+  69 003a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+  70 003c 1846     		mov	r0, r3
+  71 003e FFF7FEFF 		bl	CyExitCriticalSection
+ 147:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 148:.\Generated_Source\PSoC5/Write_Timer.c ****         #if (Write_Timer_EnableTriggerMode)
+ 149:.\Generated_Source\PSoC5/Write_Timer.c ****             Write_Timer_EnableTrigger();
+ 150:.\Generated_Source\PSoC5/Write_Timer.c ****         #endif /* Set Trigger enable bit for UDB implementation in the control register*/
+ 151:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 152:.\Generated_Source\PSoC5/Write_Timer.c ****         #if (Write_Timer_InterruptOnCaptureCount)
+ 153:.\Generated_Source\PSoC5/Write_Timer.c ****              #if (!Write_Timer_ControlRegRemoved)
+ 154:.\Generated_Source\PSoC5/Write_Timer.c ****                 Write_Timer_SetInterruptCount(Write_Timer_INIT_INT_CAPTURE_COUNT);
+ 155:.\Generated_Source\PSoC5/Write_Timer.c ****             #endif /* Set interrupt count in control register if control register is not removed */
+ 156:.\Generated_Source\PSoC5/Write_Timer.c ****         #endif /*Set interrupt count in UDB implementation if interrupt count feature is checked.*/
+ 157:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 5
+
+
+ 158:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_ClearFIFO();
+  72              		.loc 1 158 0
+  73 0042 FFF7FEFF 		bl	Write_Timer_ClearFIFO
+ 159:.\Generated_Source\PSoC5/Write_Timer.c ****     #endif /* Configure additional features of UDB implementation */
+ 160:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 161:.\Generated_Source\PSoC5/Write_Timer.c ****     Write_Timer_SetInterruptMode(Write_Timer_INIT_INTERRUPT_MODE);
+  74              		.loc 1 161 0
+  75 0046 4FF00100 		mov	r0, #1
+  76 004a FFF7FEFF 		bl	Write_Timer_SetInterruptMode
+ 162:.\Generated_Source\PSoC5/Write_Timer.c **** }
+  77              		.loc 1 162 0
+  78 004e 07F10807 		add	r7, r7, #8
+  79 0052 BD46     		mov	sp, r7
+  80 0054 80BD     		pop	{r7, pc}
+  81              		.cfi_endproc
+  82              	.LFE0:
+  83              		.size	Write_Timer_Init, .-Write_Timer_Init
+  84 0056 00BF     		.section	.text.Write_Timer_Enable,"ax",%progbits
+  85              		.align	2
+  86              		.global	Write_Timer_Enable
+  87              		.thumb
+  88              		.thumb_func
+  89              		.type	Write_Timer_Enable, %function
+  90              	Write_Timer_Enable:
+  91              	.LFB1:
+ 163:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 164:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 165:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 166:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_Enable
+ 167:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 168:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 169:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 170:.\Generated_Source\PSoC5/Write_Timer.c **** *  Enable the Timer
+ 171:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 172:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 173:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 174:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 175:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 176:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 177:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 178:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 179:.\Generated_Source\PSoC5/Write_Timer.c **** void Write_Timer_Enable(void) 
+ 180:.\Generated_Source\PSoC5/Write_Timer.c **** {
+  92              		.loc 1 180 0
+  93              		.cfi_startproc
+  94              		@ args = 0, pretend = 0, frame = 0
+  95              		@ frame_needed = 1, uses_anonymous_args = 0
+  96              		@ link register save eliminated.
+  97 0000 80B4     		push	{r7}
+  98              	.LCFI3:
+  99              		.cfi_def_cfa_offset 4
+ 100              		.cfi_offset 7, -4
+ 101 0002 00AF     		add	r7, sp, #0
+ 102              	.LCFI4:
+ 103              		.cfi_def_cfa_register 7
+ 181:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Globally Enable the Fixed Function Block chosen */
+ 182:.\Generated_Source\PSoC5/Write_Timer.c ****     #if (Write_Timer_UsingFixedFunction)
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 6
+
+
+ 183:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_GLOBAL_ENABLE |= Write_Timer_BLOCK_EN_MASK;
+ 184:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_GLOBAL_STBY_ENABLE |= Write_Timer_BLOCK_STBY_EN_MASK;
+ 185:.\Generated_Source\PSoC5/Write_Timer.c ****     #endif /* Set Enable bit for enabling Fixed function timer*/
+ 186:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 187:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Remove assignment if control register is removed */
+ 188:.\Generated_Source\PSoC5/Write_Timer.c ****     #if (!Write_Timer_ControlRegRemoved || Write_Timer_UsingFixedFunction)
+ 189:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_CONTROL |= Write_Timer_CTRL_ENABLE;
+ 104              		.loc 1 189 0
+ 105 0004 46F27E43 		movw	r3, #25726
+ 106 0008 C4F20003 		movt	r3, 16384
+ 107 000c 46F27E42 		movw	r2, #25726
+ 108 0010 C4F20002 		movt	r2, 16384
+ 109 0014 1278     		ldrb	r2, [r2, #0]
+ 110 0016 D2B2     		uxtb	r2, r2
+ 111 0018 62F07F02 		orn	r2, r2, #127
+ 112 001c D2B2     		uxtb	r2, r2
+ 113 001e 1A70     		strb	r2, [r3, #0]
+ 190:.\Generated_Source\PSoC5/Write_Timer.c ****     #endif /* Remove assignment if control register is removed */
+ 191:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 114              		.loc 1 191 0
+ 115 0020 BD46     		mov	sp, r7
+ 116 0022 80BC     		pop	{r7}
+ 117 0024 7047     		bx	lr
+ 118              		.cfi_endproc
+ 119              	.LFE1:
+ 120              		.size	Write_Timer_Enable, .-Write_Timer_Enable
+ 121 0026 00BF     		.section	.text.Write_Timer_Start,"ax",%progbits
+ 122              		.align	2
+ 123              		.global	Write_Timer_Start
+ 124              		.thumb
+ 125              		.thumb_func
+ 126              		.type	Write_Timer_Start, %function
+ 127              	Write_Timer_Start:
+ 128              	.LFB2:
+ 192:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 193:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 194:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 195:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_Start
+ 196:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 197:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 198:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 199:.\Generated_Source\PSoC5/Write_Timer.c **** *  The start function initializes the timer with the default values, the
+ 200:.\Generated_Source\PSoC5/Write_Timer.c **** *  enables the timerto begin counting.  It does not enable interrupts,
+ 201:.\Generated_Source\PSoC5/Write_Timer.c **** *  the EnableInt command should be called if interrupt generation is required.
+ 202:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 203:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 204:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 205:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 206:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 207:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 208:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 209:.\Generated_Source\PSoC5/Write_Timer.c **** * Global variables:
+ 210:.\Generated_Source\PSoC5/Write_Timer.c **** *  Write_Timer_initVar: Is modified when this function is called for the
+ 211:.\Generated_Source\PSoC5/Write_Timer.c **** *   first time. Is used to ensure that initialization happens only once.
+ 212:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 213:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 214:.\Generated_Source\PSoC5/Write_Timer.c **** void Write_Timer_Start(void) 
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 7
+
+
+ 215:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 129              		.loc 1 215 0
+ 130              		.cfi_startproc
+ 131              		@ args = 0, pretend = 0, frame = 0
+ 132              		@ frame_needed = 1, uses_anonymous_args = 0
+ 133 0000 80B5     		push	{r7, lr}
+ 134              	.LCFI5:
+ 135              		.cfi_def_cfa_offset 8
+ 136              		.cfi_offset 7, -8
+ 137              		.cfi_offset 14, -4
+ 138 0002 00AF     		add	r7, sp, #0
+ 139              	.LCFI6:
+ 140              		.cfi_def_cfa_register 7
+ 216:.\Generated_Source\PSoC5/Write_Timer.c ****     if(Write_Timer_initVar == 0u)
+ 141              		.loc 1 216 0
+ 142 0004 40F20003 		movw	r3, #:lower16:Write_Timer_initVar
+ 143 0008 C0F20003 		movt	r3, #:upper16:Write_Timer_initVar
+ 144 000c 1B78     		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 145 000e 002B     		cmp	r3, #0
+ 146 0010 08D1     		bne	.L4
+ 217:.\Generated_Source\PSoC5/Write_Timer.c ****     {
+ 218:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_Init();
+ 147              		.loc 1 218 0
+ 148 0012 FFF7FEFF 		bl	Write_Timer_Init
+ 219:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 220:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_initVar = 1u;   /* Clear this bit for Initialization */
+ 149              		.loc 1 220 0
+ 150 0016 40F20003 		movw	r3, #:lower16:Write_Timer_initVar
+ 151 001a C0F20003 		movt	r3, #:upper16:Write_Timer_initVar
+ 152 001e 4FF00102 		mov	r2, #1
+ 153 0022 1A70     		strb	r2, [r3, #0]
+ 154              	.L4:
+ 221:.\Generated_Source\PSoC5/Write_Timer.c ****     }
+ 222:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 223:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Enable the Timer */
+ 224:.\Generated_Source\PSoC5/Write_Timer.c ****     Write_Timer_Enable();
+ 155              		.loc 1 224 0
+ 156 0024 FFF7FEFF 		bl	Write_Timer_Enable
+ 225:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 157              		.loc 1 225 0
+ 158 0028 80BD     		pop	{r7, pc}
+ 159              		.cfi_endproc
+ 160              	.LFE2:
+ 161              		.size	Write_Timer_Start, .-Write_Timer_Start
+ 162 002a 00BF     		.section	.text.Write_Timer_Stop,"ax",%progbits
+ 163              		.align	2
+ 164              		.global	Write_Timer_Stop
+ 165              		.thumb
+ 166              		.thumb_func
+ 167              		.type	Write_Timer_Stop, %function
+ 168              	Write_Timer_Stop:
+ 169              	.LFB3:
+ 226:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 227:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 228:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 229:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_Stop
+ 230:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 8
+
+
+ 231:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 232:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 233:.\Generated_Source\PSoC5/Write_Timer.c **** *  The stop function halts the timer, but does not change any modes or disable
+ 234:.\Generated_Source\PSoC5/Write_Timer.c **** *  interrupts.
+ 235:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 236:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 237:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 238:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 239:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 240:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 241:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 242:.\Generated_Source\PSoC5/Write_Timer.c **** * Side Effects: If the Enable mode is set to Hardware only then this function
+ 243:.\Generated_Source\PSoC5/Write_Timer.c **** *               has no effect on the operation of the timer.
+ 244:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 245:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 246:.\Generated_Source\PSoC5/Write_Timer.c **** void Write_Timer_Stop(void) 
+ 247:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 170              		.loc 1 247 0
+ 171              		.cfi_startproc
+ 172              		@ args = 0, pretend = 0, frame = 0
+ 173              		@ frame_needed = 1, uses_anonymous_args = 0
+ 174              		@ link register save eliminated.
+ 175 0000 80B4     		push	{r7}
+ 176              	.LCFI7:
+ 177              		.cfi_def_cfa_offset 4
+ 178              		.cfi_offset 7, -4
+ 179 0002 00AF     		add	r7, sp, #0
+ 180              	.LCFI8:
+ 181              		.cfi_def_cfa_register 7
+ 248:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Disable Timer */
+ 249:.\Generated_Source\PSoC5/Write_Timer.c ****     #if(!Write_Timer_ControlRegRemoved || Write_Timer_UsingFixedFunction)
+ 250:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_CONTROL &= ((uint8)(~Write_Timer_CTRL_ENABLE));
+ 182              		.loc 1 250 0
+ 183 0004 46F27E43 		movw	r3, #25726
+ 184 0008 C4F20003 		movt	r3, 16384
+ 185 000c 46F27E42 		movw	r2, #25726
+ 186 0010 C4F20002 		movt	r2, 16384
+ 187 0014 1278     		ldrb	r2, [r2, #0]
+ 188 0016 D2B2     		uxtb	r2, r2
+ 189 0018 02F07F02 		and	r2, r2, #127
+ 190 001c D2B2     		uxtb	r2, r2
+ 191 001e 1A70     		strb	r2, [r3, #0]
+ 251:.\Generated_Source\PSoC5/Write_Timer.c ****     #endif /* Remove assignment if control register is removed */
+ 252:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 253:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Globally disable the Fixed Function Block chosen */
+ 254:.\Generated_Source\PSoC5/Write_Timer.c ****     #if (Write_Timer_UsingFixedFunction)
+ 255:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_GLOBAL_ENABLE &= ((uint8)(~Write_Timer_BLOCK_EN_MASK));
+ 256:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_GLOBAL_STBY_ENABLE &= ((uint8)(~Write_Timer_BLOCK_STBY_EN_MASK));
+ 257:.\Generated_Source\PSoC5/Write_Timer.c ****     #endif /* Disable global enable for the Timer Fixed function block to stop the Timer*/
+ 258:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 192              		.loc 1 258 0
+ 193 0020 BD46     		mov	sp, r7
+ 194 0022 80BC     		pop	{r7}
+ 195 0024 7047     		bx	lr
+ 196              		.cfi_endproc
+ 197              	.LFE3:
+ 198              		.size	Write_Timer_Stop, .-Write_Timer_Stop
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 9
+
+
+ 199 0026 00BF     		.section	.text.Write_Timer_SetInterruptMode,"ax",%progbits
+ 200              		.align	2
+ 201              		.global	Write_Timer_SetInterruptMode
+ 202              		.thumb
+ 203              		.thumb_func
+ 204              		.type	Write_Timer_SetInterruptMode, %function
+ 205              	Write_Timer_SetInterruptMode:
+ 206              	.LFB4:
+ 259:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 260:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 261:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 262:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_SetInterruptMode
+ 263:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 264:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 265:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 266:.\Generated_Source\PSoC5/Write_Timer.c **** *  This function selects which of the interrupt inputs may cause an interrupt.
+ 267:.\Generated_Source\PSoC5/Write_Timer.c **** *  The twosources are caputure and terminal.  One, both or neither may
+ 268:.\Generated_Source\PSoC5/Write_Timer.c **** *  be selected.
+ 269:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 270:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 271:.\Generated_Source\PSoC5/Write_Timer.c **** *  interruptMode:   This parameter is used to enable interrups on either/or
+ 272:.\Generated_Source\PSoC5/Write_Timer.c **** *                   terminal count or capture.
+ 273:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 274:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 275:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 276:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 277:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 278:.\Generated_Source\PSoC5/Write_Timer.c **** void Write_Timer_SetInterruptMode(uint8 interruptMode) 
+ 279:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 207              		.loc 1 279 0
+ 208              		.cfi_startproc
+ 209              		@ args = 0, pretend = 0, frame = 8
+ 210              		@ frame_needed = 1, uses_anonymous_args = 0
+ 211              		@ link register save eliminated.
+ 212 0000 80B4     		push	{r7}
+ 213              	.LCFI9:
+ 214              		.cfi_def_cfa_offset 4
+ 215              		.cfi_offset 7, -4
+ 216 0002 83B0     		sub	sp, sp, #12
+ 217              	.LCFI10:
+ 218              		.cfi_def_cfa_offset 16
+ 219 0004 00AF     		add	r7, sp, #0
+ 220              	.LCFI11:
+ 221              		.cfi_def_cfa_register 7
+ 222 0006 0346     		mov	r3, r0
+ 223 0008 FB71     		strb	r3, [r7, #7]
+ 280:.\Generated_Source\PSoC5/Write_Timer.c ****     Write_Timer_STATUS_MASK = interruptMode;
+ 224              		.loc 1 280 0
+ 225 000a 46F28E43 		movw	r3, #25742
+ 226 000e C4F20003 		movt	r3, 16384
+ 227 0012 FA79     		ldrb	r2, [r7, #7]
+ 228 0014 1A70     		strb	r2, [r3, #0]
+ 281:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 229              		.loc 1 281 0
+ 230 0016 07F10C07 		add	r7, r7, #12
+ 231 001a BD46     		mov	sp, r7
+ 232 001c 80BC     		pop	{r7}
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 10
+
+
+ 233 001e 7047     		bx	lr
+ 234              		.cfi_endproc
+ 235              	.LFE4:
+ 236              		.size	Write_Timer_SetInterruptMode, .-Write_Timer_SetInterruptMode
+ 237              		.section	.text.Write_Timer_SoftwareCapture,"ax",%progbits
+ 238              		.align	2
+ 239              		.global	Write_Timer_SoftwareCapture
+ 240              		.thumb
+ 241              		.thumb_func
+ 242              		.type	Write_Timer_SoftwareCapture, %function
+ 243              	Write_Timer_SoftwareCapture:
+ 244              	.LFB5:
+ 282:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 283:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 284:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 285:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_SoftwareCapture
+ 286:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 287:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 288:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 289:.\Generated_Source\PSoC5/Write_Timer.c **** *  This function forces a capture independent of the capture signal.
+ 290:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 291:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 292:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 293:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 294:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 295:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 296:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 297:.\Generated_Source\PSoC5/Write_Timer.c **** * Side Effects:
+ 298:.\Generated_Source\PSoC5/Write_Timer.c **** *  An existing hardware capture could be overwritten.
+ 299:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 300:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 301:.\Generated_Source\PSoC5/Write_Timer.c **** void Write_Timer_SoftwareCapture(void) 
+ 302:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 245              		.loc 1 302 0
+ 246              		.cfi_startproc
+ 247              		@ args = 0, pretend = 0, frame = 0
+ 248              		@ frame_needed = 1, uses_anonymous_args = 0
+ 249              		@ link register save eliminated.
+ 250 0000 80B4     		push	{r7}
+ 251              	.LCFI12:
+ 252              		.cfi_def_cfa_offset 4
+ 253              		.cfi_offset 7, -4
+ 254 0002 00AF     		add	r7, sp, #0
+ 255              	.LCFI13:
+ 256              		.cfi_def_cfa_register 7
+ 303:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Generate a software capture by reading the counter register */
+ 304:.\Generated_Source\PSoC5/Write_Timer.c ****     (void)Write_Timer_COUNTER_LSB;
+ 257              		.loc 1 304 0
+ 258 0004 46F20E43 		movw	r3, #25614
+ 259 0008 C4F20003 		movt	r3, 16384
+ 260 000c 1B78     		ldrb	r3, [r3, #0]
+ 305:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Capture Data is now in the FIFO */
+ 306:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 261              		.loc 1 306 0
+ 262 000e BD46     		mov	sp, r7
+ 263 0010 80BC     		pop	{r7}
+ 264 0012 7047     		bx	lr
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 11
+
+
+ 265              		.cfi_endproc
+ 266              	.LFE5:
+ 267              		.size	Write_Timer_SoftwareCapture, .-Write_Timer_SoftwareCapture
+ 268              		.section	.text.Write_Timer_ReadStatusRegister,"ax",%progbits
+ 269              		.align	2
+ 270              		.global	Write_Timer_ReadStatusRegister
+ 271              		.thumb
+ 272              		.thumb_func
+ 273              		.type	Write_Timer_ReadStatusRegister, %function
+ 274              	Write_Timer_ReadStatusRegister:
+ 275              	.LFB6:
+ 307:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 308:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 309:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 310:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_ReadStatusRegister
+ 311:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 312:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 313:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 314:.\Generated_Source\PSoC5/Write_Timer.c **** *  Reads the status register and returns it's state. This function should use
+ 315:.\Generated_Source\PSoC5/Write_Timer.c **** *  defined types for the bit-field information as the bits in this register may
+ 316:.\Generated_Source\PSoC5/Write_Timer.c **** *  be permuteable.
+ 317:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 318:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 319:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 320:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 321:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 322:.\Generated_Source\PSoC5/Write_Timer.c **** *  The contents of the status register
+ 323:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 324:.\Generated_Source\PSoC5/Write_Timer.c **** * Side Effects:
+ 325:.\Generated_Source\PSoC5/Write_Timer.c **** *  Status register bits may be clear on read.
+ 326:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 327:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 328:.\Generated_Source\PSoC5/Write_Timer.c **** uint8   Write_Timer_ReadStatusRegister(void) 
+ 329:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 276              		.loc 1 329 0
+ 277              		.cfi_startproc
+ 278              		@ args = 0, pretend = 0, frame = 0
+ 279              		@ frame_needed = 1, uses_anonymous_args = 0
+ 280              		@ link register save eliminated.
+ 281 0000 80B4     		push	{r7}
+ 282              	.LCFI14:
+ 283              		.cfi_def_cfa_offset 4
+ 284              		.cfi_offset 7, -4
+ 285 0002 00AF     		add	r7, sp, #0
+ 286              	.LCFI15:
+ 287              		.cfi_def_cfa_register 7
+ 330:.\Generated_Source\PSoC5/Write_Timer.c ****     return (Write_Timer_STATUS);
+ 288              		.loc 1 330 0
+ 289 0004 46F26E43 		movw	r3, #25710
+ 290 0008 C4F20003 		movt	r3, 16384
+ 291 000c 1B78     		ldrb	r3, [r3, #0]
+ 292 000e DBB2     		uxtb	r3, r3
+ 331:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 293              		.loc 1 331 0
+ 294 0010 1846     		mov	r0, r3
+ 295 0012 BD46     		mov	sp, r7
+ 296 0014 80BC     		pop	{r7}
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 12
+
+
+ 297 0016 7047     		bx	lr
+ 298              		.cfi_endproc
+ 299              	.LFE6:
+ 300              		.size	Write_Timer_ReadStatusRegister, .-Write_Timer_ReadStatusRegister
+ 301              		.section	.text.Write_Timer_ReadControlRegister,"ax",%progbits
+ 302              		.align	2
+ 303              		.global	Write_Timer_ReadControlRegister
+ 304              		.thumb
+ 305              		.thumb_func
+ 306              		.type	Write_Timer_ReadControlRegister, %function
+ 307              	Write_Timer_ReadControlRegister:
+ 308              	.LFB7:
+ 332:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 333:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 334:.\Generated_Source\PSoC5/Write_Timer.c **** #if (!Write_Timer_ControlRegRemoved) /* Remove API if control register is removed */
+ 335:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 336:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 337:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 338:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_ReadControlRegister
+ 339:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 340:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 341:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 342:.\Generated_Source\PSoC5/Write_Timer.c **** *  Reads the control register and returns it's value.
+ 343:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 344:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 345:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 346:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 347:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 348:.\Generated_Source\PSoC5/Write_Timer.c **** *  The contents of the control register
+ 349:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 350:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 351:.\Generated_Source\PSoC5/Write_Timer.c **** uint8 Write_Timer_ReadControlRegister(void) 
+ 352:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 309              		.loc 1 352 0
+ 310              		.cfi_startproc
+ 311              		@ args = 0, pretend = 0, frame = 0
+ 312              		@ frame_needed = 1, uses_anonymous_args = 0
+ 313              		@ link register save eliminated.
+ 314 0000 80B4     		push	{r7}
+ 315              	.LCFI16:
+ 316              		.cfi_def_cfa_offset 4
+ 317              		.cfi_offset 7, -4
+ 318 0002 00AF     		add	r7, sp, #0
+ 319              	.LCFI17:
+ 320              		.cfi_def_cfa_register 7
+ 353:.\Generated_Source\PSoC5/Write_Timer.c ****     return ((uint8)Write_Timer_CONTROL);
+ 321              		.loc 1 353 0
+ 322 0004 46F27E43 		movw	r3, #25726
+ 323 0008 C4F20003 		movt	r3, 16384
+ 324 000c 1B78     		ldrb	r3, [r3, #0]
+ 325 000e DBB2     		uxtb	r3, r3
+ 354:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 326              		.loc 1 354 0
+ 327 0010 1846     		mov	r0, r3
+ 328 0012 BD46     		mov	sp, r7
+ 329 0014 80BC     		pop	{r7}
+ 330 0016 7047     		bx	lr
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 13
+
+
+ 331              		.cfi_endproc
+ 332              	.LFE7:
+ 333              		.size	Write_Timer_ReadControlRegister, .-Write_Timer_ReadControlRegister
+ 334              		.section	.text.Write_Timer_WriteControlRegister,"ax",%progbits
+ 335              		.align	2
+ 336              		.global	Write_Timer_WriteControlRegister
+ 337              		.thumb
+ 338              		.thumb_func
+ 339              		.type	Write_Timer_WriteControlRegister, %function
+ 340              	Write_Timer_WriteControlRegister:
+ 341              	.LFB8:
+ 355:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 356:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 357:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 358:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_WriteControlRegister
+ 359:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 360:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 361:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 362:.\Generated_Source\PSoC5/Write_Timer.c **** *  Sets the bit-field of the control register.
+ 363:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 364:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 365:.\Generated_Source\PSoC5/Write_Timer.c **** *  control: The contents of the control register
+ 366:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 367:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 368:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 369:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 370:.\Generated_Source\PSoC5/Write_Timer.c **** void Write_Timer_WriteControlRegister(uint8 control) 
+ 371:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 342              		.loc 1 371 0
+ 343              		.cfi_startproc
+ 344              		@ args = 0, pretend = 0, frame = 8
+ 345              		@ frame_needed = 1, uses_anonymous_args = 0
+ 346              		@ link register save eliminated.
+ 347 0000 80B4     		push	{r7}
+ 348              	.LCFI18:
+ 349              		.cfi_def_cfa_offset 4
+ 350              		.cfi_offset 7, -4
+ 351 0002 83B0     		sub	sp, sp, #12
+ 352              	.LCFI19:
+ 353              		.cfi_def_cfa_offset 16
+ 354 0004 00AF     		add	r7, sp, #0
+ 355              	.LCFI20:
+ 356              		.cfi_def_cfa_register 7
+ 357 0006 0346     		mov	r3, r0
+ 358 0008 FB71     		strb	r3, [r7, #7]
+ 372:.\Generated_Source\PSoC5/Write_Timer.c ****     Write_Timer_CONTROL = control;
+ 359              		.loc 1 372 0
+ 360 000a 46F27E43 		movw	r3, #25726
+ 361 000e C4F20003 		movt	r3, 16384
+ 362 0012 FA79     		ldrb	r2, [r7, #7]
+ 363 0014 1A70     		strb	r2, [r3, #0]
+ 373:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 364              		.loc 1 373 0
+ 365 0016 07F10C07 		add	r7, r7, #12
+ 366 001a BD46     		mov	sp, r7
+ 367 001c 80BC     		pop	{r7}
+ 368 001e 7047     		bx	lr
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 14
+
+
+ 369              		.cfi_endproc
+ 370              	.LFE8:
+ 371              		.size	Write_Timer_WriteControlRegister, .-Write_Timer_WriteControlRegister
+ 372              		.section	.text.Write_Timer_ReadPeriod,"ax",%progbits
+ 373              		.align	2
+ 374              		.global	Write_Timer_ReadPeriod
+ 375              		.thumb
+ 376              		.thumb_func
+ 377              		.type	Write_Timer_ReadPeriod, %function
+ 378              	Write_Timer_ReadPeriod:
+ 379              	.LFB9:
+ 374:.\Generated_Source\PSoC5/Write_Timer.c **** #endif /* Remove API if control register is removed */
+ 375:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 376:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 377:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 378:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_ReadPeriod
+ 379:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 380:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 381:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 382:.\Generated_Source\PSoC5/Write_Timer.c **** *  This function returns the current value of the Period.
+ 383:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 384:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 385:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 386:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 387:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 388:.\Generated_Source\PSoC5/Write_Timer.c **** *  The present value of the counter.
+ 389:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 390:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 391:.\Generated_Source\PSoC5/Write_Timer.c **** uint8 Write_Timer_ReadPeriod(void) 
+ 392:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 380              		.loc 1 392 0
+ 381              		.cfi_startproc
+ 382              		@ args = 0, pretend = 0, frame = 0
+ 383              		@ frame_needed = 1, uses_anonymous_args = 0
+ 384              		@ link register save eliminated.
+ 385 0000 80B4     		push	{r7}
+ 386              	.LCFI21:
+ 387              		.cfi_def_cfa_offset 4
+ 388              		.cfi_offset 7, -4
+ 389 0002 00AF     		add	r7, sp, #0
+ 390              	.LCFI22:
+ 391              		.cfi_def_cfa_register 7
+ 393:.\Generated_Source\PSoC5/Write_Timer.c ****    #if(Write_Timer_UsingFixedFunction)
+ 394:.\Generated_Source\PSoC5/Write_Timer.c ****        return ((uint8)CY_GET_REG16(Write_Timer_PERIOD_LSB_PTR));
+ 395:.\Generated_Source\PSoC5/Write_Timer.c ****    #else
+ 396:.\Generated_Source\PSoC5/Write_Timer.c ****        return (CY_GET_REG8(Write_Timer_PERIOD_LSB_PTR));
+ 392              		.loc 1 396 0
+ 393 0004 46F22E43 		movw	r3, #25646
+ 394 0008 C4F20003 		movt	r3, 16384
+ 395 000c 1B78     		ldrb	r3, [r3, #0]
+ 396 000e DBB2     		uxtb	r3, r3
+ 397:.\Generated_Source\PSoC5/Write_Timer.c ****    #endif /* (Write_Timer_UsingFixedFunction) */
+ 398:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 397              		.loc 1 398 0
+ 398 0010 1846     		mov	r0, r3
+ 399 0012 BD46     		mov	sp, r7
+ 400 0014 80BC     		pop	{r7}
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 15
+
+
+ 401 0016 7047     		bx	lr
+ 402              		.cfi_endproc
+ 403              	.LFE9:
+ 404              		.size	Write_Timer_ReadPeriod, .-Write_Timer_ReadPeriod
+ 405              		.section	.text.Write_Timer_WritePeriod,"ax",%progbits
+ 406              		.align	2
+ 407              		.global	Write_Timer_WritePeriod
+ 408              		.thumb
+ 409              		.thumb_func
+ 410              		.type	Write_Timer_WritePeriod, %function
+ 411              	Write_Timer_WritePeriod:
+ 412              	.LFB10:
+ 399:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 400:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 401:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 402:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_WritePeriod
+ 403:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 404:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 405:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 406:.\Generated_Source\PSoC5/Write_Timer.c **** *  This function is used to change the period of the counter.  The new period
+ 407:.\Generated_Source\PSoC5/Write_Timer.c **** *  will be loaded the next time terminal count is detected.
+ 408:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 409:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 410:.\Generated_Source\PSoC5/Write_Timer.c **** *  period: This value may be between 1 and (2^Resolution)-1.  A value of 0 will
+ 411:.\Generated_Source\PSoC5/Write_Timer.c **** *          result in the counter remaining at zero.
+ 412:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 413:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 414:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 415:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 416:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 417:.\Generated_Source\PSoC5/Write_Timer.c **** void Write_Timer_WritePeriod(uint8 period) 
+ 418:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 413              		.loc 1 418 0
+ 414              		.cfi_startproc
+ 415              		@ args = 0, pretend = 0, frame = 8
+ 416              		@ frame_needed = 1, uses_anonymous_args = 0
+ 417              		@ link register save eliminated.
+ 418 0000 80B4     		push	{r7}
+ 419              	.LCFI23:
+ 420              		.cfi_def_cfa_offset 4
+ 421              		.cfi_offset 7, -4
+ 422 0002 83B0     		sub	sp, sp, #12
+ 423              	.LCFI24:
+ 424              		.cfi_def_cfa_offset 16
+ 425 0004 00AF     		add	r7, sp, #0
+ 426              	.LCFI25:
+ 427              		.cfi_def_cfa_register 7
+ 428 0006 0346     		mov	r3, r0
+ 429 0008 FB71     		strb	r3, [r7, #7]
+ 419:.\Generated_Source\PSoC5/Write_Timer.c ****     #if(Write_Timer_UsingFixedFunction)
+ 420:.\Generated_Source\PSoC5/Write_Timer.c ****         uint16 period_temp = (uint16)period;
+ 421:.\Generated_Source\PSoC5/Write_Timer.c ****         CY_SET_REG16(Write_Timer_PERIOD_LSB_PTR, period_temp);
+ 422:.\Generated_Source\PSoC5/Write_Timer.c ****     #else
+ 423:.\Generated_Source\PSoC5/Write_Timer.c ****         CY_SET_REG8(Write_Timer_PERIOD_LSB_PTR, period);
+ 430              		.loc 1 423 0
+ 431 000a 46F22E43 		movw	r3, #25646
+ 432 000e C4F20003 		movt	r3, 16384
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 16
+
+
+ 433 0012 FA79     		ldrb	r2, [r7, #7]
+ 434 0014 1A70     		strb	r2, [r3, #0]
+ 424:.\Generated_Source\PSoC5/Write_Timer.c ****     #endif /*Write Period value with appropriate resolution suffix depending on UDB or fixed functi
+ 425:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 435              		.loc 1 425 0
+ 436 0016 07F10C07 		add	r7, r7, #12
+ 437 001a BD46     		mov	sp, r7
+ 438 001c 80BC     		pop	{r7}
+ 439 001e 7047     		bx	lr
+ 440              		.cfi_endproc
+ 441              	.LFE10:
+ 442              		.size	Write_Timer_WritePeriod, .-Write_Timer_WritePeriod
+ 443              		.section	.text.Write_Timer_ReadCapture,"ax",%progbits
+ 444              		.align	2
+ 445              		.global	Write_Timer_ReadCapture
+ 446              		.thumb
+ 447              		.thumb_func
+ 448              		.type	Write_Timer_ReadCapture, %function
+ 449              	Write_Timer_ReadCapture:
+ 450              	.LFB11:
+ 426:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 427:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 428:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 429:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_ReadCapture
+ 430:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 431:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 432:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 433:.\Generated_Source\PSoC5/Write_Timer.c **** *  This function returns the last value captured.
+ 434:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 435:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 436:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 437:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 438:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 439:.\Generated_Source\PSoC5/Write_Timer.c **** *  Present Capture value.
+ 440:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 441:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 442:.\Generated_Source\PSoC5/Write_Timer.c **** uint8 Write_Timer_ReadCapture(void) 
+ 443:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 451              		.loc 1 443 0
+ 452              		.cfi_startproc
+ 453              		@ args = 0, pretend = 0, frame = 0
+ 454              		@ frame_needed = 1, uses_anonymous_args = 0
+ 455              		@ link register save eliminated.
+ 456 0000 80B4     		push	{r7}
+ 457              	.LCFI26:
+ 458              		.cfi_def_cfa_offset 4
+ 459              		.cfi_offset 7, -4
+ 460 0002 00AF     		add	r7, sp, #0
+ 461              	.LCFI27:
+ 462              		.cfi_def_cfa_register 7
+ 444:.\Generated_Source\PSoC5/Write_Timer.c ****    #if(Write_Timer_UsingFixedFunction)
+ 445:.\Generated_Source\PSoC5/Write_Timer.c ****        return ((uint8)CY_GET_REG16(Write_Timer_CAPTURE_LSB_PTR));
+ 446:.\Generated_Source\PSoC5/Write_Timer.c ****    #else
+ 447:.\Generated_Source\PSoC5/Write_Timer.c ****        return (CY_GET_REG8(Write_Timer_CAPTURE_LSB_PTR));
+ 463              		.loc 1 447 0
+ 464 0004 46F24E43 		movw	r3, #25678
+ 465 0008 C4F20003 		movt	r3, 16384
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 17
+
+
+ 466 000c 1B78     		ldrb	r3, [r3, #0]
+ 467 000e DBB2     		uxtb	r3, r3
+ 448:.\Generated_Source\PSoC5/Write_Timer.c ****    #endif /* (Write_Timer_UsingFixedFunction) */
+ 449:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 468              		.loc 1 449 0
+ 469 0010 1846     		mov	r0, r3
+ 470 0012 BD46     		mov	sp, r7
+ 471 0014 80BC     		pop	{r7}
+ 472 0016 7047     		bx	lr
+ 473              		.cfi_endproc
+ 474              	.LFE11:
+ 475              		.size	Write_Timer_ReadCapture, .-Write_Timer_ReadCapture
+ 476              		.section	.text.Write_Timer_WriteCounter,"ax",%progbits
+ 477              		.align	2
+ 478              		.global	Write_Timer_WriteCounter
+ 479              		.thumb
+ 480              		.thumb_func
+ 481              		.type	Write_Timer_WriteCounter, %function
+ 482              	Write_Timer_WriteCounter:
+ 483              	.LFB12:
+ 450:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 451:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 452:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 453:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_WriteCounter
+ 454:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 455:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 456:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 457:.\Generated_Source\PSoC5/Write_Timer.c **** *  This funtion is used to set the counter to a specific value
+ 458:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 459:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 460:.\Generated_Source\PSoC5/Write_Timer.c **** *  counter:  New counter value.
+ 461:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 462:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 463:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 464:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 465:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 466:.\Generated_Source\PSoC5/Write_Timer.c **** void Write_Timer_WriteCounter(uint8 counter) \
+ 467:.\Generated_Source\PSoC5/Write_Timer.c ****                                    
+ 468:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 484              		.loc 1 468 0
+ 485              		.cfi_startproc
+ 486              		@ args = 0, pretend = 0, frame = 8
+ 487              		@ frame_needed = 1, uses_anonymous_args = 0
+ 488              		@ link register save eliminated.
+ 489 0000 80B4     		push	{r7}
+ 490              	.LCFI28:
+ 491              		.cfi_def_cfa_offset 4
+ 492              		.cfi_offset 7, -4
+ 493 0002 83B0     		sub	sp, sp, #12
+ 494              	.LCFI29:
+ 495              		.cfi_def_cfa_offset 16
+ 496 0004 00AF     		add	r7, sp, #0
+ 497              	.LCFI30:
+ 498              		.cfi_def_cfa_register 7
+ 499 0006 0346     		mov	r3, r0
+ 500 0008 FB71     		strb	r3, [r7, #7]
+ 469:.\Generated_Source\PSoC5/Write_Timer.c ****    #if(Write_Timer_UsingFixedFunction)
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 18
+
+
+ 470:.\Generated_Source\PSoC5/Write_Timer.c ****         /* This functionality is removed until a FixedFunction HW update to
+ 471:.\Generated_Source\PSoC5/Write_Timer.c ****          * allow this register to be written
+ 472:.\Generated_Source\PSoC5/Write_Timer.c ****          */
+ 473:.\Generated_Source\PSoC5/Write_Timer.c ****         CY_SET_REG16(Write_Timer_COUNTER_LSB_PTR, (uint16)counter);
+ 474:.\Generated_Source\PSoC5/Write_Timer.c ****         
+ 475:.\Generated_Source\PSoC5/Write_Timer.c ****     #else
+ 476:.\Generated_Source\PSoC5/Write_Timer.c ****         CY_SET_REG8(Write_Timer_COUNTER_LSB_PTR, counter);
+ 501              		.loc 1 476 0
+ 502 000a 46F20E43 		movw	r3, #25614
+ 503 000e C4F20003 		movt	r3, 16384
+ 504 0012 FA79     		ldrb	r2, [r7, #7]
+ 505 0014 1A70     		strb	r2, [r3, #0]
+ 477:.\Generated_Source\PSoC5/Write_Timer.c ****     #endif /* Set Write Counter only for the UDB implementation (Write Counter not available in fix
+ 478:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 506              		.loc 1 478 0
+ 507 0016 07F10C07 		add	r7, r7, #12
+ 508 001a BD46     		mov	sp, r7
+ 509 001c 80BC     		pop	{r7}
+ 510 001e 7047     		bx	lr
+ 511              		.cfi_endproc
+ 512              	.LFE12:
+ 513              		.size	Write_Timer_WriteCounter, .-Write_Timer_WriteCounter
+ 514              		.section	.text.Write_Timer_ReadCounter,"ax",%progbits
+ 515              		.align	2
+ 516              		.global	Write_Timer_ReadCounter
+ 517              		.thumb
+ 518              		.thumb_func
+ 519              		.type	Write_Timer_ReadCounter, %function
+ 520              	Write_Timer_ReadCounter:
+ 521              	.LFB13:
+ 479:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 480:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 481:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 482:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_ReadCounter
+ 483:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 484:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 485:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 486:.\Generated_Source\PSoC5/Write_Timer.c **** *  This function returns the current counter value.
+ 487:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 488:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 489:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 490:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 491:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 492:.\Generated_Source\PSoC5/Write_Timer.c **** *  Present compare value.
+ 493:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 494:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 495:.\Generated_Source\PSoC5/Write_Timer.c **** uint8 Write_Timer_ReadCounter(void) 
+ 496:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 522              		.loc 1 496 0
+ 523              		.cfi_startproc
+ 524              		@ args = 0, pretend = 0, frame = 0
+ 525              		@ frame_needed = 1, uses_anonymous_args = 0
+ 526              		@ link register save eliminated.
+ 527 0000 80B4     		push	{r7}
+ 528              	.LCFI31:
+ 529              		.cfi_def_cfa_offset 4
+ 530              		.cfi_offset 7, -4
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 19
+
+
+ 531 0002 00AF     		add	r7, sp, #0
+ 532              	.LCFI32:
+ 533              		.cfi_def_cfa_register 7
+ 497:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 498:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Force capture by reading Accumulator */
+ 499:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Must first do a software capture to be able to read the counter */
+ 500:.\Generated_Source\PSoC5/Write_Timer.c ****     /* It is up to the user code to make sure there isn't already captured data in the FIFO */
+ 501:.\Generated_Source\PSoC5/Write_Timer.c ****     (void)Write_Timer_COUNTER_LSB;
+ 534              		.loc 1 501 0
+ 535 0004 46F20E43 		movw	r3, #25614
+ 536 0008 C4F20003 		movt	r3, 16384
+ 537 000c 1B78     		ldrb	r3, [r3, #0]
+ 502:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 503:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Read the data from the FIFO (or capture register for Fixed Function)*/
+ 504:.\Generated_Source\PSoC5/Write_Timer.c ****     #if(Write_Timer_UsingFixedFunction)
+ 505:.\Generated_Source\PSoC5/Write_Timer.c ****         return ((uint8)CY_GET_REG16(Write_Timer_CAPTURE_LSB_PTR));
+ 506:.\Generated_Source\PSoC5/Write_Timer.c ****     #else
+ 507:.\Generated_Source\PSoC5/Write_Timer.c ****         return (CY_GET_REG8(Write_Timer_CAPTURE_LSB_PTR));
+ 538              		.loc 1 507 0
+ 539 000e 46F24E43 		movw	r3, #25678
+ 540 0012 C4F20003 		movt	r3, 16384
+ 541 0016 1B78     		ldrb	r3, [r3, #0]
+ 542 0018 DBB2     		uxtb	r3, r3
+ 508:.\Generated_Source\PSoC5/Write_Timer.c ****     #endif /* (Write_Timer_UsingFixedFunction) */
+ 509:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 543              		.loc 1 509 0
+ 544 001a 1846     		mov	r0, r3
+ 545 001c BD46     		mov	sp, r7
+ 546 001e 80BC     		pop	{r7}
+ 547 0020 7047     		bx	lr
+ 548              		.cfi_endproc
+ 549              	.LFE13:
+ 550              		.size	Write_Timer_ReadCounter, .-Write_Timer_ReadCounter
+ 551 0022 00BF     		.section	.text.Write_Timer_ClearFIFO,"ax",%progbits
+ 552              		.align	2
+ 553              		.global	Write_Timer_ClearFIFO
+ 554              		.thumb
+ 555              		.thumb_func
+ 556              		.type	Write_Timer_ClearFIFO, %function
+ 557              	Write_Timer_ClearFIFO:
+ 558              	.LFB14:
+ 510:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 511:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 512:.\Generated_Source\PSoC5/Write_Timer.c **** #if(!Write_Timer_UsingFixedFunction) /* UDB Specific Functions */
+ 513:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 514:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 515:.\Generated_Source\PSoC5/Write_Timer.c ****  * The functions below this point are only available using the UDB
+ 516:.\Generated_Source\PSoC5/Write_Timer.c ****  * implementation.  If a feature is selected, then the API is enabled.
+ 517:.\Generated_Source\PSoC5/Write_Timer.c ****  ******************************************************************************/
+ 518:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 519:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 520:.\Generated_Source\PSoC5/Write_Timer.c **** #if (Write_Timer_SoftwareCaptureMode)
+ 521:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 522:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 523:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 524:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_SetCaptureMode
+ 525:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 20
+
+
+ 526:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 527:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 528:.\Generated_Source\PSoC5/Write_Timer.c **** *  This function sets the capture mode to either rising or falling edge.
+ 529:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 530:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 531:.\Generated_Source\PSoC5/Write_Timer.c **** *  captureMode: This parameter sets the capture mode of the UDB capture feature
+ 532:.\Generated_Source\PSoC5/Write_Timer.c **** *  The parameter values are defined using the
+ 533:.\Generated_Source\PSoC5/Write_Timer.c **** *  #define Write_Timer__B_TIMER__CM_NONE 0
+ 534:.\Generated_Source\PSoC5/Write_Timer.c **** #define Write_Timer__B_TIMER__CM_RISINGEDGE 1
+ 535:.\Generated_Source\PSoC5/Write_Timer.c **** #define Write_Timer__B_TIMER__CM_FALLINGEDGE 2
+ 536:.\Generated_Source\PSoC5/Write_Timer.c **** #define Write_Timer__B_TIMER__CM_EITHEREDGE 3
+ 537:.\Generated_Source\PSoC5/Write_Timer.c **** #define Write_Timer__B_TIMER__CM_SOFTWARE 4
+ 538:.\Generated_Source\PSoC5/Write_Timer.c ****  identifiers
+ 539:.\Generated_Source\PSoC5/Write_Timer.c **** *  The following are the possible values of the parameter
+ 540:.\Generated_Source\PSoC5/Write_Timer.c **** *  Write_Timer__B_TIMER__CM_NONE        - Set Capture mode to None
+ 541:.\Generated_Source\PSoC5/Write_Timer.c **** *  Write_Timer__B_TIMER__CM_RISINGEDGE  - Rising edge of Capture input
+ 542:.\Generated_Source\PSoC5/Write_Timer.c **** *  Write_Timer__B_TIMER__CM_FALLINGEDGE - Falling edge of Capture input
+ 543:.\Generated_Source\PSoC5/Write_Timer.c **** *  Write_Timer__B_TIMER__CM_EITHEREDGE  - Either edge of Capture input
+ 544:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 545:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 546:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 547:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 548:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 549:.\Generated_Source\PSoC5/Write_Timer.c **** void Write_Timer_SetCaptureMode(uint8 captureMode) 
+ 550:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 551:.\Generated_Source\PSoC5/Write_Timer.c ****     /* This must only set to two bits of the control register associated */
+ 552:.\Generated_Source\PSoC5/Write_Timer.c ****     captureMode = ((uint8)((uint8)captureMode << Write_Timer_CTRL_CAP_MODE_SHIFT));
+ 553:.\Generated_Source\PSoC5/Write_Timer.c ****     captureMode &= (Write_Timer_CTRL_CAP_MODE_MASK);
+ 554:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 555:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Clear the Current Setting */
+ 556:.\Generated_Source\PSoC5/Write_Timer.c ****     Write_Timer_CONTROL &= ((uint8)(~Write_Timer_CTRL_CAP_MODE_MASK));
+ 557:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 558:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Write The New Setting */
+ 559:.\Generated_Source\PSoC5/Write_Timer.c ****     Write_Timer_CONTROL |= captureMode;
+ 560:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 561:.\Generated_Source\PSoC5/Write_Timer.c **** #endif /* Remove API if Capture Mode is not Software Controlled */
+ 562:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 563:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 564:.\Generated_Source\PSoC5/Write_Timer.c **** #if (Write_Timer_SoftwareTriggerMode)
+ 565:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 566:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 567:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 568:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_SetTriggerMode
+ 569:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 570:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 571:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 572:.\Generated_Source\PSoC5/Write_Timer.c **** *  This function sets the trigger input mode
+ 573:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 574:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 575:.\Generated_Source\PSoC5/Write_Timer.c **** *  triggerMode: Pass one of the pre-defined Trigger Modes (except Software)
+ 576:.\Generated_Source\PSoC5/Write_Timer.c ****     #define Write_Timer__B_TIMER__TM_NONE 0x00u
+ 577:.\Generated_Source\PSoC5/Write_Timer.c ****     #define Write_Timer__B_TIMER__TM_RISINGEDGE 0x04u
+ 578:.\Generated_Source\PSoC5/Write_Timer.c ****     #define Write_Timer__B_TIMER__TM_FALLINGEDGE 0x08u
+ 579:.\Generated_Source\PSoC5/Write_Timer.c ****     #define Write_Timer__B_TIMER__TM_EITHEREDGE 0x0Cu
+ 580:.\Generated_Source\PSoC5/Write_Timer.c ****     #define Write_Timer__B_TIMER__TM_SOFTWARE 0x10u
+ 581:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 582:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 21
+
+
+ 583:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 584:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 585:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 586:.\Generated_Source\PSoC5/Write_Timer.c **** void Write_Timer_SetTriggerMode(uint8 triggerMode) 
+ 587:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 588:.\Generated_Source\PSoC5/Write_Timer.c ****     /* This must only set to two bits of the control register associated */
+ 589:.\Generated_Source\PSoC5/Write_Timer.c ****     triggerMode &= Write_Timer_CTRL_TRIG_MODE_MASK;
+ 590:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 591:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Clear the Current Setting */
+ 592:.\Generated_Source\PSoC5/Write_Timer.c ****     Write_Timer_CONTROL &= ((uint8)(~Write_Timer_CTRL_TRIG_MODE_MASK));
+ 593:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 594:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Write The New Setting */
+ 595:.\Generated_Source\PSoC5/Write_Timer.c ****     Write_Timer_CONTROL |= (triggerMode | Write_Timer__B_TIMER__TM_SOFTWARE);
+ 596:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 597:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 598:.\Generated_Source\PSoC5/Write_Timer.c **** #endif /* Remove API if Trigger Mode is not Software Controlled */
+ 599:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 600:.\Generated_Source\PSoC5/Write_Timer.c **** #if (Write_Timer_EnableTriggerMode)
+ 601:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 602:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 603:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 604:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_EnableTrigger
+ 605:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 606:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 607:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 608:.\Generated_Source\PSoC5/Write_Timer.c **** *  Sets the control bit enabling Hardware Trigger mode
+ 609:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 610:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 611:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 612:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 613:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 614:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 615:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 616:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 617:.\Generated_Source\PSoC5/Write_Timer.c **** void Write_Timer_EnableTrigger(void) 
+ 618:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 619:.\Generated_Source\PSoC5/Write_Timer.c ****     #if (!Write_Timer_ControlRegRemoved)   /* Remove assignment if control register is removed */
+ 620:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_CONTROL |= Write_Timer_CTRL_TRIG_EN;
+ 621:.\Generated_Source\PSoC5/Write_Timer.c ****     #endif /* Remove code section if control register is not used */
+ 622:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 623:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 624:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 625:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 626:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_DisableTrigger
+ 627:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 628:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 629:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 630:.\Generated_Source\PSoC5/Write_Timer.c **** *  Clears the control bit enabling Hardware Trigger mode
+ 631:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 632:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 633:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 634:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 635:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 636:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 637:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 638:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 639:.\Generated_Source\PSoC5/Write_Timer.c **** void Write_Timer_DisableTrigger(void) 
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 22
+
+
+ 640:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 641:.\Generated_Source\PSoC5/Write_Timer.c ****     #if (!Write_Timer_ControlRegRemoved)   /* Remove assignment if control register is removed */
+ 642:.\Generated_Source\PSoC5/Write_Timer.c ****         Write_Timer_CONTROL &= ((uint8)(~Write_Timer_CTRL_TRIG_EN));
+ 643:.\Generated_Source\PSoC5/Write_Timer.c ****     #endif /* Remove code section if control register is not used */
+ 644:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 645:.\Generated_Source\PSoC5/Write_Timer.c **** #endif /* Remove API is Trigger Mode is set to None */
+ 646:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 647:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 648:.\Generated_Source\PSoC5/Write_Timer.c **** #if(Write_Timer_InterruptOnCaptureCount)
+ 649:.\Generated_Source\PSoC5/Write_Timer.c **** #if (!Write_Timer_ControlRegRemoved)   /* Remove API if control register is removed */
+ 650:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 651:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 652:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 653:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_SetInterruptCount
+ 654:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 655:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 656:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 657:.\Generated_Source\PSoC5/Write_Timer.c **** *  This function sets the capture count before an interrupt is triggered.
+ 658:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 659:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 660:.\Generated_Source\PSoC5/Write_Timer.c **** *  interruptCount:  A value between 0 and 3 is valid.  If the value is 0, then
+ 661:.\Generated_Source\PSoC5/Write_Timer.c **** *                   an interrupt will occur each time a capture occurs.
+ 662:.\Generated_Source\PSoC5/Write_Timer.c **** *                   A value of 1 to 3 will cause the interrupt
+ 663:.\Generated_Source\PSoC5/Write_Timer.c **** *                   to delay by the same number of captures.
+ 664:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 665:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 666:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 667:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 668:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 669:.\Generated_Source\PSoC5/Write_Timer.c **** void Write_Timer_SetInterruptCount(uint8 interruptCount) 
+ 670:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 671:.\Generated_Source\PSoC5/Write_Timer.c ****     /* This must only set to two bits of the control register associated */
+ 672:.\Generated_Source\PSoC5/Write_Timer.c ****     interruptCount &= Write_Timer_CTRL_INTCNT_MASK;
+ 673:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 674:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Clear the Current Setting */
+ 675:.\Generated_Source\PSoC5/Write_Timer.c ****     Write_Timer_CONTROL &= ((uint8)(~Write_Timer_CTRL_INTCNT_MASK));
+ 676:.\Generated_Source\PSoC5/Write_Timer.c ****     /* Write The New Setting */
+ 677:.\Generated_Source\PSoC5/Write_Timer.c ****     Write_Timer_CONTROL |= interruptCount;
+ 678:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 679:.\Generated_Source\PSoC5/Write_Timer.c **** #endif /* Remove API if control register is removed */
+ 680:.\Generated_Source\PSoC5/Write_Timer.c **** #endif /* Write_Timer_InterruptOnCaptureCount */
+ 681:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 682:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 683:.\Generated_Source\PSoC5/Write_Timer.c **** #if (Write_Timer_UsingHWCaptureCounter)
+ 684:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 685:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 686:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 687:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_SetCaptureCount
+ 688:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 689:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 690:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 691:.\Generated_Source\PSoC5/Write_Timer.c **** *  This function sets the capture count
+ 692:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 693:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 694:.\Generated_Source\PSoC5/Write_Timer.c **** *  captureCount: A value between 2 and 127 inclusive is valid.  A value of 1
+ 695:.\Generated_Source\PSoC5/Write_Timer.c **** *                to 127 will cause the interrupt to delay by the same number of
+ 696:.\Generated_Source\PSoC5/Write_Timer.c **** *                captures.
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 23
+
+
+ 697:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 698:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 699:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 700:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 701:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 702:.\Generated_Source\PSoC5/Write_Timer.c **** void Write_Timer_SetCaptureCount(uint8 captureCount) 
+ 703:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 704:.\Generated_Source\PSoC5/Write_Timer.c ****     Write_Timer_CAP_COUNT = captureCount;
+ 705:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 706:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 707:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 708:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 709:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_ReadCaptureCount
+ 710:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 711:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 712:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 713:.\Generated_Source\PSoC5/Write_Timer.c **** *  This function reads the capture count setting
+ 714:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 715:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 716:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 717:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 718:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 719:.\Generated_Source\PSoC5/Write_Timer.c **** *  Returns the Capture Count Setting
+ 720:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 721:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 722:.\Generated_Source\PSoC5/Write_Timer.c **** uint8 Write_Timer_ReadCaptureCount(void) 
+ 723:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 724:.\Generated_Source\PSoC5/Write_Timer.c ****     return ((uint8)Write_Timer_CAP_COUNT);
+ 725:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 726:.\Generated_Source\PSoC5/Write_Timer.c **** #endif /* Write_Timer_UsingHWCaptureCounter */
+ 727:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 728:.\Generated_Source\PSoC5/Write_Timer.c **** 
+ 729:.\Generated_Source\PSoC5/Write_Timer.c **** /*******************************************************************************
+ 730:.\Generated_Source\PSoC5/Write_Timer.c **** * Function Name: Write_Timer_ClearFIFO
+ 731:.\Generated_Source\PSoC5/Write_Timer.c **** ********************************************************************************
+ 732:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 733:.\Generated_Source\PSoC5/Write_Timer.c **** * Summary:
+ 734:.\Generated_Source\PSoC5/Write_Timer.c **** *  This function clears all capture data from the capture FIFO
+ 735:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 736:.\Generated_Source\PSoC5/Write_Timer.c **** * Parameters:
+ 737:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 738:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 739:.\Generated_Source\PSoC5/Write_Timer.c **** * Return:
+ 740:.\Generated_Source\PSoC5/Write_Timer.c **** *  void
+ 741:.\Generated_Source\PSoC5/Write_Timer.c **** *
+ 742:.\Generated_Source\PSoC5/Write_Timer.c **** *******************************************************************************/
+ 743:.\Generated_Source\PSoC5/Write_Timer.c **** void Write_Timer_ClearFIFO(void) 
+ 744:.\Generated_Source\PSoC5/Write_Timer.c **** {
+ 559              		.loc 1 744 0
+ 560              		.cfi_startproc
+ 561              		@ args = 0, pretend = 0, frame = 0
+ 562              		@ frame_needed = 1, uses_anonymous_args = 0
+ 563 0000 80B5     		push	{r7, lr}
+ 564              	.LCFI33:
+ 565              		.cfi_def_cfa_offset 8
+ 566              		.cfi_offset 7, -8
+ 567              		.cfi_offset 14, -4
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 24
+
+
+ 568 0002 00AF     		add	r7, sp, #0
+ 569              	.LCFI34:
+ 570              		.cfi_def_cfa_register 7
+ 745:.\Generated_Source\PSoC5/Write_Timer.c ****     while(0u != (Write_Timer_ReadStatusRegister() & Write_Timer_STATUS_FIFONEMP))
+ 571              		.loc 1 745 0
+ 572 0004 01E0     		b	.L22
+ 573              	.L23:
+ 746:.\Generated_Source\PSoC5/Write_Timer.c ****     {
+ 747:.\Generated_Source\PSoC5/Write_Timer.c ****         (void)Write_Timer_ReadCapture();
+ 574              		.loc 1 747 0
+ 575 0006 FFF7FEFF 		bl	Write_Timer_ReadCapture
+ 576              	.L22:
+ 745:.\Generated_Source\PSoC5/Write_Timer.c ****     while(0u != (Write_Timer_ReadStatusRegister() & Write_Timer_STATUS_FIFONEMP))
+ 577              		.loc 1 745 0 discriminator 1
+ 578 000a FFF7FEFF 		bl	Write_Timer_ReadStatusRegister
+ 579 000e 0346     		mov	r3, r0
+ 580 0010 03F00803 		and	r3, r3, #8
+ 581 0014 002B     		cmp	r3, #0
+ 582 0016 F6D1     		bne	.L23
+ 748:.\Generated_Source\PSoC5/Write_Timer.c ****     }
+ 749:.\Generated_Source\PSoC5/Write_Timer.c **** }
+ 583              		.loc 1 749 0
+ 584 0018 80BD     		pop	{r7, pc}
+ 585              		.cfi_endproc
+ 586              	.LFE14:
+ 587              		.size	Write_Timer_ClearFIFO, .-Write_Timer_ClearFIFO
+ 588 001a 00BF     		.text
+ 589              	.Letext0:
+ 590              		.file 2 ".\\Generated_Source\\PSoC5\\cytypes.h"
+ 591              		.section	.debug_info,"",%progbits
+ 592              	.Ldebug_info0:
+ 593 0000 81020000 		.4byte	0x281
+ 594 0004 0200     		.2byte	0x2
+ 595 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 596 000a 04       		.byte	0x4
+ 597 000b 01       		.uleb128 0x1
+ 598 000c 4E020000 		.4byte	.LASF34
+ 599 0010 01       		.byte	0x1
+ 600 0011 1D020000 		.4byte	.LASF35
+ 601 0015 C4000000 		.4byte	.LASF36
+ 602 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 603 001d 00000000 		.4byte	0
+ 604 0021 00000000 		.4byte	0
+ 605 0025 00000000 		.4byte	.Ldebug_line0
+ 606 0029 02       		.uleb128 0x2
+ 607 002a 01       		.byte	0x1
+ 608 002b 06       		.byte	0x6
+ 609 002c E5020000 		.4byte	.LASF0
+ 610 0030 02       		.uleb128 0x2
+ 611 0031 01       		.byte	0x1
+ 612 0032 08       		.byte	0x8
+ 613 0033 24010000 		.4byte	.LASF1
+ 614 0037 02       		.uleb128 0x2
+ 615 0038 02       		.byte	0x2
+ 616 0039 05       		.byte	0x5
+ 617 003a 44020000 		.4byte	.LASF2
+ 618 003e 02       		.uleb128 0x2
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 25
+
+
+ 619 003f 02       		.byte	0x2
+ 620 0040 07       		.byte	0x7
+ 621 0041 30000000 		.4byte	.LASF3
+ 622 0045 02       		.uleb128 0x2
+ 623 0046 04       		.byte	0x4
+ 624 0047 05       		.byte	0x5
+ 625 0048 B8020000 		.4byte	.LASF4
+ 626 004c 02       		.uleb128 0x2
+ 627 004d 04       		.byte	0x4
+ 628 004e 07       		.byte	0x7
+ 629 004f A4000000 		.4byte	.LASF5
+ 630 0053 02       		.uleb128 0x2
+ 631 0054 08       		.byte	0x8
+ 632 0055 05       		.byte	0x5
+ 633 0056 EE010000 		.4byte	.LASF6
+ 634 005a 02       		.uleb128 0x2
+ 635 005b 08       		.byte	0x8
+ 636 005c 07       		.byte	0x7
+ 637 005d 93010000 		.4byte	.LASF7
+ 638 0061 03       		.uleb128 0x3
+ 639 0062 04       		.byte	0x4
+ 640 0063 05       		.byte	0x5
+ 641 0064 696E7400 		.ascii	"int\000"
+ 642 0068 02       		.uleb128 0x2
+ 643 0069 04       		.byte	0x4
+ 644 006a 07       		.byte	0x7
+ 645 006b 69010000 		.4byte	.LASF8
+ 646 006f 04       		.uleb128 0x4
+ 647 0070 B6000000 		.4byte	.LASF12
+ 648 0074 02       		.byte	0x2
+ 649 0075 5B       		.byte	0x5b
+ 650 0076 30000000 		.4byte	0x30
+ 651 007a 02       		.uleb128 0x2
+ 652 007b 04       		.byte	0x4
+ 653 007c 04       		.byte	0x4
+ 654 007d 7B000000 		.4byte	.LASF9
+ 655 0081 02       		.uleb128 0x2
+ 656 0082 08       		.byte	0x8
+ 657 0083 04       		.byte	0x4
+ 658 0084 46010000 		.4byte	.LASF10
+ 659 0088 02       		.uleb128 0x2
+ 660 0089 01       		.byte	0x1
+ 661 008a 08       		.byte	0x8
+ 662 008b C1020000 		.4byte	.LASF11
+ 663 008f 04       		.uleb128 0x4
+ 664 0090 9F000000 		.4byte	.LASF13
+ 665 0094 02       		.byte	0x2
+ 666 0095 F0       		.byte	0xf0
+ 667 0096 9A000000 		.4byte	0x9a
+ 668 009a 05       		.uleb128 0x5
+ 669 009b 6F000000 		.4byte	0x6f
+ 670 009f 02       		.uleb128 0x2
+ 671 00a0 04       		.byte	0x4
+ 672 00a1 07       		.byte	0x7
+ 673 00a2 D4010000 		.4byte	.LASF14
+ 674 00a6 06       		.uleb128 0x6
+ 675 00a7 01       		.byte	0x1
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 26
+
+
+ 676 00a8 AA010000 		.4byte	.LASF18
+ 677 00ac 01       		.byte	0x1
+ 678 00ad 2B       		.byte	0x2b
+ 679 00ae 01       		.byte	0x1
+ 680 00af 00000000 		.4byte	.LFB0
+ 681 00b3 56000000 		.4byte	.LFE0
+ 682 00b7 00000000 		.4byte	.LLST0
+ 683 00bb 01       		.byte	0x1
+ 684 00bc CF000000 		.4byte	0xcf
+ 685 00c0 07       		.uleb128 0x7
+ 686 00c1 09030000 		.4byte	.LASF37
+ 687 00c5 01       		.byte	0x1
+ 688 00c6 2F       		.byte	0x2f
+ 689 00c7 6F000000 		.4byte	0x6f
+ 690 00cb 02       		.byte	0x2
+ 691 00cc 91       		.byte	0x91
+ 692 00cd 77       		.sleb128 -9
+ 693 00ce 00       		.byte	0
+ 694 00cf 08       		.uleb128 0x8
+ 695 00d0 01       		.byte	0x1
+ 696 00d1 FC010000 		.4byte	.LASF15
+ 697 00d5 01       		.byte	0x1
+ 698 00d6 B3       		.byte	0xb3
+ 699 00d7 01       		.byte	0x1
+ 700 00d8 00000000 		.4byte	.LFB1
+ 701 00dc 26000000 		.4byte	.LFE1
+ 702 00e0 38000000 		.4byte	.LLST1
+ 703 00e4 01       		.byte	0x1
+ 704 00e5 09       		.uleb128 0x9
+ 705 00e6 01       		.byte	0x1
+ 706 00e7 00000000 		.4byte	.LASF16
+ 707 00eb 01       		.byte	0x1
+ 708 00ec D6       		.byte	0xd6
+ 709 00ed 01       		.byte	0x1
+ 710 00ee 00000000 		.4byte	.LFB2
+ 711 00f2 2A000000 		.4byte	.LFE2
+ 712 00f6 64000000 		.4byte	.LLST2
+ 713 00fa 01       		.byte	0x1
+ 714 00fb 08       		.uleb128 0x8
+ 715 00fc 01       		.byte	0x1
+ 716 00fd DD010000 		.4byte	.LASF17
+ 717 0101 01       		.byte	0x1
+ 718 0102 F6       		.byte	0xf6
+ 719 0103 01       		.byte	0x1
+ 720 0104 00000000 		.4byte	.LFB3
+ 721 0108 26000000 		.4byte	.LFE3
+ 722 010c 90000000 		.4byte	.LLST3
+ 723 0110 01       		.byte	0x1
+ 724 0111 0A       		.uleb128 0xa
+ 725 0112 01       		.byte	0x1
+ 726 0113 76010000 		.4byte	.LASF19
+ 727 0117 01       		.byte	0x1
+ 728 0118 1601     		.2byte	0x116
+ 729 011a 01       		.byte	0x1
+ 730 011b 00000000 		.4byte	.LFB4
+ 731 011f 20000000 		.4byte	.LFE4
+ 732 0123 BC000000 		.4byte	.LLST4
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 27
+
+
+ 733 0127 01       		.byte	0x1
+ 734 0128 3C010000 		.4byte	0x13c
+ 735 012c 0B       		.uleb128 0xb
+ 736 012d 0F020000 		.4byte	.LASF24
+ 737 0131 01       		.byte	0x1
+ 738 0132 1601     		.2byte	0x116
+ 739 0134 6F000000 		.4byte	0x6f
+ 740 0138 02       		.byte	0x2
+ 741 0139 91       		.byte	0x91
+ 742 013a 77       		.sleb128 -9
+ 743 013b 00       		.byte	0
+ 744 013c 0C       		.uleb128 0xc
+ 745 013d 01       		.byte	0x1
+ 746 013e 4D010000 		.4byte	.LASF20
+ 747 0142 01       		.byte	0x1
+ 748 0143 2D01     		.2byte	0x12d
+ 749 0145 01       		.byte	0x1
+ 750 0146 00000000 		.4byte	.LFB5
+ 751 014a 14000000 		.4byte	.LFE5
+ 752 014e F4000000 		.4byte	.LLST5
+ 753 0152 01       		.byte	0x1
+ 754 0153 0D       		.uleb128 0xd
+ 755 0154 01       		.byte	0x1
+ 756 0155 C6020000 		.4byte	.LASF21
+ 757 0159 01       		.byte	0x1
+ 758 015a 4801     		.2byte	0x148
+ 759 015c 01       		.byte	0x1
+ 760 015d 6F000000 		.4byte	0x6f
+ 761 0161 00000000 		.4byte	.LFB6
+ 762 0165 18000000 		.4byte	.LFE6
+ 763 0169 20010000 		.4byte	.LLST6
+ 764 016d 01       		.byte	0x1
+ 765 016e 0D       		.uleb128 0xd
+ 766 016f 01       		.byte	0x1
+ 767 0170 5B000000 		.4byte	.LASF22
+ 768 0174 01       		.byte	0x1
+ 769 0175 5F01     		.2byte	0x15f
+ 770 0177 01       		.byte	0x1
+ 771 0178 6F000000 		.4byte	0x6f
+ 772 017c 00000000 		.4byte	.LFB7
+ 773 0180 18000000 		.4byte	.LFE7
+ 774 0184 4C010000 		.4byte	.LLST7
+ 775 0188 01       		.byte	0x1
+ 776 0189 0A       		.uleb128 0xa
+ 777 018a 01       		.byte	0x1
+ 778 018b 97020000 		.4byte	.LASF23
+ 779 018f 01       		.byte	0x1
+ 780 0190 7201     		.2byte	0x172
+ 781 0192 01       		.byte	0x1
+ 782 0193 00000000 		.4byte	.LFB8
+ 783 0197 20000000 		.4byte	.LFE8
+ 784 019b 78010000 		.4byte	.LLST8
+ 785 019f 01       		.byte	0x1
+ 786 01a0 B4010000 		.4byte	0x1b4
+ 787 01a4 0B       		.uleb128 0xb
+ 788 01a5 BC000000 		.4byte	.LASF25
+ 789 01a9 01       		.byte	0x1
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 28
+
+
+ 790 01aa 7201     		.2byte	0x172
+ 791 01ac 6F000000 		.4byte	0x6f
+ 792 01b0 02       		.byte	0x2
+ 793 01b1 91       		.byte	0x91
+ 794 01b2 77       		.sleb128 -9
+ 795 01b3 00       		.byte	0
+ 796 01b4 0D       		.uleb128 0xd
+ 797 01b5 01       		.byte	0x1
+ 798 01b6 12000000 		.4byte	.LASF26
+ 799 01ba 01       		.byte	0x1
+ 800 01bb 8701     		.2byte	0x187
+ 801 01bd 01       		.byte	0x1
+ 802 01be 6F000000 		.4byte	0x6f
+ 803 01c2 00000000 		.4byte	.LFB9
+ 804 01c6 18000000 		.4byte	.LFE9
+ 805 01ca B0010000 		.4byte	.LLST9
+ 806 01ce 01       		.byte	0x1
+ 807 01cf 0A       		.uleb128 0xa
+ 808 01d0 01       		.byte	0x1
+ 809 01d1 0C010000 		.4byte	.LASF27
+ 810 01d5 01       		.byte	0x1
+ 811 01d6 A101     		.2byte	0x1a1
+ 812 01d8 01       		.byte	0x1
+ 813 01d9 00000000 		.4byte	.LFB10
+ 814 01dd 20000000 		.4byte	.LFE10
+ 815 01e1 DC010000 		.4byte	.LLST10
+ 816 01e5 01       		.byte	0x1
+ 817 01e6 FA010000 		.4byte	0x1fa
+ 818 01ea 0B       		.uleb128 0xb
+ 819 01eb 29000000 		.4byte	.LASF28
+ 820 01ef 01       		.byte	0x1
+ 821 01f0 A101     		.2byte	0x1a1
+ 822 01f2 6F000000 		.4byte	0x6f
+ 823 01f6 02       		.byte	0x2
+ 824 01f7 91       		.byte	0x91
+ 825 01f8 77       		.sleb128 -9
+ 826 01f9 00       		.byte	0
+ 827 01fa 0D       		.uleb128 0xd
+ 828 01fb 01       		.byte	0x1
+ 829 01fc F1020000 		.4byte	.LASF29
+ 830 0200 01       		.byte	0x1
+ 831 0201 BA01     		.2byte	0x1ba
+ 832 0203 01       		.byte	0x1
+ 833 0204 6F000000 		.4byte	0x6f
+ 834 0208 00000000 		.4byte	.LFB11
+ 835 020c 18000000 		.4byte	.LFE11
+ 836 0210 14020000 		.4byte	.LLST11
+ 837 0214 01       		.byte	0x1
+ 838 0215 0A       		.uleb128 0xa
+ 839 0216 01       		.byte	0x1
+ 840 0217 BB010000 		.4byte	.LASF30
+ 841 021b 01       		.byte	0x1
+ 842 021c D201     		.2byte	0x1d2
+ 843 021e 01       		.byte	0x1
+ 844 021f 00000000 		.4byte	.LFB12
+ 845 0223 20000000 		.4byte	.LFE12
+ 846 0227 40020000 		.4byte	.LLST12
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 29
+
+
+ 847 022b 01       		.byte	0x1
+ 848 022c 40020000 		.4byte	0x240
+ 849 0230 0B       		.uleb128 0xb
+ 850 0231 81000000 		.4byte	.LASF31
+ 851 0235 01       		.byte	0x1
+ 852 0236 D201     		.2byte	0x1d2
+ 853 0238 6F000000 		.4byte	0x6f
+ 854 023c 02       		.byte	0x2
+ 855 023d 91       		.byte	0x91
+ 856 023e 77       		.sleb128 -9
+ 857 023f 00       		.byte	0
+ 858 0240 0D       		.uleb128 0xd
+ 859 0241 01       		.byte	0x1
+ 860 0242 43000000 		.4byte	.LASF32
+ 861 0246 01       		.byte	0x1
+ 862 0247 EF01     		.2byte	0x1ef
+ 863 0249 01       		.byte	0x1
+ 864 024a 6F000000 		.4byte	0x6f
+ 865 024e 00000000 		.4byte	.LFB13
+ 866 0252 22000000 		.4byte	.LFE13
+ 867 0256 78020000 		.4byte	.LLST13
+ 868 025a 01       		.byte	0x1
+ 869 025b 0E       		.uleb128 0xe
+ 870 025c 01       		.byte	0x1
+ 871 025d 89000000 		.4byte	.LASF33
+ 872 0261 01       		.byte	0x1
+ 873 0262 E702     		.2byte	0x2e7
+ 874 0264 01       		.byte	0x1
+ 875 0265 00000000 		.4byte	.LFB14
+ 876 0269 1A000000 		.4byte	.LFE14
+ 877 026d A4020000 		.4byte	.LLST14
+ 878 0271 01       		.byte	0x1
+ 879 0272 0F       		.uleb128 0xf
+ 880 0273 32010000 		.4byte	.LASF38
+ 881 0277 01       		.byte	0x1
+ 882 0278 1A       		.byte	0x1a
+ 883 0279 6F000000 		.4byte	0x6f
+ 884 027d 01       		.byte	0x1
+ 885 027e 05       		.byte	0x5
+ 886 027f 03       		.byte	0x3
+ 887 0280 00000000 		.4byte	Write_Timer_initVar
+ 888 0284 00       		.byte	0
+ 889              		.section	.debug_abbrev,"",%progbits
+ 890              	.Ldebug_abbrev0:
+ 891 0000 01       		.uleb128 0x1
+ 892 0001 11       		.uleb128 0x11
+ 893 0002 01       		.byte	0x1
+ 894 0003 25       		.uleb128 0x25
+ 895 0004 0E       		.uleb128 0xe
+ 896 0005 13       		.uleb128 0x13
+ 897 0006 0B       		.uleb128 0xb
+ 898 0007 03       		.uleb128 0x3
+ 899 0008 0E       		.uleb128 0xe
+ 900 0009 1B       		.uleb128 0x1b
+ 901 000a 0E       		.uleb128 0xe
+ 902 000b 55       		.uleb128 0x55
+ 903 000c 06       		.uleb128 0x6
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 30
+
+
+ 904 000d 11       		.uleb128 0x11
+ 905 000e 01       		.uleb128 0x1
+ 906 000f 52       		.uleb128 0x52
+ 907 0010 01       		.uleb128 0x1
+ 908 0011 10       		.uleb128 0x10
+ 909 0012 06       		.uleb128 0x6
+ 910 0013 00       		.byte	0
+ 911 0014 00       		.byte	0
+ 912 0015 02       		.uleb128 0x2
+ 913 0016 24       		.uleb128 0x24
+ 914 0017 00       		.byte	0
+ 915 0018 0B       		.uleb128 0xb
+ 916 0019 0B       		.uleb128 0xb
+ 917 001a 3E       		.uleb128 0x3e
+ 918 001b 0B       		.uleb128 0xb
+ 919 001c 03       		.uleb128 0x3
+ 920 001d 0E       		.uleb128 0xe
+ 921 001e 00       		.byte	0
+ 922 001f 00       		.byte	0
+ 923 0020 03       		.uleb128 0x3
+ 924 0021 24       		.uleb128 0x24
+ 925 0022 00       		.byte	0
+ 926 0023 0B       		.uleb128 0xb
+ 927 0024 0B       		.uleb128 0xb
+ 928 0025 3E       		.uleb128 0x3e
+ 929 0026 0B       		.uleb128 0xb
+ 930 0027 03       		.uleb128 0x3
+ 931 0028 08       		.uleb128 0x8
+ 932 0029 00       		.byte	0
+ 933 002a 00       		.byte	0
+ 934 002b 04       		.uleb128 0x4
+ 935 002c 16       		.uleb128 0x16
+ 936 002d 00       		.byte	0
+ 937 002e 03       		.uleb128 0x3
+ 938 002f 0E       		.uleb128 0xe
+ 939 0030 3A       		.uleb128 0x3a
+ 940 0031 0B       		.uleb128 0xb
+ 941 0032 3B       		.uleb128 0x3b
+ 942 0033 0B       		.uleb128 0xb
+ 943 0034 49       		.uleb128 0x49
+ 944 0035 13       		.uleb128 0x13
+ 945 0036 00       		.byte	0
+ 946 0037 00       		.byte	0
+ 947 0038 05       		.uleb128 0x5
+ 948 0039 35       		.uleb128 0x35
+ 949 003a 00       		.byte	0
+ 950 003b 49       		.uleb128 0x49
+ 951 003c 13       		.uleb128 0x13
+ 952 003d 00       		.byte	0
+ 953 003e 00       		.byte	0
+ 954 003f 06       		.uleb128 0x6
+ 955 0040 2E       		.uleb128 0x2e
+ 956 0041 01       		.byte	0x1
+ 957 0042 3F       		.uleb128 0x3f
+ 958 0043 0C       		.uleb128 0xc
+ 959 0044 03       		.uleb128 0x3
+ 960 0045 0E       		.uleb128 0xe
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 31
+
+
+ 961 0046 3A       		.uleb128 0x3a
+ 962 0047 0B       		.uleb128 0xb
+ 963 0048 3B       		.uleb128 0x3b
+ 964 0049 0B       		.uleb128 0xb
+ 965 004a 27       		.uleb128 0x27
+ 966 004b 0C       		.uleb128 0xc
+ 967 004c 11       		.uleb128 0x11
+ 968 004d 01       		.uleb128 0x1
+ 969 004e 12       		.uleb128 0x12
+ 970 004f 01       		.uleb128 0x1
+ 971 0050 40       		.uleb128 0x40
+ 972 0051 06       		.uleb128 0x6
+ 973 0052 9642     		.uleb128 0x2116
+ 974 0054 0C       		.uleb128 0xc
+ 975 0055 01       		.uleb128 0x1
+ 976 0056 13       		.uleb128 0x13
+ 977 0057 00       		.byte	0
+ 978 0058 00       		.byte	0
+ 979 0059 07       		.uleb128 0x7
+ 980 005a 34       		.uleb128 0x34
+ 981 005b 00       		.byte	0
+ 982 005c 03       		.uleb128 0x3
+ 983 005d 0E       		.uleb128 0xe
+ 984 005e 3A       		.uleb128 0x3a
+ 985 005f 0B       		.uleb128 0xb
+ 986 0060 3B       		.uleb128 0x3b
+ 987 0061 0B       		.uleb128 0xb
+ 988 0062 49       		.uleb128 0x49
+ 989 0063 13       		.uleb128 0x13
+ 990 0064 02       		.uleb128 0x2
+ 991 0065 0A       		.uleb128 0xa
+ 992 0066 00       		.byte	0
+ 993 0067 00       		.byte	0
+ 994 0068 08       		.uleb128 0x8
+ 995 0069 2E       		.uleb128 0x2e
+ 996 006a 00       		.byte	0
+ 997 006b 3F       		.uleb128 0x3f
+ 998 006c 0C       		.uleb128 0xc
+ 999 006d 03       		.uleb128 0x3
+ 1000 006e 0E       		.uleb128 0xe
+ 1001 006f 3A       		.uleb128 0x3a
+ 1002 0070 0B       		.uleb128 0xb
+ 1003 0071 3B       		.uleb128 0x3b
+ 1004 0072 0B       		.uleb128 0xb
+ 1005 0073 27       		.uleb128 0x27
+ 1006 0074 0C       		.uleb128 0xc
+ 1007 0075 11       		.uleb128 0x11
+ 1008 0076 01       		.uleb128 0x1
+ 1009 0077 12       		.uleb128 0x12
+ 1010 0078 01       		.uleb128 0x1
+ 1011 0079 40       		.uleb128 0x40
+ 1012 007a 06       		.uleb128 0x6
+ 1013 007b 9742     		.uleb128 0x2117
+ 1014 007d 0C       		.uleb128 0xc
+ 1015 007e 00       		.byte	0
+ 1016 007f 00       		.byte	0
+ 1017 0080 09       		.uleb128 0x9
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 32
+
+
+ 1018 0081 2E       		.uleb128 0x2e
+ 1019 0082 00       		.byte	0
+ 1020 0083 3F       		.uleb128 0x3f
+ 1021 0084 0C       		.uleb128 0xc
+ 1022 0085 03       		.uleb128 0x3
+ 1023 0086 0E       		.uleb128 0xe
+ 1024 0087 3A       		.uleb128 0x3a
+ 1025 0088 0B       		.uleb128 0xb
+ 1026 0089 3B       		.uleb128 0x3b
+ 1027 008a 0B       		.uleb128 0xb
+ 1028 008b 27       		.uleb128 0x27
+ 1029 008c 0C       		.uleb128 0xc
+ 1030 008d 11       		.uleb128 0x11
+ 1031 008e 01       		.uleb128 0x1
+ 1032 008f 12       		.uleb128 0x12
+ 1033 0090 01       		.uleb128 0x1
+ 1034 0091 40       		.uleb128 0x40
+ 1035 0092 06       		.uleb128 0x6
+ 1036 0093 9642     		.uleb128 0x2116
+ 1037 0095 0C       		.uleb128 0xc
+ 1038 0096 00       		.byte	0
+ 1039 0097 00       		.byte	0
+ 1040 0098 0A       		.uleb128 0xa
+ 1041 0099 2E       		.uleb128 0x2e
+ 1042 009a 01       		.byte	0x1
+ 1043 009b 3F       		.uleb128 0x3f
+ 1044 009c 0C       		.uleb128 0xc
+ 1045 009d 03       		.uleb128 0x3
+ 1046 009e 0E       		.uleb128 0xe
+ 1047 009f 3A       		.uleb128 0x3a
+ 1048 00a0 0B       		.uleb128 0xb
+ 1049 00a1 3B       		.uleb128 0x3b
+ 1050 00a2 05       		.uleb128 0x5
+ 1051 00a3 27       		.uleb128 0x27
+ 1052 00a4 0C       		.uleb128 0xc
+ 1053 00a5 11       		.uleb128 0x11
+ 1054 00a6 01       		.uleb128 0x1
+ 1055 00a7 12       		.uleb128 0x12
+ 1056 00a8 01       		.uleb128 0x1
+ 1057 00a9 40       		.uleb128 0x40
+ 1058 00aa 06       		.uleb128 0x6
+ 1059 00ab 9742     		.uleb128 0x2117
+ 1060 00ad 0C       		.uleb128 0xc
+ 1061 00ae 01       		.uleb128 0x1
+ 1062 00af 13       		.uleb128 0x13
+ 1063 00b0 00       		.byte	0
+ 1064 00b1 00       		.byte	0
+ 1065 00b2 0B       		.uleb128 0xb
+ 1066 00b3 05       		.uleb128 0x5
+ 1067 00b4 00       		.byte	0
+ 1068 00b5 03       		.uleb128 0x3
+ 1069 00b6 0E       		.uleb128 0xe
+ 1070 00b7 3A       		.uleb128 0x3a
+ 1071 00b8 0B       		.uleb128 0xb
+ 1072 00b9 3B       		.uleb128 0x3b
+ 1073 00ba 05       		.uleb128 0x5
+ 1074 00bb 49       		.uleb128 0x49
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 33
+
+
+ 1075 00bc 13       		.uleb128 0x13
+ 1076 00bd 02       		.uleb128 0x2
+ 1077 00be 0A       		.uleb128 0xa
+ 1078 00bf 00       		.byte	0
+ 1079 00c0 00       		.byte	0
+ 1080 00c1 0C       		.uleb128 0xc
+ 1081 00c2 2E       		.uleb128 0x2e
+ 1082 00c3 00       		.byte	0
+ 1083 00c4 3F       		.uleb128 0x3f
+ 1084 00c5 0C       		.uleb128 0xc
+ 1085 00c6 03       		.uleb128 0x3
+ 1086 00c7 0E       		.uleb128 0xe
+ 1087 00c8 3A       		.uleb128 0x3a
+ 1088 00c9 0B       		.uleb128 0xb
+ 1089 00ca 3B       		.uleb128 0x3b
+ 1090 00cb 05       		.uleb128 0x5
+ 1091 00cc 27       		.uleb128 0x27
+ 1092 00cd 0C       		.uleb128 0xc
+ 1093 00ce 11       		.uleb128 0x11
+ 1094 00cf 01       		.uleb128 0x1
+ 1095 00d0 12       		.uleb128 0x12
+ 1096 00d1 01       		.uleb128 0x1
+ 1097 00d2 40       		.uleb128 0x40
+ 1098 00d3 06       		.uleb128 0x6
+ 1099 00d4 9742     		.uleb128 0x2117
+ 1100 00d6 0C       		.uleb128 0xc
+ 1101 00d7 00       		.byte	0
+ 1102 00d8 00       		.byte	0
+ 1103 00d9 0D       		.uleb128 0xd
+ 1104 00da 2E       		.uleb128 0x2e
+ 1105 00db 00       		.byte	0
+ 1106 00dc 3F       		.uleb128 0x3f
+ 1107 00dd 0C       		.uleb128 0xc
+ 1108 00de 03       		.uleb128 0x3
+ 1109 00df 0E       		.uleb128 0xe
+ 1110 00e0 3A       		.uleb128 0x3a
+ 1111 00e1 0B       		.uleb128 0xb
+ 1112 00e2 3B       		.uleb128 0x3b
+ 1113 00e3 05       		.uleb128 0x5
+ 1114 00e4 27       		.uleb128 0x27
+ 1115 00e5 0C       		.uleb128 0xc
+ 1116 00e6 49       		.uleb128 0x49
+ 1117 00e7 13       		.uleb128 0x13
+ 1118 00e8 11       		.uleb128 0x11
+ 1119 00e9 01       		.uleb128 0x1
+ 1120 00ea 12       		.uleb128 0x12
+ 1121 00eb 01       		.uleb128 0x1
+ 1122 00ec 40       		.uleb128 0x40
+ 1123 00ed 06       		.uleb128 0x6
+ 1124 00ee 9742     		.uleb128 0x2117
+ 1125 00f0 0C       		.uleb128 0xc
+ 1126 00f1 00       		.byte	0
+ 1127 00f2 00       		.byte	0
+ 1128 00f3 0E       		.uleb128 0xe
+ 1129 00f4 2E       		.uleb128 0x2e
+ 1130 00f5 00       		.byte	0
+ 1131 00f6 3F       		.uleb128 0x3f
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 34
+
+
+ 1132 00f7 0C       		.uleb128 0xc
+ 1133 00f8 03       		.uleb128 0x3
+ 1134 00f9 0E       		.uleb128 0xe
+ 1135 00fa 3A       		.uleb128 0x3a
+ 1136 00fb 0B       		.uleb128 0xb
+ 1137 00fc 3B       		.uleb128 0x3b
+ 1138 00fd 05       		.uleb128 0x5
+ 1139 00fe 27       		.uleb128 0x27
+ 1140 00ff 0C       		.uleb128 0xc
+ 1141 0100 11       		.uleb128 0x11
+ 1142 0101 01       		.uleb128 0x1
+ 1143 0102 12       		.uleb128 0x12
+ 1144 0103 01       		.uleb128 0x1
+ 1145 0104 40       		.uleb128 0x40
+ 1146 0105 06       		.uleb128 0x6
+ 1147 0106 9642     		.uleb128 0x2116
+ 1148 0108 0C       		.uleb128 0xc
+ 1149 0109 00       		.byte	0
+ 1150 010a 00       		.byte	0
+ 1151 010b 0F       		.uleb128 0xf
+ 1152 010c 34       		.uleb128 0x34
+ 1153 010d 00       		.byte	0
+ 1154 010e 03       		.uleb128 0x3
+ 1155 010f 0E       		.uleb128 0xe
+ 1156 0110 3A       		.uleb128 0x3a
+ 1157 0111 0B       		.uleb128 0xb
+ 1158 0112 3B       		.uleb128 0x3b
+ 1159 0113 0B       		.uleb128 0xb
+ 1160 0114 49       		.uleb128 0x49
+ 1161 0115 13       		.uleb128 0x13
+ 1162 0116 3F       		.uleb128 0x3f
+ 1163 0117 0C       		.uleb128 0xc
+ 1164 0118 02       		.uleb128 0x2
+ 1165 0119 0A       		.uleb128 0xa
+ 1166 011a 00       		.byte	0
+ 1167 011b 00       		.byte	0
+ 1168 011c 00       		.byte	0
+ 1169              		.section	.debug_loc,"",%progbits
+ 1170              	.Ldebug_loc0:
+ 1171              	.LLST0:
+ 1172 0000 00000000 		.4byte	.LFB0
+ 1173 0004 02000000 		.4byte	.LCFI0
+ 1174 0008 0200     		.2byte	0x2
+ 1175 000a 7D       		.byte	0x7d
+ 1176 000b 00       		.sleb128 0
+ 1177 000c 02000000 		.4byte	.LCFI0
+ 1178 0010 04000000 		.4byte	.LCFI1
+ 1179 0014 0200     		.2byte	0x2
+ 1180 0016 7D       		.byte	0x7d
+ 1181 0017 08       		.sleb128 8
+ 1182 0018 04000000 		.4byte	.LCFI1
+ 1183 001c 06000000 		.4byte	.LCFI2
+ 1184 0020 0200     		.2byte	0x2
+ 1185 0022 7D       		.byte	0x7d
+ 1186 0023 10       		.sleb128 16
+ 1187 0024 06000000 		.4byte	.LCFI2
+ 1188 0028 56000000 		.4byte	.LFE0
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 35
+
+
+ 1189 002c 0200     		.2byte	0x2
+ 1190 002e 77       		.byte	0x77
+ 1191 002f 10       		.sleb128 16
+ 1192 0030 00000000 		.4byte	0
+ 1193 0034 00000000 		.4byte	0
+ 1194              	.LLST1:
+ 1195 0038 00000000 		.4byte	.LFB1
+ 1196 003c 02000000 		.4byte	.LCFI3
+ 1197 0040 0200     		.2byte	0x2
+ 1198 0042 7D       		.byte	0x7d
+ 1199 0043 00       		.sleb128 0
+ 1200 0044 02000000 		.4byte	.LCFI3
+ 1201 0048 04000000 		.4byte	.LCFI4
+ 1202 004c 0200     		.2byte	0x2
+ 1203 004e 7D       		.byte	0x7d
+ 1204 004f 04       		.sleb128 4
+ 1205 0050 04000000 		.4byte	.LCFI4
+ 1206 0054 26000000 		.4byte	.LFE1
+ 1207 0058 0200     		.2byte	0x2
+ 1208 005a 77       		.byte	0x77
+ 1209 005b 04       		.sleb128 4
+ 1210 005c 00000000 		.4byte	0
+ 1211 0060 00000000 		.4byte	0
+ 1212              	.LLST2:
+ 1213 0064 00000000 		.4byte	.LFB2
+ 1214 0068 02000000 		.4byte	.LCFI5
+ 1215 006c 0200     		.2byte	0x2
+ 1216 006e 7D       		.byte	0x7d
+ 1217 006f 00       		.sleb128 0
+ 1218 0070 02000000 		.4byte	.LCFI5
+ 1219 0074 04000000 		.4byte	.LCFI6
+ 1220 0078 0200     		.2byte	0x2
+ 1221 007a 7D       		.byte	0x7d
+ 1222 007b 08       		.sleb128 8
+ 1223 007c 04000000 		.4byte	.LCFI6
+ 1224 0080 2A000000 		.4byte	.LFE2
+ 1225 0084 0200     		.2byte	0x2
+ 1226 0086 77       		.byte	0x77
+ 1227 0087 08       		.sleb128 8
+ 1228 0088 00000000 		.4byte	0
+ 1229 008c 00000000 		.4byte	0
+ 1230              	.LLST3:
+ 1231 0090 00000000 		.4byte	.LFB3
+ 1232 0094 02000000 		.4byte	.LCFI7
+ 1233 0098 0200     		.2byte	0x2
+ 1234 009a 7D       		.byte	0x7d
+ 1235 009b 00       		.sleb128 0
+ 1236 009c 02000000 		.4byte	.LCFI7
+ 1237 00a0 04000000 		.4byte	.LCFI8
+ 1238 00a4 0200     		.2byte	0x2
+ 1239 00a6 7D       		.byte	0x7d
+ 1240 00a7 04       		.sleb128 4
+ 1241 00a8 04000000 		.4byte	.LCFI8
+ 1242 00ac 26000000 		.4byte	.LFE3
+ 1243 00b0 0200     		.2byte	0x2
+ 1244 00b2 77       		.byte	0x77
+ 1245 00b3 04       		.sleb128 4
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 36
+
+
+ 1246 00b4 00000000 		.4byte	0
+ 1247 00b8 00000000 		.4byte	0
+ 1248              	.LLST4:
+ 1249 00bc 00000000 		.4byte	.LFB4
+ 1250 00c0 02000000 		.4byte	.LCFI9
+ 1251 00c4 0200     		.2byte	0x2
+ 1252 00c6 7D       		.byte	0x7d
+ 1253 00c7 00       		.sleb128 0
+ 1254 00c8 02000000 		.4byte	.LCFI9
+ 1255 00cc 04000000 		.4byte	.LCFI10
+ 1256 00d0 0200     		.2byte	0x2
+ 1257 00d2 7D       		.byte	0x7d
+ 1258 00d3 04       		.sleb128 4
+ 1259 00d4 04000000 		.4byte	.LCFI10
+ 1260 00d8 06000000 		.4byte	.LCFI11
+ 1261 00dc 0200     		.2byte	0x2
+ 1262 00de 7D       		.byte	0x7d
+ 1263 00df 10       		.sleb128 16
+ 1264 00e0 06000000 		.4byte	.LCFI11
+ 1265 00e4 20000000 		.4byte	.LFE4
+ 1266 00e8 0200     		.2byte	0x2
+ 1267 00ea 77       		.byte	0x77
+ 1268 00eb 10       		.sleb128 16
+ 1269 00ec 00000000 		.4byte	0
+ 1270 00f0 00000000 		.4byte	0
+ 1271              	.LLST5:
+ 1272 00f4 00000000 		.4byte	.LFB5
+ 1273 00f8 02000000 		.4byte	.LCFI12
+ 1274 00fc 0200     		.2byte	0x2
+ 1275 00fe 7D       		.byte	0x7d
+ 1276 00ff 00       		.sleb128 0
+ 1277 0100 02000000 		.4byte	.LCFI12
+ 1278 0104 04000000 		.4byte	.LCFI13
+ 1279 0108 0200     		.2byte	0x2
+ 1280 010a 7D       		.byte	0x7d
+ 1281 010b 04       		.sleb128 4
+ 1282 010c 04000000 		.4byte	.LCFI13
+ 1283 0110 14000000 		.4byte	.LFE5
+ 1284 0114 0200     		.2byte	0x2
+ 1285 0116 77       		.byte	0x77
+ 1286 0117 04       		.sleb128 4
+ 1287 0118 00000000 		.4byte	0
+ 1288 011c 00000000 		.4byte	0
+ 1289              	.LLST6:
+ 1290 0120 00000000 		.4byte	.LFB6
+ 1291 0124 02000000 		.4byte	.LCFI14
+ 1292 0128 0200     		.2byte	0x2
+ 1293 012a 7D       		.byte	0x7d
+ 1294 012b 00       		.sleb128 0
+ 1295 012c 02000000 		.4byte	.LCFI14
+ 1296 0130 04000000 		.4byte	.LCFI15
+ 1297 0134 0200     		.2byte	0x2
+ 1298 0136 7D       		.byte	0x7d
+ 1299 0137 04       		.sleb128 4
+ 1300 0138 04000000 		.4byte	.LCFI15
+ 1301 013c 18000000 		.4byte	.LFE6
+ 1302 0140 0200     		.2byte	0x2
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 37
+
+
+ 1303 0142 77       		.byte	0x77
+ 1304 0143 04       		.sleb128 4
+ 1305 0144 00000000 		.4byte	0
+ 1306 0148 00000000 		.4byte	0
+ 1307              	.LLST7:
+ 1308 014c 00000000 		.4byte	.LFB7
+ 1309 0150 02000000 		.4byte	.LCFI16
+ 1310 0154 0200     		.2byte	0x2
+ 1311 0156 7D       		.byte	0x7d
+ 1312 0157 00       		.sleb128 0
+ 1313 0158 02000000 		.4byte	.LCFI16
+ 1314 015c 04000000 		.4byte	.LCFI17
+ 1315 0160 0200     		.2byte	0x2
+ 1316 0162 7D       		.byte	0x7d
+ 1317 0163 04       		.sleb128 4
+ 1318 0164 04000000 		.4byte	.LCFI17
+ 1319 0168 18000000 		.4byte	.LFE7
+ 1320 016c 0200     		.2byte	0x2
+ 1321 016e 77       		.byte	0x77
+ 1322 016f 04       		.sleb128 4
+ 1323 0170 00000000 		.4byte	0
+ 1324 0174 00000000 		.4byte	0
+ 1325              	.LLST8:
+ 1326 0178 00000000 		.4byte	.LFB8
+ 1327 017c 02000000 		.4byte	.LCFI18
+ 1328 0180 0200     		.2byte	0x2
+ 1329 0182 7D       		.byte	0x7d
+ 1330 0183 00       		.sleb128 0
+ 1331 0184 02000000 		.4byte	.LCFI18
+ 1332 0188 04000000 		.4byte	.LCFI19
+ 1333 018c 0200     		.2byte	0x2
+ 1334 018e 7D       		.byte	0x7d
+ 1335 018f 04       		.sleb128 4
+ 1336 0190 04000000 		.4byte	.LCFI19
+ 1337 0194 06000000 		.4byte	.LCFI20
+ 1338 0198 0200     		.2byte	0x2
+ 1339 019a 7D       		.byte	0x7d
+ 1340 019b 10       		.sleb128 16
+ 1341 019c 06000000 		.4byte	.LCFI20
+ 1342 01a0 20000000 		.4byte	.LFE8
+ 1343 01a4 0200     		.2byte	0x2
+ 1344 01a6 77       		.byte	0x77
+ 1345 01a7 10       		.sleb128 16
+ 1346 01a8 00000000 		.4byte	0
+ 1347 01ac 00000000 		.4byte	0
+ 1348              	.LLST9:
+ 1349 01b0 00000000 		.4byte	.LFB9
+ 1350 01b4 02000000 		.4byte	.LCFI21
+ 1351 01b8 0200     		.2byte	0x2
+ 1352 01ba 7D       		.byte	0x7d
+ 1353 01bb 00       		.sleb128 0
+ 1354 01bc 02000000 		.4byte	.LCFI21
+ 1355 01c0 04000000 		.4byte	.LCFI22
+ 1356 01c4 0200     		.2byte	0x2
+ 1357 01c6 7D       		.byte	0x7d
+ 1358 01c7 04       		.sleb128 4
+ 1359 01c8 04000000 		.4byte	.LCFI22
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 38
+
+
+ 1360 01cc 18000000 		.4byte	.LFE9
+ 1361 01d0 0200     		.2byte	0x2
+ 1362 01d2 77       		.byte	0x77
+ 1363 01d3 04       		.sleb128 4
+ 1364 01d4 00000000 		.4byte	0
+ 1365 01d8 00000000 		.4byte	0
+ 1366              	.LLST10:
+ 1367 01dc 00000000 		.4byte	.LFB10
+ 1368 01e0 02000000 		.4byte	.LCFI23
+ 1369 01e4 0200     		.2byte	0x2
+ 1370 01e6 7D       		.byte	0x7d
+ 1371 01e7 00       		.sleb128 0
+ 1372 01e8 02000000 		.4byte	.LCFI23
+ 1373 01ec 04000000 		.4byte	.LCFI24
+ 1374 01f0 0200     		.2byte	0x2
+ 1375 01f2 7D       		.byte	0x7d
+ 1376 01f3 04       		.sleb128 4
+ 1377 01f4 04000000 		.4byte	.LCFI24
+ 1378 01f8 06000000 		.4byte	.LCFI25
+ 1379 01fc 0200     		.2byte	0x2
+ 1380 01fe 7D       		.byte	0x7d
+ 1381 01ff 10       		.sleb128 16
+ 1382 0200 06000000 		.4byte	.LCFI25
+ 1383 0204 20000000 		.4byte	.LFE10
+ 1384 0208 0200     		.2byte	0x2
+ 1385 020a 77       		.byte	0x77
+ 1386 020b 10       		.sleb128 16
+ 1387 020c 00000000 		.4byte	0
+ 1388 0210 00000000 		.4byte	0
+ 1389              	.LLST11:
+ 1390 0214 00000000 		.4byte	.LFB11
+ 1391 0218 02000000 		.4byte	.LCFI26
+ 1392 021c 0200     		.2byte	0x2
+ 1393 021e 7D       		.byte	0x7d
+ 1394 021f 00       		.sleb128 0
+ 1395 0220 02000000 		.4byte	.LCFI26
+ 1396 0224 04000000 		.4byte	.LCFI27
+ 1397 0228 0200     		.2byte	0x2
+ 1398 022a 7D       		.byte	0x7d
+ 1399 022b 04       		.sleb128 4
+ 1400 022c 04000000 		.4byte	.LCFI27
+ 1401 0230 18000000 		.4byte	.LFE11
+ 1402 0234 0200     		.2byte	0x2
+ 1403 0236 77       		.byte	0x77
+ 1404 0237 04       		.sleb128 4
+ 1405 0238 00000000 		.4byte	0
+ 1406 023c 00000000 		.4byte	0
+ 1407              	.LLST12:
+ 1408 0240 00000000 		.4byte	.LFB12
+ 1409 0244 02000000 		.4byte	.LCFI28
+ 1410 0248 0200     		.2byte	0x2
+ 1411 024a 7D       		.byte	0x7d
+ 1412 024b 00       		.sleb128 0
+ 1413 024c 02000000 		.4byte	.LCFI28
+ 1414 0250 04000000 		.4byte	.LCFI29
+ 1415 0254 0200     		.2byte	0x2
+ 1416 0256 7D       		.byte	0x7d
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 39
+
+
+ 1417 0257 04       		.sleb128 4
+ 1418 0258 04000000 		.4byte	.LCFI29
+ 1419 025c 06000000 		.4byte	.LCFI30
+ 1420 0260 0200     		.2byte	0x2
+ 1421 0262 7D       		.byte	0x7d
+ 1422 0263 10       		.sleb128 16
+ 1423 0264 06000000 		.4byte	.LCFI30
+ 1424 0268 20000000 		.4byte	.LFE12
+ 1425 026c 0200     		.2byte	0x2
+ 1426 026e 77       		.byte	0x77
+ 1427 026f 10       		.sleb128 16
+ 1428 0270 00000000 		.4byte	0
+ 1429 0274 00000000 		.4byte	0
+ 1430              	.LLST13:
+ 1431 0278 00000000 		.4byte	.LFB13
+ 1432 027c 02000000 		.4byte	.LCFI31
+ 1433 0280 0200     		.2byte	0x2
+ 1434 0282 7D       		.byte	0x7d
+ 1435 0283 00       		.sleb128 0
+ 1436 0284 02000000 		.4byte	.LCFI31
+ 1437 0288 04000000 		.4byte	.LCFI32
+ 1438 028c 0200     		.2byte	0x2
+ 1439 028e 7D       		.byte	0x7d
+ 1440 028f 04       		.sleb128 4
+ 1441 0290 04000000 		.4byte	.LCFI32
+ 1442 0294 22000000 		.4byte	.LFE13
+ 1443 0298 0200     		.2byte	0x2
+ 1444 029a 77       		.byte	0x77
+ 1445 029b 04       		.sleb128 4
+ 1446 029c 00000000 		.4byte	0
+ 1447 02a0 00000000 		.4byte	0
+ 1448              	.LLST14:
+ 1449 02a4 00000000 		.4byte	.LFB14
+ 1450 02a8 02000000 		.4byte	.LCFI33
+ 1451 02ac 0200     		.2byte	0x2
+ 1452 02ae 7D       		.byte	0x7d
+ 1453 02af 00       		.sleb128 0
+ 1454 02b0 02000000 		.4byte	.LCFI33
+ 1455 02b4 04000000 		.4byte	.LCFI34
+ 1456 02b8 0200     		.2byte	0x2
+ 1457 02ba 7D       		.byte	0x7d
+ 1458 02bb 08       		.sleb128 8
+ 1459 02bc 04000000 		.4byte	.LCFI34
+ 1460 02c0 1A000000 		.4byte	.LFE14
+ 1461 02c4 0200     		.2byte	0x2
+ 1462 02c6 77       		.byte	0x77
+ 1463 02c7 08       		.sleb128 8
+ 1464 02c8 00000000 		.4byte	0
+ 1465 02cc 00000000 		.4byte	0
+ 1466              		.section	.debug_aranges,"",%progbits
+ 1467 0000 8C000000 		.4byte	0x8c
+ 1468 0004 0200     		.2byte	0x2
+ 1469 0006 00000000 		.4byte	.Ldebug_info0
+ 1470 000a 04       		.byte	0x4
+ 1471 000b 00       		.byte	0
+ 1472 000c 0000     		.2byte	0
+ 1473 000e 0000     		.2byte	0
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 40
+
+
+ 1474 0010 00000000 		.4byte	.LFB0
+ 1475 0014 56000000 		.4byte	.LFE0-.LFB0
+ 1476 0018 00000000 		.4byte	.LFB1
+ 1477 001c 26000000 		.4byte	.LFE1-.LFB1
+ 1478 0020 00000000 		.4byte	.LFB2
+ 1479 0024 2A000000 		.4byte	.LFE2-.LFB2
+ 1480 0028 00000000 		.4byte	.LFB3
+ 1481 002c 26000000 		.4byte	.LFE3-.LFB3
+ 1482 0030 00000000 		.4byte	.LFB4
+ 1483 0034 20000000 		.4byte	.LFE4-.LFB4
+ 1484 0038 00000000 		.4byte	.LFB5
+ 1485 003c 14000000 		.4byte	.LFE5-.LFB5
+ 1486 0040 00000000 		.4byte	.LFB6
+ 1487 0044 18000000 		.4byte	.LFE6-.LFB6
+ 1488 0048 00000000 		.4byte	.LFB7
+ 1489 004c 18000000 		.4byte	.LFE7-.LFB7
+ 1490 0050 00000000 		.4byte	.LFB8
+ 1491 0054 20000000 		.4byte	.LFE8-.LFB8
+ 1492 0058 00000000 		.4byte	.LFB9
+ 1493 005c 18000000 		.4byte	.LFE9-.LFB9
+ 1494 0060 00000000 		.4byte	.LFB10
+ 1495 0064 20000000 		.4byte	.LFE10-.LFB10
+ 1496 0068 00000000 		.4byte	.LFB11
+ 1497 006c 18000000 		.4byte	.LFE11-.LFB11
+ 1498 0070 00000000 		.4byte	.LFB12
+ 1499 0074 20000000 		.4byte	.LFE12-.LFB12
+ 1500 0078 00000000 		.4byte	.LFB13
+ 1501 007c 22000000 		.4byte	.LFE13-.LFB13
+ 1502 0080 00000000 		.4byte	.LFB14
+ 1503 0084 1A000000 		.4byte	.LFE14-.LFB14
+ 1504 0088 00000000 		.4byte	0
+ 1505 008c 00000000 		.4byte	0
+ 1506              		.section	.debug_ranges,"",%progbits
+ 1507              	.Ldebug_ranges0:
+ 1508 0000 00000000 		.4byte	.LFB0
+ 1509 0004 56000000 		.4byte	.LFE0
+ 1510 0008 00000000 		.4byte	.LFB1
+ 1511 000c 26000000 		.4byte	.LFE1
+ 1512 0010 00000000 		.4byte	.LFB2
+ 1513 0014 2A000000 		.4byte	.LFE2
+ 1514 0018 00000000 		.4byte	.LFB3
+ 1515 001c 26000000 		.4byte	.LFE3
+ 1516 0020 00000000 		.4byte	.LFB4
+ 1517 0024 20000000 		.4byte	.LFE4
+ 1518 0028 00000000 		.4byte	.LFB5
+ 1519 002c 14000000 		.4byte	.LFE5
+ 1520 0030 00000000 		.4byte	.LFB6
+ 1521 0034 18000000 		.4byte	.LFE6
+ 1522 0038 00000000 		.4byte	.LFB7
+ 1523 003c 18000000 		.4byte	.LFE7
+ 1524 0040 00000000 		.4byte	.LFB8
+ 1525 0044 20000000 		.4byte	.LFE8
+ 1526 0048 00000000 		.4byte	.LFB9
+ 1527 004c 18000000 		.4byte	.LFE9
+ 1528 0050 00000000 		.4byte	.LFB10
+ 1529 0054 20000000 		.4byte	.LFE10
+ 1530 0058 00000000 		.4byte	.LFB11
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 41
+
+
+ 1531 005c 18000000 		.4byte	.LFE11
+ 1532 0060 00000000 		.4byte	.LFB12
+ 1533 0064 20000000 		.4byte	.LFE12
+ 1534 0068 00000000 		.4byte	.LFB13
+ 1535 006c 22000000 		.4byte	.LFE13
+ 1536 0070 00000000 		.4byte	.LFB14
+ 1537 0074 1A000000 		.4byte	.LFE14
+ 1538 0078 00000000 		.4byte	0
+ 1539 007c 00000000 		.4byte	0
+ 1540              		.section	.debug_line,"",%progbits
+ 1541              	.Ldebug_line0:
+ 1542 0000 76010000 		.section	.debug_str,"MS",%progbits,1
+ 1542      02004A00 
+ 1542      00000201 
+ 1542      FB0E0D00 
+ 1542      01010101 
+ 1543              	.LASF16:
+ 1544 0000 57726974 		.ascii	"Write_Timer_Start\000"
+ 1544      655F5469 
+ 1544      6D65725F 
+ 1544      53746172 
+ 1544      7400
+ 1545              	.LASF26:
+ 1546 0012 57726974 		.ascii	"Write_Timer_ReadPeriod\000"
+ 1546      655F5469 
+ 1546      6D65725F 
+ 1546      52656164 
+ 1546      50657269 
+ 1547              	.LASF28:
+ 1548 0029 70657269 		.ascii	"period\000"
+ 1548      6F6400
+ 1549              	.LASF3:
+ 1550 0030 73686F72 		.ascii	"short unsigned int\000"
+ 1550      7420756E 
+ 1550      7369676E 
+ 1550      65642069 
+ 1550      6E7400
+ 1551              	.LASF32:
+ 1552 0043 57726974 		.ascii	"Write_Timer_ReadCounter\000"
+ 1552      655F5469 
+ 1552      6D65725F 
+ 1552      52656164 
+ 1552      436F756E 
+ 1553              	.LASF22:
+ 1554 005b 57726974 		.ascii	"Write_Timer_ReadControlRegister\000"
+ 1554      655F5469 
+ 1554      6D65725F 
+ 1554      52656164 
+ 1554      436F6E74 
+ 1555              	.LASF9:
+ 1556 007b 666C6F61 		.ascii	"float\000"
+ 1556      7400
+ 1557              	.LASF31:
+ 1558 0081 636F756E 		.ascii	"counter\000"
+ 1558      74657200 
+ 1559              	.LASF33:
+ 1560 0089 57726974 		.ascii	"Write_Timer_ClearFIFO\000"
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 42
+
+
+ 1560      655F5469 
+ 1560      6D65725F 
+ 1560      436C6561 
+ 1560      72464946 
+ 1561              	.LASF13:
+ 1562 009f 72656738 		.ascii	"reg8\000"
+ 1562      00
+ 1563              	.LASF5:
+ 1564 00a4 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1564      20756E73 
+ 1564      69676E65 
+ 1564      6420696E 
+ 1564      7400
+ 1565              	.LASF12:
+ 1566 00b6 75696E74 		.ascii	"uint8\000"
+ 1566      3800
+ 1567              	.LASF25:
+ 1568 00bc 636F6E74 		.ascii	"control\000"
+ 1568      726F6C00 
+ 1569              	.LASF36:
+ 1570 00c4 433A5C55 		.ascii	"C:\\Users\\jgonzales13\\Documents\\PSoC Creator\\US"
+ 1570      73657273 
+ 1570      5C6A676F 
+ 1570      6E7A616C 
+ 1570      65733133 
+ 1571 00f2 425F5541 		.ascii	"B_UART01\\USB_UART01.cydsn\000"
+ 1571      52543031 
+ 1571      5C555342 
+ 1571      5F554152 
+ 1571      5430312E 
+ 1572              	.LASF27:
+ 1573 010c 57726974 		.ascii	"Write_Timer_WritePeriod\000"
+ 1573      655F5469 
+ 1573      6D65725F 
+ 1573      57726974 
+ 1573      65506572 
+ 1574              	.LASF1:
+ 1575 0124 756E7369 		.ascii	"unsigned char\000"
+ 1575      676E6564 
+ 1575      20636861 
+ 1575      7200
+ 1576              	.LASF38:
+ 1577 0132 57726974 		.ascii	"Write_Timer_initVar\000"
+ 1577      655F5469 
+ 1577      6D65725F 
+ 1577      696E6974 
+ 1577      56617200 
+ 1578              	.LASF10:
+ 1579 0146 646F7562 		.ascii	"double\000"
+ 1579      6C6500
+ 1580              	.LASF20:
+ 1581 014d 57726974 		.ascii	"Write_Timer_SoftwareCapture\000"
+ 1581      655F5469 
+ 1581      6D65725F 
+ 1581      536F6674 
+ 1581      77617265 
+ 1582              	.LASF8:
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 43
+
+
+ 1583 0169 756E7369 		.ascii	"unsigned int\000"
+ 1583      676E6564 
+ 1583      20696E74 
+ 1583      00
+ 1584              	.LASF19:
+ 1585 0176 57726974 		.ascii	"Write_Timer_SetInterruptMode\000"
+ 1585      655F5469 
+ 1585      6D65725F 
+ 1585      53657449 
+ 1585      6E746572 
+ 1586              	.LASF7:
+ 1587 0193 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1587      206C6F6E 
+ 1587      6720756E 
+ 1587      7369676E 
+ 1587      65642069 
+ 1588              	.LASF18:
+ 1589 01aa 57726974 		.ascii	"Write_Timer_Init\000"
+ 1589      655F5469 
+ 1589      6D65725F 
+ 1589      496E6974 
+ 1589      00
+ 1590              	.LASF30:
+ 1591 01bb 57726974 		.ascii	"Write_Timer_WriteCounter\000"
+ 1591      655F5469 
+ 1591      6D65725F 
+ 1591      57726974 
+ 1591      65436F75 
+ 1592              	.LASF14:
+ 1593 01d4 73697A65 		.ascii	"sizetype\000"
+ 1593      74797065 
+ 1593      00
+ 1594              	.LASF17:
+ 1595 01dd 57726974 		.ascii	"Write_Timer_Stop\000"
+ 1595      655F5469 
+ 1595      6D65725F 
+ 1595      53746F70 
+ 1595      00
+ 1596              	.LASF6:
+ 1597 01ee 6C6F6E67 		.ascii	"long long int\000"
+ 1597      206C6F6E 
+ 1597      6720696E 
+ 1597      7400
+ 1598              	.LASF15:
+ 1599 01fc 57726974 		.ascii	"Write_Timer_Enable\000"
+ 1599      655F5469 
+ 1599      6D65725F 
+ 1599      456E6162 
+ 1599      6C6500
+ 1600              	.LASF24:
+ 1601 020f 696E7465 		.ascii	"interruptMode\000"
+ 1601      72727570 
+ 1601      744D6F64 
+ 1601      6500
+ 1602              	.LASF35:
+ 1603 021d 2E5C4765 		.ascii	".\\Generated_Source\\PSoC5\\Write_Timer.c\000"
+ 1603      6E657261 
+ARM GAS  C:\Users\JGONZA~1\AppData\Local\Temp\ccO4VVbU.s 			page 44
+
+
+ 1603      7465645F 
+ 1603      536F7572 
+ 1603      63655C50 
+ 1604              	.LASF2:
+ 1605 0244 73686F72 		.ascii	"short int\000"
+ 1605      7420696E 
+ 1605      7400
+ 1606              	.LASF34:
+ 1607 024e 474E5520 		.ascii	"GNU C 4.7.3 20130312 (release) [ARM/embedded-4_7-br"
+ 1607      4320342E 
+ 1607      372E3320 
+ 1607      32303133 
+ 1607      30333132 
+ 1608 0281 616E6368 		.ascii	"anch revision 196615]\000"
+ 1608      20726576 
+ 1608      6973696F 
+ 1608      6E203139 
+ 1608      36363135 
+ 1609              	.LASF23:
+ 1610 0297 57726974 		.ascii	"Write_Timer_WriteControlRegister\000"
+ 1610      655F5469 
+ 1610      6D65725F 
+ 1610      57726974 
+ 1610      65436F6E 
+ 1611              	.LASF4:
+ 1612 02b8 6C6F6E67 		.ascii	"long int\000"
+ 1612      20696E74 
+ 1612      00
+ 1613              	.LASF11:
+ 1614 02c1 63686172 		.ascii	"char\000"
+ 1614      00
+ 1615              	.LASF21:
+ 1616 02c6 57726974 		.ascii	"Write_Timer_ReadStatusRegister\000"
+ 1616      655F5469 
+ 1616      6D65725F 
+ 1616      52656164 
+ 1616      53746174 
+ 1617              	.LASF0:
+ 1618 02e5 7369676E 		.ascii	"signed char\000"
+ 1618      65642063 
+ 1618      68617200 
+ 1619              	.LASF29:
+ 1620 02f1 57726974 		.ascii	"Write_Timer_ReadCapture\000"
+ 1620      655F5469 
+ 1620      6D65725F 
+ 1620      52656164 
+ 1620      43617074 
+ 1621              	.LASF37:
+ 1622 0309 57726974 		.ascii	"Write_Timer_interruptState\000"
+ 1622      655F5469 
+ 1622      6D65725F 
+ 1622      696E7465 
+ 1622      72727570 
+ 1623              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.7.3 20130312 (release) [ARM/embedded-4_7-br
