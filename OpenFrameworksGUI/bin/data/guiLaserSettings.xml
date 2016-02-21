@@ -1,0 +1,11 @@
+<Widget>
+    <Kind>11</Kind>
+    <Name>Laserpad</Name>
+    <XValue>104.921875000</XValue>
+    <YValue>61.093750000</YValue>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>Laser</Name>
+    <Value>0</Value>
+</Widget>
